@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom'
 import LoginInfo from './LoginInfo'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { loadJs } from '../../util/helpers'
 import * as actions from '../../store/actions/AuthActions'
 
 class Auth extends Component {
@@ -13,9 +14,43 @@ class Auth extends Component {
         this.passwordRef = React.createRef()
     }
 
+    componentDidMount = () => {
+        window.addEventListener('keypress', this.isEnterPressed);
+        loadJs()
+        this.shouldClearError()
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('keypress', this.isEnterPressed);
+    }
+
     setEmail = () => this.props.actions.setEmail(this.emailRef.current.value)
+
     setPassword = () => this.props.actions.setPassword(this.passwordRef.current.value)
-    fetchAuth = () => this.props.actions.fetchAuth(this.props.auth)
+
+    fetchAuth = () => {
+        const { value: email } = this.emailRef.current
+        const { value: password } = this.passwordRef.current
+
+        if (email === '' || password === '') {
+            this.props.actions.setError('Please, complete all fields')
+            return false
+        }
+
+        this.props.actions.fetchAuth(this.props.auth)
+    }
+
+    isEnterPressed = e => {
+        if (e.keyCode === 13) {
+            this.fetchAuth()
+        }
+    }
+
+    shouldClearError = () => {
+        if (this.props.auth.error !== '') {
+            this.props.actions.setError('')
+        }
+    }
 
     render() {
         let authRedirect = null

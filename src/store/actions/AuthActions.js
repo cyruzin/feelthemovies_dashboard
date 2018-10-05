@@ -30,9 +30,10 @@ export const setEmail = email => {
 }
 
 export const setPassword = password => {
-    return {
-        type: type.PASSWORD, password: password
-    }
+    return { type: type.PASSWORD, password: password }
+}
+export const setError = value => {
+    return { type: type.ERROR, error: value }
 }
 
 export const logout = () => {

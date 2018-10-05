@@ -20,6 +20,15 @@ const LoginInfo = props => (
                     <div className="col-lg-6 bg-white">
                         <div className="form d-flex align-items-center">
                             <div className="content">
+                                {props.auth.error !== '' ?
+                                    <div className="form-group">
+                                        <label className="form-control-label text-primary text-capitalize">
+                                            {props.auth.error}
+                                        </label>
+                                    </div>
+                                    :
+                                    null
+                                }
 
                                 <div className="form-group">
                                     <input
@@ -28,7 +37,6 @@ const LoginInfo = props => (
                                         ref={props.emailRef}
                                         className="input-material" />
                                     <label
-                                        htmlFor="login-username"
                                         className="label-material">
                                         E-mail
                                     </label>
@@ -41,7 +49,6 @@ const LoginInfo = props => (
                                         ref={props.passwordRef}
                                         className="input-material" />
                                     <label
-                                        htmlFor="login-password"
                                         className="label-material">
                                         Senha
                                         </label>

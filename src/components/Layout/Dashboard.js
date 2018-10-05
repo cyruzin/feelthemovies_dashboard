@@ -10,9 +10,13 @@ import Genres from '../Genres/Genres'
 import Keywords from '../Keywords/Keywords'
 import Sources from '../Sources/Sources'
 import Logout from '../Auth/Logout'
-
+import { loadJs } from '../../util/helpers'
 
 class Dashboard extends Component {
+
+    componentDidMount() {
+        loadJs()
+    }
 
     render() {
         let authRedirect = null

@@ -1,3 +1,30 @@
 @import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 @import '../node_modules/font-awesome/css/font-awesome.min.css';
 @import './assets/css/style.default.css';
+
+.smooth-enter {
+    opacity: 0.01;
+  }
+  
+  .smooth-enter.smooth-enter-active {
+    opacity: 1;
+    transition: opacity 500ms ease-in;
+  }
+  
+  .smooth-leave {
+    opacity: 1;
+  }
+  
+  .smooth-leave.smooth-leave-active {
+    opacity: 0.01;
+    transition: opacity 300ms ease-in;
+  }
+  
+  .smooth-appear {
+    opacity: 0.01;
+  }
+  
+  .smooth-appear.smooth-appear-active {
+    opacity: 1;
+    transition: opacity .5s ease-in;
+  }
