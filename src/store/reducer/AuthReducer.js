@@ -31,7 +31,9 @@ export default (state = initialState, action) => {
         case type.LOGOUT:
             return {
                 ...state,
-                authorized: action.authorized
+                authorized: action.authorized,
+                email: action.email,
+                apiToken: action.apiToken
             }
         case type.ERROR:
             return {

@@ -7,7 +7,6 @@ import * as actions from '../../store/actions/AuthActions'
 class Logout extends Component {
 
     componentDidMount() {
-        localStorage.clear()
         this.props.actions.logout()
     }
 

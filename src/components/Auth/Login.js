@@ -21,7 +21,7 @@ class Auth extends Component {
         let authRedirect = null
 
         if (this.props.auth.authorized) {
-            authRedirect = <Redirect to='/dashboard' />
+            authRedirect = <Redirect to='/dashboard/home' />
         }
 
         return (

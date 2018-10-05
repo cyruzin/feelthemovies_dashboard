@@ -9,7 +9,7 @@ import Recommendations from '../Recommendations/Recommendations'
 import Genres from '../Genres/Genres'
 import Keywords from '../Keywords/Keywords'
 import Sources from '../Sources/Sources'
-import Logout from '../Layout/Logout'
+import Logout from '../Auth/Logout'
 
 
 class Dashboard extends Component {
