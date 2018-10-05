@@ -33,7 +33,7 @@ class Auth extends Component {
         const { value: password } = this.passwordRef.current
 
         if (email === '' || password === '') {
-            this.props.actions.setError('Please, complete all fields')
+            this.props.actions.setError('Please, fill all fields')
             return false
         }
 

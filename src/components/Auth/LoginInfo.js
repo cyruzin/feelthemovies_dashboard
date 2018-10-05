@@ -22,7 +22,7 @@ const LoginInfo = props => (
                             <div className="content">
                                 {props.auth.error !== '' ?
                                     <div className="form-group">
-                                        <label className="form-control-label text-primary text-capitalize">
+                                        <label className="form-control-label text-primary">
                                             {props.auth.error}
                                         </label>
                                     </div>
@@ -50,7 +50,7 @@ const LoginInfo = props => (
                                         className="input-material" />
                                     <label
                                         className="label-material">
-                                        Senha
+                                        Password
                                         </label>
                                 </div>
                                 <button
