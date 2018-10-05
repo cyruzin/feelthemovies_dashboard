@@ -1,28 +1,39 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
+import { Provider } from 'react-redux'
+import { createStore, applyMiddleware, compose } from 'redux'
+import ReduxThunk from 'redux-thunk'
+import reducers from './store/reducer'
+import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import 'bootstrap/dist/js/bootstrap.min'
+import './App.css'
+import './assets/js/front'
+import { loadState, saveState } from './util/helpers'
+import Login from './components/Auth/Login'
+import Dashboard from './components/Layout/Dashboard'
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const persistedState = loadState();
+const store = createStore(reducers, persistedState, composeEnhancers(applyMiddleware(ReduxThunk)))
+
+store.subscribe(() => saveState({ auth: store.getState().auth }))
 
 class App extends Component {
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div>
+        <Provider store={store}>
+          <BrowserRouter>
+            <Switch>
+              <Route path='/' exact component={Login} />
+              <Route path='/dashboard' component={Dashboard} />
+              <Route render={() => <div><h3>Page Not Found</h3></div>} />
+            </Switch>
+          </BrowserRouter>
+        </Provider>
       </div>
     );
   }
 }
 
-export default App;
+export default App
