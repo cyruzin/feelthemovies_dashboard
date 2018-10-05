@@ -34,3 +34,9 @@ export const setPassword = password => {
         type: type.PASSWORD, password: password
     }
 }
+
+export const logout = () => {
+    return {
+        type: type.LOGOUT, authorized: false
+    }
+}

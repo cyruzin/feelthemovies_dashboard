@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const Header = () => (
     <div>
@@ -23,10 +24,10 @@ const Header = () => (
                         </button>
                     </div>
                     <div className="right-menu list-inline no-margin-bottom">
-                        <div
-                            className="list-inline-item logout"
-                            style={{ cursor: 'pointer' }}>
-                            Logout <i className="fa fa-sign-out" aria-hidden="true"></i>
+                        <div className="list-inline-item logout">
+                            <Link to='/dashboard/logout'>
+                                Logout <i className="fa fa-sign-out" aria-hidden="true"></i>
+                            </Link>
                         </div>
                     </div>
                 </div>

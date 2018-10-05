@@ -28,6 +28,11 @@ export default (state = initialState, action) => {
                 password: action.password,
                 error: action.error
             }
+        case type.LOGOUT:
+            return {
+                ...state,
+                authorized: action.authorized
+            }
         case type.ERROR:
             return {
                 ...state,

@@ -24,7 +24,7 @@ const LoginInfo = props => (
                                 <div className="form-group">
                                     <input
                                         type="text"
-                                        onKeyUp={props.setEmail}
+                                        onKeyDown={props.setEmail}
                                         ref={props.emailRef}
                                         className="input-material" />
                                     <label
@@ -37,7 +37,7 @@ const LoginInfo = props => (
                                 <div className="form-group">
                                     <input
                                         type="password"
-                                        onKeyUp={props.setPassword}
+                                        onKeyDown={props.setPassword}
                                         ref={props.passwordRef}
                                         className="input-material" />
                                     <label

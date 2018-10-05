@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Route, Switch } from 'react-router-dom'
+import { Redirect, Route, Switch } from 'react-router-dom'
 import Header from './Header'
 import Content from './Content'
 import Home from '../Home/Home'
@@ -9,16 +9,21 @@ import Recommendations from '../Recommendations/Recommendations'
 import Genres from '../Genres/Genres'
 import Keywords from '../Keywords/Keywords'
 import Sources from '../Sources/Sources'
+import Logout from '../Layout/Logout'
+
 
 class Dashboard extends Component {
 
-    logout = () => {
-        //   localStorage.clear()
-    }
-
     render() {
+        let authRedirect = null
+
+        if (this.props.auth.authorized === false) {
+            authRedirect = <Redirect to='/' />
+        }
+
         return (
             <div>
+                {authRedirect}
                 <Header />
                 <Content>
                     <Switch>
@@ -28,6 +33,7 @@ class Dashboard extends Component {
                         <Route path='/dashboard/genres' component={Genres} />
                         <Route path='/dashboard/keywords' component={Keywords} />
                         <Route path='/dashboard/sources' component={Sources} />
+                        <Route path='/dashboard/logout' component={Logout} />
                     </Switch>
                 </Content>
             </div>
