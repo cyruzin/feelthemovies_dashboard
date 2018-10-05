@@ -29,12 +29,7 @@ export default (state = initialState, action) => {
                 error: action.error
             }
         case type.LOGOUT:
-            return {
-                ...state,
-                authorized: action.authorized,
-                email: action.email,
-                apiToken: action.apiToken
-            }
+            return initialState
         case type.ERROR:
             return {
                 ...state,

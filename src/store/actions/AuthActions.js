@@ -36,10 +36,5 @@ export const setPassword = password => {
 }
 
 export const logout = () => {
-    return {
-        type: type.LOGOUT,
-        authorized: false,
-        email: '',
-        apiToken: ''
-    }
+    return { type: type.LOGOUT }
 }
