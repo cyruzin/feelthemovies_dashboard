@@ -1,7 +1,16 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const UserRegistration = props => (
     <div>
+        <div className="container-fluid">
+            <ul className="breadcrumb">
+                <li className="breadcrumb-item">
+                    <Link onClick={props.listUsers} to='/dashboard/users'>Users</Link>
+                </li>
+                <li className="breadcrumb-item active">Registration</li>
+            </ul>
+        </div>
         <section className="no-padding-top">
             <div className="container-fluid">
                 <div className="row">

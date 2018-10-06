@@ -1,10 +1,29 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import * as actions from '../../store/actions/UsersActions'
+import UserList from './UserList'
 import UserRegistration from './UserRegistration'
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
 class Users extends Component {
 
+    componentDidMount() {
+        this.props.actions.fetchUsers(this.props.users)
+    }
+
+    listUsers = () => {
+        this.props.actions.listLoaded(true)
+        this.props.actions.createUser(false)
+    }
+
+    createUser = () => {
+        this.props.actions.listLoaded(false)
+        this.props.actions.createUser(true)
+    }
+
     render() {
+        const { listLoaded, createUserLoaded } = this.props.users
         return (
             <div>
                 <div className="page-header">
@@ -12,18 +31,41 @@ class Users extends Component {
                         <h2 className="h5 no-margin-bottom">Users</h2>
                     </div>
                 </div>
-                <div className="container-fluid">
-                    <ul className="breadcrumb">
-                        <li className="breadcrumb-item">
-                            <Link to='/dashboard/home'>Home</Link>
-                        </li>
-                        <li className="breadcrumb-item active">Users</li>
-                    </ul>
-                </div>
-                <UserRegistration />
+                {listLoaded ?
+                    <UserList
+                        data={this.props.users.data}
+                        createUser={this.createUser} />
+                    :
+                    null
+                }
+                {createUserLoaded ?
+                    <ReactCSSTransitionGroup
+                        transitionName="smooth"
+                        transitionAppear={true}
+                        transitionAppearTimeout={1000}
+                        transitionEnter={false}
+                        transitionLeave={false}>
+                        <UserRegistration
+                            key={Date.now()}
+                            listUsers={this.listUsers} />
+                    </ReactCSSTransitionGroup>
+                    :
+                    null
+                }
+
             </div>
         )
     }
 }
 
-export default Users
+const mapStateToProps = state => {
+    return {
+        users: state.users
+    }
+}
+
+const mapDispatchToProps = dispatch => ({
+    actions: bindActionCreators(actions, dispatch)
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Users)
