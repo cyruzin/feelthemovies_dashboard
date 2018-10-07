@@ -2,10 +2,13 @@ import type from '../types/UsersTypes'
 
 const initialState = {
     listLoaded: false,
+    editLoaded: false,
     data: [],
     createUserLoaded: false,
     userRegister: '',
-    userData: [],
+    userEdited: '',
+    userDeleted: '',
+    userData: '',
     error: ''
 }
 
@@ -15,6 +18,11 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 listLoaded: action.listLoaded
+            }
+        case type.EDIT_LOADED:
+            return {
+                ...state,
+                editLoaded: action.editLoaded
             }
         case type.FETCH_USERS:
             return {
@@ -30,6 +38,16 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 userRegister: action.userRegister
+            }
+        case type.USER_EDITED:
+            return {
+                ...state,
+                userEdited: action.userEdited
+            }
+        case type.USER_DELETED:
+            return {
+                ...state,
+                userDeleted: action.userDeleted
             }
         case type.FETCH_SINGLE_USER:
             return {

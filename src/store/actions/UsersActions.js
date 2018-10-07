@@ -28,9 +28,11 @@ export const listLoaded = value => {
 
 export const fetchSingleUser = id => {
     return dispatch => {
+        dispatch(setEditLoaded(false))
         axios.get(`${baseUrl}/user/${id}?api_token=${apiToken}`)
             .then(res => {
-                dispatch({ type: type.FETCH_SINGLE_USER, data: res.data })
+                dispatch({ type: type.FETCH_SINGLE_USER, userData: res.data })
+                dispatch(setEditLoaded(true))
             })
             .catch(err => {
                 dispatch({ type: type.USER_ERROR, error: err })
@@ -40,10 +42,10 @@ export const fetchSingleUser = id => {
 
 export const registerUser = user => {
     return dispatch => {
-        dispatch({ type: type.USER_ERROR, error: '' })
+        dispatch(setError(''))
 
         axios.post(`${baseUrl}/user?api_token=${apiToken}`, user)
-            .then(res => {
+            .then(() => {
                 dispatch({
                     type: type.USER_REGISTER,
                     userRegister: 'User created successfully'
@@ -54,28 +56,60 @@ export const registerUser = user => {
                     type: type.USER_REGISTER,
                     userRegister: ''
                 })
-                dispatch({
-                    type: type.USER_ERROR,
-                    error: 'Something went wrong'
-                })
+                dispatch(setError('Something went wrong'))
             })
     }
 }
 
-export const editUser = () => false
+export const editUser = (id, user) => {
+    return dispatch => {
+        dispatch(setError(''))
+        axios.put(`${baseUrl}/user/${id}?api_token=${apiToken}`, user)
+            .then(() => {
+                dispatch(setEdited('User edited successfully'))
+            })
+            .catch(() => {
+                dispatch(setEdited(''))
+                dispatch(setError('Something went wrong'))
+            })
+    }
+}
 
 export const deleteUser = id => {
     return dispatch => {
         axios.delete(`${baseUrl}/user/${id}?api_token=${apiToken}`)
-            .then(res => console.log(res.data))
-            .catch(err => console.log(err))
+            .then(() => {
+                dispatch(setDeleted('User removed successfully'))
+            })
+            .catch(() => {
+                dispatch(setDeleted(''))
+                dispatch(setError('Something went wrong'))
+            })
     }
 }
 
 export const showRegistration = () => false
 
+export const setEdited = value => {
+    return {
+        type: type.USER_EDITED, userEdited: value
+    }
+}
+
+export const setDeleted = value => {
+    return {
+        type: type.USER_DELETED, userDeleted: value
+    }
+}
+
 export const setError = value => {
     return {
         type: type.USER_ERROR, error: value
+    }
+}
+
+export const setEditLoaded = value => {
+    return {
+        type: type.EDIT_LOADED, editLoaded: value
     }
 }

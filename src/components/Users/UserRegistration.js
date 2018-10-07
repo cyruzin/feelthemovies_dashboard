@@ -25,17 +25,17 @@ class UserRegistration extends Component {
             password: password
         }
 
+        if (name === '' || email === '' || password === '') {
+            this.props.actions.setError('Please, fill all fields')
+            return false
+        }
+
         this.props.actions.registerUser(user)
 
         name = this.nameRef.current.value = ''
         email = this.emailRef.current.value = ''
         password = this.passwordRef.current.value = ''
 
-    }
-
-    listUsers = () => {
-        this.props.actions.listLoaded(true)
-        this.props.actions.createUser(false)
     }
 
     render() {
