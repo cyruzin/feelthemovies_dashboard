@@ -14,10 +14,16 @@ class UserRegistration extends Component {
         this.passwordRef = React.createRef()
     }
 
+    componentDidMount() {
+        this.props.actions.setUserRegister('')
+    }
+
     registerUser = () => {
         let name = this.nameRef.current.value;
         let email = this.emailRef.current.value;
         let password = this.passwordRef.current.value;
+
+        this.props.actions.setUserRegister('')
 
         let user = {
             name: name,

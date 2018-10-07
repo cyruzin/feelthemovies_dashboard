@@ -5,7 +5,7 @@ import type from '../types/UsersTypes'
 export const fetchUsers = ({ listLoaded }) => {
     return dispatch => {
         if (listLoaded) {
-            dispatch({ type: type.LIST_LOADED, listLoaded: false })
+            dispatch(setListLoaded(false))
         }
 
         axios.get(`${baseUrl}/users?api_token=${apiToken}`)
@@ -14,17 +14,13 @@ export const fetchUsers = ({ listLoaded }) => {
                     type: type.FETCH_USERS,
                     data: res.data.data,
                 })
-                dispatch({ type: type.LIST_LOADED, listLoaded: true })
+                dispatch(setListLoaded(true))
             })
-            .catch(err => dispatch({ type: type.USER_ERROR, error: err }))
+            .catch(() => dispatch(setError('Something went wrong')))
     }
 }
 
-export const listLoaded = value => {
-    return {
-        type: type.LIST_LOADED, listLoaded: value
-    }
-}
+
 
 export const fetchSingleUser = id => {
     return dispatch => {
@@ -34,8 +30,8 @@ export const fetchSingleUser = id => {
                 dispatch({ type: type.FETCH_SINGLE_USER, userData: res.data })
                 dispatch(setEditLoaded(true))
             })
-            .catch(err => {
-                dispatch({ type: type.USER_ERROR, error: err })
+            .catch(() => {
+                dispatch(setError('Something went wrong'))
             })
     }
 }
@@ -46,16 +42,10 @@ export const registerUser = user => {
 
         axios.post(`${baseUrl}/user?api_token=${apiToken}`, user)
             .then(() => {
-                dispatch({
-                    type: type.USER_REGISTER,
-                    userRegister: 'User created successfully'
-                })
+                dispatch(setUserRegister('User created successfully'))
             })
             .catch(() => {
-                dispatch({
-                    type: type.USER_REGISTER,
-                    userRegister: ''
-                })
+                dispatch(setUserRegister(''))
                 dispatch(setError('Something went wrong'))
             })
     }
@@ -88,7 +78,17 @@ export const deleteUser = id => {
     }
 }
 
-export const showRegistration = () => false
+export const setListLoaded = value => {
+    return {
+        type: type.LIST_LOADED, listLoaded: value
+    }
+}
+
+export const setUserRegister = value => {
+    return {
+        type: type.USER_REGISTER, userRegister: value
+    }
+}
 
 export const setEdited = value => {
     return {
