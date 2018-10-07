@@ -3,27 +3,21 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as actions from '../../store/actions/UsersActions'
 import UserList from './UserList'
-import UserRegistration from './UserRegistration'
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
 class Users extends Component {
 
     componentDidMount() {
-        this.props.actions.fetchUsers(this.props.users)
+        this.fetchUsers()
     }
 
-    listUsers = () => {
-        this.props.actions.listLoaded(true)
-        this.props.actions.createUser(false)
-    }
-
-    createUser = () => {
-        this.props.actions.listLoaded(false)
-        this.props.actions.createUser(true)
+    fetchUsers = () => {
+        if (this.props.users.data.length === 0) {
+            this.props.actions.fetchUsers(this.props.users)
+        }
     }
 
     render() {
-        const { listLoaded, createUserLoaded } = this.props.users
+        const { listLoaded } = this.props.users
         return (
             <div>
                 <div className="page-header">
@@ -32,27 +26,10 @@ class Users extends Component {
                     </div>
                 </div>
                 {listLoaded ?
-                    <UserList
-                        data={this.props.users.data}
-                        createUser={this.createUser} />
+                    <UserList data={this.props.users.data} />
                     :
                     null
                 }
-                {createUserLoaded ?
-                    <ReactCSSTransitionGroup
-                        transitionName="smooth"
-                        transitionAppear={true}
-                        transitionAppearTimeout={1000}
-                        transitionEnter={false}
-                        transitionLeave={false}>
-                        <UserRegistration
-                            key={Date.now()}
-                            listUsers={this.listUsers} />
-                    </ReactCSSTransitionGroup>
-                    :
-                    null
-                }
-
             </div>
         )
     }

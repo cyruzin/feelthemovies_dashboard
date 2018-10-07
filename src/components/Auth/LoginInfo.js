@@ -12,7 +12,7 @@ const LoginInfo = props => (
                                 <div className="logo">
                                     <h1>Feel the Movies</h1>
                                 </div>
-                                <p>Dashboard 2.0.</p>
+                                <p>Can You Feel It?</p>
                             </div>
                         </div>
                     </div>
