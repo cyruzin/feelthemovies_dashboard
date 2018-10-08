@@ -1,11 +1,47 @@
-import React from 'react'
+import React, { Component } from 'react'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import * as actions from '../../store/actions/KeywordsActions'
+import KeywordsList from './KeywordsList'
 
-const Keywords = () => (
-    <div className="page-header">
-        <div className="container-fluid">
-            <h2 className="h5 no-margin-bottom">Keywords</h2>
-        </div>
-    </div>
-)
+class Keywords extends Component {
 
-export default Keywords
+    componentDidMount() {
+        this.fetchKeywords()
+    }
+
+    fetchKeywords = () => {
+        this.props.actions.fetchKeywords()
+    }
+
+    render() {
+        const { loaded } = this.props.keywords
+        return (
+            <div>
+                <div className="page-header">
+                    <div className="container-fluid">
+                        <h2 className="h5 no-margin-bottom">Keywords</h2>
+                    </div>
+                </div>
+                {loaded ?
+                    <KeywordsList />
+                    :
+                    null
+                }
+            </div >
+        )
+    }
+}
+
+
+const mapStateToProps = state => {
+    return {
+        keywords: state.keywords
+    }
+}
+
+const mapDispatchToProps = dispatch => ({
+    actions: bindActionCreators(actions, dispatch)
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Keywords)

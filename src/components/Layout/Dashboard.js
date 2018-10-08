@@ -14,6 +14,9 @@ import { loadJs } from '../../util/helpers'
 import UserRegistration from '../Users/UserRegistration';
 import UserEdit from '../Users/UserEdit';
 import UserDelete from '../Users/UserDelete';
+import KeywordsCreate from '../Keywords/KeywordsCreate'
+import KeywordsEdit from '../Keywords/KeywordsEdit'
+import KeywordsDelete from '../Keywords/KeywordsDelete'
 
 class Dashboard extends Component {
 
@@ -39,6 +42,11 @@ class Dashboard extends Component {
                         <Route path='/dashboard/create_user' component={UserRegistration} />
                         <Route path='/dashboard/edit_user/:id' component={UserEdit} />
                         <Route path='/dashboard/delete_user/:id' component={UserDelete} />
+
+                        <Route path='/dashboard/create_keyword' component={KeywordsCreate} />
+                        <Route path='/dashboard/edit_keyword/:id' component={KeywordsEdit} />
+                        <Route path='/dashboard/delete_keyword/:id' component={KeywordsDelete} />
+
                         <Route path='/dashboard/recommendations' component={Recommendations} />
                         <Route path='/dashboard/genres' component={Genres} />
                         <Route path='/dashboard/keywords' component={Keywords} />
