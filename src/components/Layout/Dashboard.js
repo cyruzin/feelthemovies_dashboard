@@ -6,6 +6,9 @@ import Content from './Content'
 import Home from '../Home/Home'
 import Recommendations from '../Recommendations/Recommendations'
 import Sources from '../Sources/Sources'
+import SourcesCreate from '../Sources/SourcesCreate'
+import SourcesEdit from '../Sources/SourcesEdit'
+import SourcesDelete from '../Sources/SourcesDelete'
 import Logout from '../Auth/Logout'
 import Users from '../Users/Users'
 import UserRegistration from '../Users/UserRegistration';
@@ -41,15 +44,11 @@ class Dashboard extends Component {
                 <Content>
                     <Switch>
                         <Route path='/dashboard/home' component={Home} />
+
                         <Route path='/dashboard/users' component={Users} />
                         <Route path='/dashboard/create_user' component={UserRegistration} />
                         <Route path='/dashboard/edit_user/:id' component={UserEdit} />
                         <Route path='/dashboard/delete_user/:id' component={UserDelete} />
-
-                        <Route path='/dashboard/keywords' component={Keywords} />
-                        <Route path='/dashboard/create_keyword' component={KeywordsCreate} />
-                        <Route path='/dashboard/edit_keyword/:id' component={KeywordsEdit} />
-                        <Route path='/dashboard/delete_keyword/:id' component={KeywordsDelete} />
 
                         <Route path='/dashboard/recommendations' component={Recommendations} />
 
@@ -58,7 +57,16 @@ class Dashboard extends Component {
                         <Route path='/dashboard/edit_genre/:id' component={GenresEdit} />
                         <Route path='/dashboard/delete_genre/:id' component={GenresDelete} />
 
+                        <Route path='/dashboard/keywords' component={Keywords} />
+                        <Route path='/dashboard/create_keyword' component={KeywordsCreate} />
+                        <Route path='/dashboard/edit_keyword/:id' component={KeywordsEdit} />
+                        <Route path='/dashboard/delete_keyword/:id' component={KeywordsDelete} />
+
                         <Route path='/dashboard/sources' component={Sources} />
+                        <Route path='/dashboard/create_source' component={SourcesCreate} />
+                        <Route path='/dashboard/edit_source/:id' component={SourcesEdit} />
+                        <Route path='/dashboard/delete_source/:id' component={SourcesDelete} />
+
                         <Route path='/dashboard/logout' component={Logout} />
                     </Switch>
                 </Content>

@@ -3,9 +3,9 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import Alert from '../Layout/Alert'
-import * as actions from '../../store/actions/GenresActions'
+import * as actions from '../../store/actions/SourcesActions'
 
-class GenresCreate extends Component {
+class SourcesCreate extends Component {
 
     constructor(props) {
         super(props)
@@ -13,17 +13,17 @@ class GenresCreate extends Component {
     }
 
     componentDidMount() {
-        if (this.props.genres.created) {
-            this.props.actions.setCreateGenre(false)
+        if (this.props.sources.created) {
+            this.props.actions.setCreateSource(false)
         }
     }
 
-    createGenre = () => {
+    createSource = () => {
         let name = this.nameRef.current.value
 
-        this.props.actions.setCreateGenre(false)
+        this.props.actions.setCreateSource(false)
 
-        let genre = {
+        let source = {
             name: name
         }
 
@@ -32,7 +32,7 @@ class GenresCreate extends Component {
             return false
         }
 
-        this.props.actions.createGenre(genre)
+        this.props.actions.createSource(source)
 
         name = this.nameRef.current.value = ''
     }
@@ -43,8 +43,8 @@ class GenresCreate extends Component {
                 <div className="container-fluid">
                     <ul className="breadcrumb">
                         <li className="breadcrumb-item">
-                            <Link to='/dashboard/genres'>
-                                Genres
+                            <Link to='/dashboard/sources'>
+                                Sources
                             </Link>
                         </li>
                         <li className="breadcrumb-item active">Create</li>
@@ -57,14 +57,14 @@ class GenresCreate extends Component {
 
                                 <div className="block">
                                     <div className="title">
-                                        <strong>Create genre</strong>
+                                        <strong>Create source</strong>
                                     </div>
                                     <div className="block-body">
-                                        {this.props.genres.error !== '' ?
-                                            <Alert message={this.props.genres.error} type='primary' />
+                                        {this.props.sources.error !== '' ?
+                                            <Alert message={this.props.sources.error} type='primary' />
                                             : null
                                         }
-                                        {this.props.genres.created ?
+                                        {this.props.sources.created ?
                                             <Alert message="Genre created successfully" type='success' />
                                             : null
                                         }
@@ -81,7 +81,7 @@ class GenresCreate extends Component {
                                         <div className="form-group row">
                                             <div className="col-sm-9 ml-auto">
                                                 <button
-                                                    onClick={this.createGenre}
+                                                    onClick={this.createSource}
                                                     className="btn btn-primary">
                                                     Save
                                                 </button>
@@ -102,7 +102,7 @@ class GenresCreate extends Component {
 
 const mapStateToProps = state => {
     return {
-        genres: state.genres
+        sources: state.sources
     }
 }
 
@@ -110,4 +110,4 @@ const mapDispatchToProps = dispatch => ({
     actions: bindActionCreators(actions, dispatch)
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(GenresCreate)
+export default connect(mapStateToProps, mapDispatchToProps)(SourcesCreate)
