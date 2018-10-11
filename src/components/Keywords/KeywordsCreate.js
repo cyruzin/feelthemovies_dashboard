@@ -10,38 +10,31 @@ class KeywordsCreate extends Component {
     constructor(props) {
         super(props)
         this.nameRef = React.createRef()
-        this.emailRef = React.createRef()
-        this.passwordRef = React.createRef()
     }
 
     componentDidMount() {
-        this.props.actions.setUserRegister('')
+        if (this.props.keywords.created) {
+            this.props.actions.setCreateKeyword(false)
+        }
     }
 
-    registerUser = () => {
-        let name = this.nameRef.current.value;
-        let email = this.emailRef.current.value;
-        let password = this.passwordRef.current.value;
+    createKeyword = () => {
+        let name = this.nameRef.current.value
 
-        this.props.actions.setUserRegister('')
+        this.props.actions.setCreateKeyword('')
 
-        let user = {
-            name: name,
-            email: email,
-            password: password
+        let keyword = {
+            name: name
         }
 
-        if (name === '' || email === '' || password === '') {
-            this.props.actions.setError('Please, fill all fields')
+        if (name === '') {
+            this.props.actions.setError('Please, fill name field')
             return false
         }
 
-        this.props.actions.registerUser(user)
+        this.props.actions.createKeyword(keyword)
 
         name = this.nameRef.current.value = ''
-        email = this.emailRef.current.value = ''
-        password = this.passwordRef.current.value = ''
-
     }
 
     render() {
@@ -50,11 +43,11 @@ class KeywordsCreate extends Component {
                 <div className="container-fluid">
                     <ul className="breadcrumb">
                         <li className="breadcrumb-item">
-                            <Link to='/dashboard/users'>
-                                Users
+                            <Link to='/dashboard/keywords'>
+                                Keywords
                             </Link>
                         </li>
-                        <li className="breadcrumb-item active">Registration</li>
+                        <li className="breadcrumb-item active">Create</li>
                     </ul>
                 </div>
                 <section className="no-padding-top">
@@ -64,15 +57,15 @@ class KeywordsCreate extends Component {
 
                                 <div className="block">
                                     <div className="title">
-                                        <strong>User registration</strong>
+                                        <strong>Create keyword</strong>
                                     </div>
                                     <div className="block-body">
-                                        {this.props.users.error !== '' ?
-                                            <Alert message={this.props.users.error} type='primary' />
+                                        {this.props.keywords.error !== '' ?
+                                            <Alert message={this.props.keywords.error} type='primary' />
                                             : null
                                         }
-                                        {this.props.users.userRegister !== '' ?
-                                            <Alert message={this.props.users.userRegister} type='success' />
+                                        {this.props.keywords.created ?
+                                            <Alert message="Keyword created successfully" type='success' />
                                             : null
                                         }
                                         <div className="form-group row">
@@ -86,29 +79,9 @@ class KeywordsCreate extends Component {
                                         <div className="line"></div>
 
                                         <div className="form-group row">
-                                            <label className="col-lg-3 form-control-label">E-mail</label>
-                                            <div className="col-lg-9">
-                                                <input ref={this.emailRef}
-                                                    type="text"
-                                                    className="form-control" />
-                                            </div>
-                                        </div>
-                                        <div className="line"></div>
-
-                                        <div className="form-group row">
-                                            <label className="col-lg-3 form-control-label">Password</label>
-                                            <div className="col-lg-9">
-                                                <input ref={this.passwordRef}
-                                                    type="password"
-                                                    className="form-control" />
-                                            </div>
-                                        </div>
-                                        <div className="line"></div>
-
-                                        <div className="form-group row">
                                             <div className="col-sm-9 ml-auto">
                                                 <button
-                                                    onClick={this.registerUser}
+                                                    onClick={this.createKeyword}
                                                     className="btn btn-primary">
                                                     Save
                                                 </button>
@@ -129,7 +102,7 @@ class KeywordsCreate extends Component {
 
 const mapStateToProps = state => {
     return {
-        users: state.users
+        keywords: state.keywords
     }
 }
 

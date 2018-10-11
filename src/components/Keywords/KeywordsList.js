@@ -16,7 +16,7 @@ class KeywordsList extends Component {
                             <div className="col-lg-12">
                                 <div className="block">
                                     {this.props.keywords.deleted ?
-                                        <Alert type='success' message={this.props.users.deleted} />
+                                        <Alert type='success' message="Keyword removed successfully" />
                                         :
                                         null
                                     }

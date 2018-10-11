@@ -1,37 +1,29 @@
 import React, { Component } from 'react'
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import * as actions from '../../store/actions/UsersActions';
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import * as actions from '../../store/actions/KeywordsActions'
 import { Link } from 'react-router-dom'
 import Alert from '../Layout/Alert'
 
-class UserEdit extends Component {
+class KeywordsEdit extends Component {
 
     constructor(props) {
         super(props)
         this.nameRef = React.createRef()
-        this.emailRef = React.createRef()
-        this.passwordRef = React.createRef()
     }
 
     componentDidMount() {
         this.reset()
-        this.fetchSingleUser()
+        this.fetchSingleKeyword()
     }
 
-    fetchSingleUser = () => {
-        this.props.actions.fetchSingleUser(this.props.match.params.id)
+    fetchSingleKeyword = () => {
+        this.props.actions.fetchSingleKeyword(this.props.match.params.id)
     }
 
-    editUser = () => {
-        let user = {
-            name: this.nameRef.current.value,
-            email: this.emailRef.current.value,
-            password: this.passwordRef.current.value,
-        }
-        this.props.actions.editUser(this.props.match.params.id, user)
-
-        this.passwordRef.current.value = ''
+    editKeyword = () => {
+        let keyword = { name: this.nameRef.current.value }
+        this.props.actions.editKeyword(this.props.match.params.id, keyword)
     }
 
     reset = () => {
@@ -45,7 +37,7 @@ class UserEdit extends Component {
                 <div className="container-fluid">
                     <ul className="breadcrumb">
                         <li className="breadcrumb-item">
-                            <Link to='/dashboard/users'>Users</Link>
+                            <Link to='/dashboard/keywords'>Keywords</Link>
                         </li>
                         <li className="breadcrumb-item active">Edit</li>
                     </ul>
@@ -55,45 +47,25 @@ class UserEdit extends Component {
                         <div className="row">
                             <div className="col-lg-12">
 
-                                {this.props.users.editLoaded ?
+                                {this.props.keywords.editLoaded ?
                                     <div className="block">
                                         <div className="title">
-                                            <strong>User edit</strong>
+                                            <strong>Keyword edit</strong>
                                         </div>
                                         <div className="block-body">
-                                            {this.props.users.error !== '' ?
-                                                <Alert message={this.props.users.error} type='primary' />
+                                            {this.props.keywords.error !== '' ?
+                                                <Alert message={this.props.keywords.error} type='primary' />
                                                 : null
                                             }
-                                            {this.props.users.userEdited !== '' ?
-                                                <Alert message={this.props.users.userEdited} type='success' />
+                                            {this.props.keywords.edited !== false ?
+                                                <Alert message={this.props.keywords.edited} type='success' />
                                                 : null
                                             }
                                             <div className="form-group row">
                                                 <label className="col-sm-3 form-control-label">Name</label>
                                                 <div className="col-sm-9">
                                                     <input ref={this.nameRef} type="text" className="form-control"
-                                                        defaultValue={this.props.users.userData.name} />
-                                                </div>
-                                            </div>
-                                            <div className="line"></div>
-
-                                            <div className="form-group row">
-                                                <label className="col-sm-3 form-control-label">E-mail</label>
-                                                <div className="col-sm-9">
-                                                    <input
-                                                        ref={this.emailRef}
-                                                        type="text"
-                                                        className="form-control"
-                                                        defaultValue={this.props.users.userData.email} />
-                                                </div>
-                                            </div>
-                                            <div className="line"></div>
-
-                                            <div className="form-group row">
-                                                <label className="col-sm-3 form-control-label">Password</label>
-                                                <div className="col-sm-9">
-                                                    <input ref={this.passwordRef} type="password" className="form-control" />
+                                                        defaultValue={this.props.keywords.keywordData.name} />
                                                 </div>
                                             </div>
                                             <div className="line"></div>
@@ -101,7 +73,7 @@ class UserEdit extends Component {
                                             <div className="form-group row">
                                                 <div className="col-sm-9 ml-auto">
                                                     <button className="btn btn-primary"
-                                                        onClick={this.editUser}>
+                                                        onClick={this.editKeyword}>
                                                         Save
                                                 </button>
                                                 </div>
@@ -110,7 +82,6 @@ class UserEdit extends Component {
                                         </div>
                                     </div>
                                     : null}
-
                             </div>
                         </div>
                     </div>
@@ -122,7 +93,7 @@ class UserEdit extends Component {
 
 const mapStateToProps = state => {
     return {
-        users: state.users
+        keywords: state.keywords
     }
 }
 
@@ -130,4 +101,4 @@ const mapDispatchToProps = dispatch => ({
     actions: bindActionCreators(actions, dispatch)
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserEdit)
+export default connect(mapStateToProps, mapDispatchToProps)(KeywordsEdit)

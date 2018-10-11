@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import * as actions from '../../store/actions/UsersActions';
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import * as actions from '../../store/actions/UsersActions'
 import { Link } from 'react-router-dom'
 import Alert from '../Layout/Alert'
 
