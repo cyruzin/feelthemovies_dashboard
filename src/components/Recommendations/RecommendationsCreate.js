@@ -3,13 +3,24 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import Alert from '../Layout/Alert'
+import Select from 'antd/lib/select'
+import 'antd/lib/select/style/css'
 import * as actions from '../../store/actions/RecommendationsActions'
+
+const Option = Select.Option;
+
+const children = [];
+for (let i = 10; i < 36; i++) {
+    children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
+}
 
 class RecommendationsCreate extends Component {
 
     constructor(props) {
         super(props)
-        this.nameRef = React.createRef()
+        this.titleRef = React.createRef()
+        this.bodyRef = React.createRef()
+        this.typeRef = React.createRef()
     }
 
     componentDidMount() {
@@ -19,22 +30,26 @@ class RecommendationsCreate extends Component {
     }
 
     createRecommendation = () => {
-        let name = this.nameRef.current.value
+        let title = this.titleRef.current.value
 
         this.props.actions.setCreateRecommendation('')
 
         let recommendation = {
-            name: name
+            title: title
         }
 
-        if (name === '') {
-            this.props.actions.setError('Please, fill name field')
+        if (title === '') {
+            this.props.actions.setError('Please, fill title field')
             return false
         }
 
         this.props.actions.create(recommendation)
 
-        name = this.nameRef.current.value = ''
+        title = this.titleRef.current.value = ''
+    }
+
+    handleChange = value => {
+        console.log(`selected ${value}`);
     }
 
     render() {
@@ -69,14 +84,68 @@ class RecommendationsCreate extends Component {
                                             : null
                                         }
                                         <div className="form-group row">
-                                            <label className="col-lg-3 form-control-label">Name</label>
+                                            <label className="col-lg-3 form-control-label">Title</label>
                                             <div className="col-lg-9">
-                                                <input ref={this.nameRef}
+                                                <input ref={this.titleRef}
                                                     type="text"
                                                     className="form-control" />
                                             </div>
                                         </div>
                                         <div className="line"></div>
+
+                                        <div className="form-group row">
+                                            <label className="col-lg-3 form-control-label">Body</label>
+                                            <div className="col-lg-9">
+                                                <textarea ref={this.bodyRef}
+                                                    type="text"
+                                                    className="form-control" >
+                                                </textarea>
+                                            </div>
+                                        </div>
+                                        <div className="line"></div>
+
+                                        <div className="form-group row">
+                                            <label className="col-lg-3 form-control-label">Type</label>
+                                            <div className="col-lg-9">
+                                                <select ref={this.typeRef} className="form-control mb-3">
+                                                    <option>Movie</option>
+                                                    <option>Serie</option>
+                                                    <option>Mixed</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div className="line"></div>
+
+                                        <div className="form-group row">
+                                            <label className="col-lg-3 form-control-label">Genres</label>
+                                            <div className="col-lg-9">
+                                                <Select
+                                                    mode="tags"
+                                                    size="large"
+                                                    style={{ width: '100%' }}
+                                                    onChange={this.handleChange}
+                                                >
+                                                    {children}
+                                                </Select>
+                                            </div>
+                                        </div>
+                                        <div className="line"></div>
+
+                                        <div className="form-group row">
+                                            <label className="col-lg-3 form-control-label">Keywords</label>
+                                            <div className="col-lg-9">
+                                                <Select
+                                                    mode="tags"
+                                                    size="large"
+                                                    style={{ width: '100%' }}
+                                                    onChange={this.handleChange}
+                                                >
+                                                    {children}
+                                                </Select>
+                                            </div>
+                                        </div>
+                                        <div className="line"></div>
+
 
                                         <div className="form-group row">
                                             <div className="col-sm-9 ml-auto">
@@ -95,7 +164,7 @@ class RecommendationsCreate extends Component {
                         </div>
                     </div>
                 </section>
-            </div>
+            </div >
         )
     }
 }
