@@ -15,17 +15,14 @@ import * as genresActions from '../../store/actions/GenresActions'
 
 const Option = Select.Option;
 
-const children = [];
-for (let i = 10; i < 36; i++) {
-    children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
-}
+let type = '0'
+let body = ''
 
 class RecommendationsCreate extends Component {
 
     constructor(props) {
         super(props)
         this.titleRef = React.createRef()
-        this.typeRef = React.createRef()
 
         this.searchKeywords = debounce(this.searchKeywords, 800)
         this.searchGenres = debounce(this.searchGenres, 800)
@@ -38,39 +35,46 @@ class RecommendationsCreate extends Component {
     }
 
     createRecommendation = () => {
+
         let title = this.titleRef.current.value
+        let genres = this.props.genres.genresValue.map(v => v.key)
+        let keywords = this.props.keywords.keywordsValue.map(v => v.key)
 
         this.props.actions.setCreateRecommendation('')
 
         let recommendation = {
-            title: title
+            title: title,
+            body: body,
+            type: type,
+            genres: genres,
+            keywords: keywords,
+            user_id: this.props.auth.id
         }
 
-        if (title === '') {
-            this.props.actions.setError('Please, fill title field')
+        if (title === '' || type === '' || body === '') {
+            this.props.actions.setRecommendationError('Please, fill all fields')
             return false
         }
 
-        this.props.actions.create(recommendation)
-
-        title = this.titleRef.current.value = ''
+        this.props.actions.createRecommendation(recommendation)
     }
 
-    handleChange = value => {
-        console.log(`selected ${value}`);
+    handleType = e => {
+        type = e.target.value
     }
 
     handleEditorChange = e => {
-        console.log('Content was updated:', e.target.getContent());
+        body = e.target.getContent()
     }
-
     searchKeywords = value => this.props.actions.searchKeywords(value)
 
     keywordsChange = value => this.props.actions.keywordsChange(value)
 
     searchGenres = value => this.props.actions.searchGenres(value)
 
-    genresChange = value => this.props.actions.genresChange(value)
+    genresChange = value => {
+        this.props.actions.genresChange(value)
+    }
 
     render() {
         return (
@@ -100,7 +104,7 @@ class RecommendationsCreate extends Component {
                                             : null
                                         }
                                         {this.props.recommendations.created ?
-                                            <Alert message="Keyword created successfully" type='success' />
+                                            <Alert message="Recommendations created successfully" type='success' />
                                             : null
                                         }
                                         <div className="form-group row">
@@ -120,7 +124,6 @@ class RecommendationsCreate extends Component {
                                                     init={{
                                                         toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | code'
                                                     }}
-                                                    ref={this.bodyRef}
                                                     apiKey="524aoctgpx14f8bvkwp4nwtstg3qzosyouqmz0dkqto0mv11"
                                                     onChange={this.handleEditorChange}
                                                 />
@@ -131,10 +134,10 @@ class RecommendationsCreate extends Component {
                                         <div className="form-group row">
                                             <label className="col-lg-3 form-control-label">Type</label>
                                             <div className="col-lg-9">
-                                                <select ref={this.typeRef} className="form-control mb-3">
-                                                    <option>Movie</option>
-                                                    <option>Serie</option>
-                                                    <option>Mixed</option>
+                                                <select onChange={this.handleType} className="form-control mb-3">
+                                                    <option value="0" defaultValue>Movie</option>
+                                                    <option value="1">Serie</option>
+                                                    <option value="2">Mixed</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -213,7 +216,8 @@ const mapStateToProps = state => {
     return {
         recommendations: state.recommendations,
         keywords: state.keywords,
-        genres: state.genres
+        genres: state.genres,
+        auth: state.auth
     }
 }
 

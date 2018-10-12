@@ -11,7 +11,7 @@ export const fetchRecommendations = () => {
                 dispatch(setRecommendations(res.data.data))
                 dispatch(setLoaded(true))
             })
-            .catch(() => dispatch(setError('Something went wrong')))
+            .catch(() => dispatch(setRecommendationError('Something went wrong')))
     }
 }
 
@@ -27,14 +27,14 @@ export const fetchSingleRecommendation = id => {
                 dispatch(setEditLoaded(true))
             })
             .catch(() => {
-                dispatch(setError('Something went wrong'))
+                dispatch(setRecommendationError('Something went wrong'))
             })
     }
 }
 
 export const createRecommendation = recommendation => {
     return dispatch => {
-        dispatch(setError(''))
+        dispatch(setRecommendationError(''))
 
         axios.post(`${baseUrl}/recommendation?api_token=${apiToken}`, recommendation)
             .then(() => {
@@ -42,21 +42,21 @@ export const createRecommendation = recommendation => {
             })
             .catch(() => {
                 dispatch(setCreateRecommendation(''))
-                dispatch(setError('Something went wrong'))
+                dispatch(setRecommendationError('Something went wrong'))
             })
     }
 }
 
 export const editRecommendation = (id, recommendation) => {
     return dispatch => {
-        dispatch(setError(''))
+        dispatch(setRecommendationError(''))
         axios.put(`${baseUrl}/recommendation/${id}?api_token=${apiToken}`, recommendation)
             .then(() => {
                 dispatch(setEdited('Recommendation edited successfully'))
             })
             .catch(() => {
                 dispatch(setEdited(''))
-                dispatch(setError('Something went wrong'))
+                dispatch(setRecommendationError('Something went wrong'))
             })
     }
 }
@@ -69,7 +69,7 @@ export const deleteRecommendation = id => {
             })
             .catch(() => {
                 dispatch(setDeleted(''))
-                dispatch(setError('Something went wrong'))
+                dispatch(setRecommendationError('Something went wrong'))
             })
     }
 }
@@ -86,7 +86,7 @@ export const setLoaded = value => {
     }
 }
 
-export const setError = value => {
+export const setRecommendationError = value => {
     return {
         type: type.ERROR_RECOMMENDATION, error: value
     }
