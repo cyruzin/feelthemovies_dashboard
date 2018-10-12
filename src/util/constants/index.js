@@ -1,3 +1,3 @@
-export const apiToken = 'Y7d7mLC0yHxJMGLby0daKr84FPrsQbiH'
+export const apiToken = 'WvOsstSmMTs4ILUuROA1Vofa5cmqY3kR'
 export const baseUrl = 'http://feelthemovies.test/v1'
 //export const baseUrl = 'https://api.feelthemovies.com.br/v1'

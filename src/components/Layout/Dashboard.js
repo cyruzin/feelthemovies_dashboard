@@ -3,8 +3,10 @@ import { connect } from 'react-redux'
 import { Redirect, Route, Switch } from 'react-router-dom'
 import Header from './Header'
 import Content from './Content'
-import Home from '../Home/Home'
 import Recommendations from '../Recommendations/Recommendations'
+import RecommendationsCreate from '../Recommendations/RecommendationsCreate'
+import RecommendationsEdit from '../Recommendations/RecommendationsEdit'
+import RecommendationsDelete from '../Recommendations/RecommendationsDelete'
 import Sources from '../Sources/Sources'
 import SourcesCreate from '../Sources/SourcesCreate'
 import SourcesEdit from '../Sources/SourcesEdit'
@@ -43,14 +45,15 @@ class Dashboard extends Component {
                 <Header />
                 <Content>
                     <Switch>
-                        <Route path='/dashboard/home' component={Home} />
-
                         <Route path='/dashboard/users' component={Users} />
                         <Route path='/dashboard/create_user' component={UserRegistration} />
                         <Route path='/dashboard/edit_user/:id' component={UserEdit} />
                         <Route path='/dashboard/delete_user/:id' component={UserDelete} />
 
                         <Route path='/dashboard/recommendations' component={Recommendations} />
+                        <Route path='/dashboard/create_recommendation' component={RecommendationsCreate} />
+                        <Route path='/dashboard/edit_recommendation/:id' component={RecommendationsEdit} />
+                        <Route path='/dashboard/delete_recommendation/:id' component={RecommendationsDelete} />
 
                         <Route path='/dashboard/genres' component={Genres} />
                         <Route path='/dashboard/create_genre' component={GenresCreate} />
