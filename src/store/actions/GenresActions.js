@@ -71,6 +71,20 @@ export const deleteGenre = id => {
     }
 }
 
+export const searchGenres = genres => {
+    return dispatch => {
+        loadingGenresSearch(true)
+        axios.get(`${baseUrl}/search_genre?api_token=${apiToken}&q=${genres}`)
+            .then(res => {
+                dispatch(setGenresSearch(res.data))
+                loadingGenresSearch(false)
+            })
+            .catch(() => {
+                dispatch(setError('Something went wrong'))
+            })
+    }
+}
+
 export const setGenres = value => {
     return {
         type: type.FETCH_GENRES, data: value
@@ -80,6 +94,24 @@ export const setGenres = value => {
 export const setLoaded = value => {
     return {
         type: type.LOADED_GENRES, loaded: value
+    }
+}
+
+export const setGenresSearch = value => {
+    return {
+        type: type.SEARCH_GENRES, genres: value
+    }
+}
+
+export const loadingGenresSearch = value => {
+    return {
+        type: type.LOADING_GENRES_SEARCH, loadingGenres: value
+    }
+}
+
+export const genresChange = value => {
+    return {
+        type: type.SEARCH_GENRES_VALUE, genresValue: value, genres: []
     }
 }
 

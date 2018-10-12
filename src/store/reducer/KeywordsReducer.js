@@ -6,8 +6,11 @@ const initialState = {
     created: false,
     edited: false,
     deleted: false,
+    loadingSearch: false,
     data: [],
     keywordData: '',
+    keywords: [],
+    keywordsValue: [],
     error: ''
 }
 
@@ -22,6 +25,22 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 keywordData: action.keywordData
+            }
+        case type.SEARCH_KEYWORDS:
+            return {
+                ...state,
+                keywords: action.keywords
+            }
+        case type.SEARCH_KEYWORDS_VALUE:
+            return {
+                ...state,
+                keywordsValue: action.keywordsValue,
+                keywords: action.keywords
+            }
+        case type.LOADING_KEYWORDS_SEARCH:
+            return {
+                ...state,
+                loadingSearch: action.loadingSearch
             }
         case type.LOADED_KEYWORDS:
             return {

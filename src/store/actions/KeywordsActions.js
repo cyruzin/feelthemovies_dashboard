@@ -71,9 +71,41 @@ export const deleteKeyword = id => {
     }
 }
 
+export const searchKeywords = keyword => {
+    return dispatch => {
+        loadingKeywordsSearch(true)
+        axios.get(`${baseUrl}/search_keyword?api_token=${apiToken}&q=${keyword}`)
+            .then(res => {
+                dispatch(setKeywordsSearch(res.data))
+                loadingKeywordsSearch(false)
+            })
+            .catch(() => {
+                dispatch(setError('Something went wrong'))
+            })
+    }
+}
+
 export const setKeywords = value => {
     return {
         type: type.FETCH_KEYWORDS, data: value
+    }
+}
+
+export const setKeywordsSearch = value => {
+    return {
+        type: type.SEARCH_KEYWORDS, keywords: value
+    }
+}
+
+export const loadingKeywordsSearch = value => {
+    return {
+        type: type.LOADING_KEYWORDS_SEARCH, loadingSearch: value
+    }
+}
+
+export const keywordsChange = value => {
+    return {
+        type: type.SEARCH_KEYWORDS_VALUE, keywordsValue: value, keywords: []
     }
 }
 

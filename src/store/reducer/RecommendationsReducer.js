@@ -7,6 +7,8 @@ const initialState = {
     edited: false,
     deleted: false,
     data: [],
+    genres: [],
+    genresValue: [],
     recommendationData: '',
     error: ''
 }

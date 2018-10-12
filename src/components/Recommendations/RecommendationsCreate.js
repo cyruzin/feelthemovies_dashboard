@@ -2,10 +2,16 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import debounce from 'lodash/debounce'
 import Alert from '../Layout/Alert'
 import Select from 'antd/lib/select'
+import Spin from 'antd/lib/spin'
 import 'antd/lib/select/style/css'
+import 'antd/lib/spin/style/css'
+import { Editor } from '@tinymce/tinymce-react'
 import * as actions from '../../store/actions/RecommendationsActions'
+import * as keywordsActions from '../../store/actions/KeywordsActions'
+import * as genresActions from '../../store/actions/GenresActions'
 
 const Option = Select.Option;
 
@@ -19,8 +25,10 @@ class RecommendationsCreate extends Component {
     constructor(props) {
         super(props)
         this.titleRef = React.createRef()
-        this.bodyRef = React.createRef()
         this.typeRef = React.createRef()
+
+        this.searchKeywords = debounce(this.searchKeywords, 800)
+        this.searchGenres = debounce(this.searchGenres, 800)
     }
 
     componentDidMount() {
@@ -51,6 +59,18 @@ class RecommendationsCreate extends Component {
     handleChange = value => {
         console.log(`selected ${value}`);
     }
+
+    handleEditorChange = e => {
+        console.log('Content was updated:', e.target.getContent());
+    }
+
+    searchKeywords = value => this.props.actions.searchKeywords(value)
+
+    keywordsChange = value => this.props.actions.keywordsChange(value)
+
+    searchGenres = value => this.props.actions.searchGenres(value)
+
+    genresChange = value => this.props.actions.genresChange(value)
 
     render() {
         return (
@@ -96,10 +116,14 @@ class RecommendationsCreate extends Component {
                                         <div className="form-group row">
                                             <label className="col-lg-3 form-control-label">Body</label>
                                             <div className="col-lg-9">
-                                                <textarea ref={this.bodyRef}
-                                                    type="text"
-                                                    className="form-control" >
-                                                </textarea>
+                                                <Editor
+                                                    init={{
+                                                        toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | code'
+                                                    }}
+                                                    ref={this.bodyRef}
+                                                    apiKey="524aoctgpx14f8bvkwp4nwtstg3qzosyouqmz0dkqto0mv11"
+                                                    onChange={this.handleEditorChange}
+                                                />
                                             </div>
                                         </div>
                                         <div className="line"></div>
@@ -120,12 +144,20 @@ class RecommendationsCreate extends Component {
                                             <label className="col-lg-3 form-control-label">Genres</label>
                                             <div className="col-lg-9">
                                                 <Select
-                                                    mode="tags"
+                                                    allowClear
+                                                    mode="multiple"
+                                                    labelInValue
+                                                    value={this.props.genres.genresValue}
                                                     size="large"
+                                                    notFoundContent={this.props.genres.loadingGenres ? <Spin size="small" /> : null}
+                                                    filterOption={false}
+                                                    onSearch={this.searchGenres}
+                                                    onChange={this.genresChange}
                                                     style={{ width: '100%' }}
-                                                    onChange={this.handleChange}
                                                 >
-                                                    {children}
+                                                    {this.props.genres.genres.map(k =>
+                                                        <Option key={k.id} value={k.id}>{k.name}</Option>)
+                                                    }
                                                 </Select>
                                             </div>
                                         </div>
@@ -135,12 +167,20 @@ class RecommendationsCreate extends Component {
                                             <label className="col-lg-3 form-control-label">Keywords</label>
                                             <div className="col-lg-9">
                                                 <Select
-                                                    mode="tags"
+                                                    allowClear
+                                                    mode="multiple"
+                                                    labelInValue
+                                                    value={this.props.keywords.keywordsValue}
                                                     size="large"
+                                                    notFoundContent={this.props.keywords.loadingKeywords ? <Spin size="small" /> : null}
+                                                    filterOption={false}
+                                                    onSearch={this.searchKeywords}
+                                                    onChange={this.keywordsChange}
                                                     style={{ width: '100%' }}
-                                                    onChange={this.handleChange}
                                                 >
-                                                    {children}
+                                                    {this.props.keywords.keywords.map(k =>
+                                                        <Option key={k.id} value={k.id}>{k.name}</Option>)
+                                                    }
                                                 </Select>
                                             </div>
                                         </div>
@@ -171,12 +211,16 @@ class RecommendationsCreate extends Component {
 
 const mapStateToProps = state => {
     return {
-        recommendations: state.recommendations
+        recommendations: state.recommendations,
+        keywords: state.keywords,
+        genres: state.genres
     }
 }
 
 const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(actions, dispatch)
+    actions: bindActionCreators({
+        ...actions, ...keywordsActions, ...genresActions
+    }, dispatch)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(RecommendationsCreate)

@@ -6,7 +6,10 @@ const initialState = {
     created: false,
     edited: false,
     deleted: false,
+    loadingSearch: false,
     data: [],
+    genres: [],
+    genresValue: [],
     genreData: '',
     error: ''
 }
@@ -22,6 +25,22 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 genreData: action.genreData
+            }
+        case type.SEARCH_GENRES:
+            return {
+                ...state,
+                genres: action.genres
+            }
+        case type.SEARCH_GENRES_VALUE:
+            return {
+                ...state,
+                genresValue: action.genresValue,
+                genres: action.genres
+            }
+        case type.LOADING_GENRES_SEARCH:
+            return {
+                ...state,
+                loadingSearch: action.loadingSearch
             }
         case type.LOADED_GENRES:
             return {
