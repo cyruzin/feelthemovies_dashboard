@@ -9,6 +9,10 @@ const initialState = {
     data: [],
     genres: [],
     genresValue: [],
+    images: [],
+    imagesValue: [],
+    poster: '',
+    backdrop: '',
     recommendationData: '',
     error: ''
 }
@@ -24,6 +28,11 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 recommendationData: action.recommendationData
+            }
+        case type.FETCH_RECOMMENDATION_IMAGE:
+            return {
+                ...state,
+                images: action.images
             }
         case type.LOADED_RECOMMENDATIONS:
             return {
@@ -49,6 +58,18 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 deleted: action.deleted
+            }
+        case type.RECOMMENDATION_IMAGES:
+            return {
+                ...state,
+                poster: action.poster,
+                backdrop: action.backdrop
+            }
+        case type.RECOMMENDATION_IMAGES_VALUE:
+            return {
+                ...state,
+                imagesValue: action.imagesValue,
+                images: action.images
             }
         case type.ERROR_RECOMMENDATION:
             return {

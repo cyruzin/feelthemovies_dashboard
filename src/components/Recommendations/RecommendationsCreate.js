@@ -12,6 +12,7 @@ import { Editor } from '@tinymce/tinymce-react'
 import * as actions from '../../store/actions/RecommendationsActions'
 import * as keywordsActions from '../../store/actions/KeywordsActions'
 import * as genresActions from '../../store/actions/GenresActions'
+import { getYear } from '../../util/helpers'
 
 const Option = Select.Option;
 
@@ -26,6 +27,7 @@ class RecommendationsCreate extends Component {
 
         this.searchKeywords = debounce(this.searchKeywords, 800)
         this.searchGenres = debounce(this.searchGenres, 800)
+        this.fetchRecommendationImages = debounce(this.fetchRecommendationImages, 800)
     }
 
     componentDidMount() {
@@ -47,6 +49,8 @@ class RecommendationsCreate extends Component {
             body: body,
             type: type,
             genres: genres,
+            poster: this.props.recommendations.poster,
+            backdrop: this.props.recommendations.backdrop,
             keywords: keywords,
             user_id: this.props.auth.id
         }
@@ -74,6 +78,27 @@ class RecommendationsCreate extends Component {
 
     genresChange = value => {
         this.props.actions.genresChange(value)
+    }
+
+    fetchRecommendationImages = value => {
+        this.props.actions.fetchRecommendationImages(value)
+    }
+
+    handleRecommendationImage = value => {
+
+        let image = this.props.recommendations.images
+            .filter(v => v.id === value)
+
+        this.props.actions
+            .setRecommendationImages(image[0].poster_path, image[0].backdrop_path)
+
+        if (image[0].hasOwnProperty('name')) {
+            value = `${image[0].name} ${getYear(image[0].first_air_date)}`
+        } else {
+            value = `${image[0].title} ${getYear(image[0].release_date)}`
+        }
+
+        this.props.actions.imagesChange(value)
     }
 
     render() {
@@ -139,6 +164,36 @@ class RecommendationsCreate extends Component {
                                                     <option value="1">Serie</option>
                                                     <option value="2">Mixed</option>
                                                 </select>
+                                            </div>
+                                        </div>
+                                        <div className="line"></div>
+
+                                        <div className="form-group row">
+                                            <label className="col-lg-3 form-control-label">Image</label>
+                                            <div className="col-lg-9">
+                                                <Select
+                                                    showSearch
+                                                    size='large'
+                                                    value={this.props.recommendations.imagesValue}
+                                                    style={{ width: '100%' }}
+                                                    defaultActiveFirstOption={false}
+                                                    showArrow={false}
+                                                    filterOption={false}
+                                                    onSearch={this.fetchRecommendationImages}
+                                                    onChange={this.handleRecommendationImage}
+                                                    notFoundContent={null}
+                                                >
+                                                    {this.props.recommendations.images.map(v =>
+
+                                                        <Option key={v.id} value={v.id}>
+                                                            {v.hasOwnProperty('name') ?
+                                                                `${v.name} ${getYear(v.first_air_date)}`
+                                                                :
+                                                                `${v.title} ${getYear(v.release_date)}`
+                                                            }
+                                                        </Option>)
+                                                    }
+                                                </Select>
                                             </div>
                                         </div>
                                         <div className="line"></div>

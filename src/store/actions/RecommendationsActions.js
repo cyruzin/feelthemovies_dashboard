@@ -1,6 +1,6 @@
 import type from '../types/RecommendationsTypes'
 import axios from 'axios'
-import { apiToken, baseUrl } from '../../util/constants'
+import { apiToken, baseUrl, tmdbToken } from '../../util/constants'
 
 export const fetchRecommendations = () => {
     return dispatch => {
@@ -74,6 +74,25 @@ export const deleteRecommendation = id => {
     }
 }
 
+export const fetchRecommendationImages = search => {
+
+    let query = encodeURIComponent(search)
+
+    return dispatch => {
+
+        axios.get(`https://api.themoviedb.org/3/search/multi?api_key=${tmdbToken}&language=en-US&query=${query}&page=1&include_adult=false`)
+            .then(res => {
+                let images = res.data.results
+                    .filter(v => v.media_type !== 'person' && v.backdrop_path !== null)
+                dispatch({
+                    type: type.FETCH_RECOMMENDATION_IMAGE,
+                    images: images
+                })
+            })
+            .catch(() => dispatch(setRecommendationError('Something went wrong')))
+    }
+}
+
 export const setRecommendations = value => {
     return {
         type: type.FETCH_RECOMMENDATIONS, data: value
@@ -113,5 +132,19 @@ export const setCreateRecommendation = value => {
 export const setEdited = value => {
     return {
         type: type.EDIT_RECOMMENDATION, edited: value
+    }
+}
+
+export const setRecommendationImages = (poster, backdrop) => {
+    return {
+        type: type.RECOMMENDATION_IMAGES,
+        poster: poster,
+        backdrop: backdrop
+    }
+}
+
+export const imagesChange = value => {
+    return {
+        type: type.RECOMMENDATION_IMAGES_VALUE, imagesValue: value, images: []
     }
 }
