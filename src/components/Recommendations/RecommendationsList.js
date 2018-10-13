@@ -45,6 +45,12 @@ class RecommendationsList extends Component {
                                                         <td>{recommendation.updated_at}</td>
                                                         <td>
                                                             <Link
+                                                                className="btn btn-sm btn-outline-success mr-2"
+                                                                to={`/dashboard/create_item/${recommendation.id}`}
+                                                            >
+                                                                <i className="fa fa-plus"></i>
+                                                            </Link>
+                                                            <Link
                                                                 className="btn btn-sm btn-outline-secondary mr-2"
                                                                 to={`/dashboard/edit_recommendation/${recommendation.id}`}
                                                             >
