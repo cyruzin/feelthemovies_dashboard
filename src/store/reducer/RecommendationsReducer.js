@@ -5,6 +5,7 @@ const initialState = {
     editLoaded: false,
     created: false,
     edited: false,
+    editedLoaded: false,
     deleted: false,
     data: [],
     genres: [],
@@ -49,6 +50,11 @@ export default (state = initialState, action) => {
                 ...state,
                 edited: action.edited
             }
+        case type.EDIT_LOADED:
+            return {
+                ...state,
+                editedLoaded: action.editedLoaded
+            }
         case type.RECOMMENDATION_EDIT_LOADED:
             return {
                 ...state,
@@ -76,6 +82,8 @@ export default (state = initialState, action) => {
                 ...state,
                 error: action.error
             }
+        case type.RESET_RECOMMENDATION:
+            return state
         default:
             return state
     }

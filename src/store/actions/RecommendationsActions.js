@@ -52,10 +52,10 @@ export const editRecommendation = (id, recommendation) => {
         dispatch(setRecommendationError(''))
         axios.put(`${baseUrl}/recommendation/${id}?api_token=${apiToken}`, recommendation)
             .then(() => {
-                dispatch(setEdited('Recommendation edited successfully'))
+                dispatch(setEditRecommendation('Recommendation edited successfully'))
             })
             .catch(() => {
-                dispatch(setEdited(''))
+                dispatch(setEditRecommendation(''))
                 dispatch(setRecommendationError('Something went wrong'))
             })
     }
@@ -129,7 +129,8 @@ export const setCreateRecommendation = value => {
     }
 }
 
-export const setEdited = value => {
+
+export const setEditRecommendation = value => {
     return {
         type: type.EDIT_RECOMMENDATION, edited: value
     }
@@ -146,5 +147,17 @@ export const setRecommendationImages = (poster, backdrop) => {
 export const imagesChange = value => {
     return {
         type: type.RECOMMENDATION_IMAGES_VALUE, imagesValue: value, images: []
+    }
+}
+
+export const resetRecommendation = () => {
+    return {
+        type: type.RESET_RECOMMENDATION
+    }
+}
+
+export const recommendationEditLoaded = value => {
+    return {
+        type: type.EDIT_LOADED, editLoaded: value
     }
 }
