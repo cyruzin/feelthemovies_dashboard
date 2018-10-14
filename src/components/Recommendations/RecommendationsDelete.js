@@ -7,7 +7,6 @@ import Modal from '../Layout/Modal'
 
 class RecommendationsDelete extends Component {
 
-
     deleteRecommendation = () => {
         this.props.actions.deleteRecommendation(this.props.match.params.id)
     }

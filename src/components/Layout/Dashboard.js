@@ -7,6 +7,7 @@ import Recommendations from '../Recommendations/Recommendations'
 import RecommendationsCreate from '../Recommendations/RecommendationsCreate'
 import RecommendationsEdit from '../Recommendations/RecommendationsEdit'
 import RecommendationsDelete from '../Recommendations/RecommendationsDelete'
+import RecommendationItems from '../RecommendationItems/RecommendationItems'
 import Sources from '../Sources/Sources'
 import SourcesCreate from '../Sources/SourcesCreate'
 import SourcesEdit from '../Sources/SourcesEdit'
@@ -25,6 +26,9 @@ import KeywordsCreate from '../Keywords/KeywordsCreate'
 import KeywordsEdit from '../Keywords/KeywordsEdit'
 import KeywordsDelete from '../Keywords/KeywordsDelete'
 import { loadJs } from '../../util/helpers'
+import RecommendationItemsCreate from '../RecommendationItems/RecommendationItemsCreate';
+import RecommendationItemsEdit from '../RecommendationItems/RecommendationItemsEdit';
+import RecommendationItemsDelete from '../RecommendationItems/RecommendationItemsDelete';
 
 class Dashboard extends Component {
 
@@ -54,6 +58,11 @@ class Dashboard extends Component {
                         <Route path='/dashboard/create_recommendation' component={RecommendationsCreate} />
                         <Route path='/dashboard/edit_recommendation/:id' component={RecommendationsEdit} />
                         <Route path='/dashboard/delete_recommendation/:id' component={RecommendationsDelete} />
+
+                        <Route path='/dashboard/items/:id' component={RecommendationItems} />
+                        <Route path='/dashboard/create_item/:id' component={RecommendationItemsCreate} />
+                        <Route path='/dashboard/edit_item/:id' component={RecommendationItemsEdit} />
+                        <Route path='/dashboard/delete_item/:id' component={RecommendationItemsDelete} />
 
                         <Route path='/dashboard/genres' component={Genres} />
                         <Route path='/dashboard/create_genre' component={GenresCreate} />

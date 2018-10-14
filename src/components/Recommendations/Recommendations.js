@@ -28,7 +28,7 @@ class Recommendations extends Component {
                     :
                     null
                 }
-            </div >
+            </div>
         )
     }
 }

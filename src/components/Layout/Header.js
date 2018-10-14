@@ -7,7 +7,7 @@ const Header = () => (
             <nav className="navbar navbar-expand-lg">
                 <div className="container-fluid d-flex align-items-center justify-content-between">
                     <div className="navbar-header">
-                        <a href="index.html" className="navbar-brand">
+                        <Link to="/dashboard/recommendations" className="navbar-brand">
                             <div className="brand-text brand-big visible text-uppercase">
                                 <strong className="text-primary">
                                     Feel the
@@ -18,7 +18,7 @@ const Header = () => (
                                 <strong className="text-primary">FT</strong>
                                 <strong>M</strong>
                             </div>
-                        </a>
+                        </Link>
                         <button className="sidebar-toggle">
                             <i className="fa fa-long-arrow-left"></i>
                         </button>

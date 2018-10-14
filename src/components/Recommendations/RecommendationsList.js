@@ -30,7 +30,8 @@ class RecommendationsList extends Component {
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
-                                                    <th>Name</th>
+                                                    <th>Title</th>
+                                                    <th>Status</th>
                                                     <th>Created at</th>
                                                     <th>Updated at</th>
                                                     <th>Actions</th>
@@ -41,12 +42,17 @@ class RecommendationsList extends Component {
                                                     <tr key={recommendation.id}>
                                                         <th scope="row">{recommendation.id}</th>
                                                         <td>{recommendation.title}</td>
-                                                        <td>{recommendation.created_at}</td>
-                                                        <td>{recommendation.updated_at}</td>
+                                                        <td>{recommendation.status}</td>
+                                                        <td className="small">
+                                                            {recommendation.created_at}
+                                                        </td>
+                                                        <td className="small">
+                                                            {recommendation.updated_at}
+                                                        </td>
                                                         <td>
                                                             <Link
                                                                 className="btn btn-sm btn-outline-success mr-2"
-                                                                to={`/dashboard/create_item/${recommendation.id}`}
+                                                                to={`/dashboard/items/${recommendation.id}`}
                                                             >
                                                                 <i className="fa fa-plus"></i>
                                                             </Link>
