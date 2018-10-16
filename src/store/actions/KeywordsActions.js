@@ -72,9 +72,10 @@ export const deleteKeyword = id => {
 }
 
 export const searchKeywords = keyword => {
+    let query = encodeURIComponent(keyword)
     return dispatch => {
         loadingKeywordsSearch(true)
-        axios.get(`${baseUrl}/search_keyword?api_token=${apiToken}&q=${keyword}`)
+        axios.get(`${baseUrl}/search_keyword?api_token=${apiToken}&q=${query}`)
             .then(res => {
                 dispatch(setKeywordsSearch(res.data))
                 loadingKeywordsSearch(false)

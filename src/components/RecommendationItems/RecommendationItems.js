@@ -7,7 +7,6 @@ import RecommendationItemsList from './RecommendationItemsList'
 class RecommendationItemsActions extends Component {
 
     render() {
-        const { loaded } = this.props.recommendationItems
         return (
             <div>
                 <div className="page-header">

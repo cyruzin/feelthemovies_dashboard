@@ -19,7 +19,9 @@ class RecommendationItemsList extends Component {
     }
 
     deleteMessage = () => {
-        this.props.actions.setDeleteRecommendationItem(false)
+        if (this.props.recommendationItems.deleted) {
+            this.props.actions.setDeleteRecommendationItem(false)
+        }
     }
 
     fetchRecommendationItems = () => {
@@ -31,7 +33,7 @@ class RecommendationItemsList extends Component {
 
     render() {
         const { loaded, items } = this.props.recommendationItems
-
+        const { id } = this.props.match.params
         return (
             <div>
                 <div className="container-fluid">
@@ -58,7 +60,7 @@ class RecommendationItemsList extends Component {
                                         <div className="table-responsive">
                                             <Link
                                                 className="btn btn btn-outline-success mb-3 float-right"
-                                                to='/dashboard/create_item'>
+                                                to={`/dashboard/create_item/${id}`}>
                                                 New
                                         </Link>
                                             <table className="table table-striped table-sm">

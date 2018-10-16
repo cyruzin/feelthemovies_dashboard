@@ -129,7 +129,7 @@ class RecommendationsCreate extends Component {
                                             : null
                                         }
                                         {this.props.recommendations.created ?
-                                            <Alert message="Recommendations created successfully" type='success' />
+                                            <Alert message="Recommendation created successfully" type='success' />
                                             : null
                                         }
                                         <div className="form-group row">

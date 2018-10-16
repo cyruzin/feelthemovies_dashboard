@@ -72,9 +72,10 @@ export const deleteGenre = id => {
 }
 
 export const searchGenres = genres => {
+    let query = encodeURIComponent(genres)
     return dispatch => {
         loadingGenresSearch(true)
-        axios.get(`${baseUrl}/search_genre?api_token=${apiToken}&q=${genres}`)
+        axios.get(`${baseUrl}/search_genre?api_token=${apiToken}&q=${query}`)
             .then(res => {
                 dispatch(setGenresSearch(res.data))
                 loadingGenresSearch(false)
