@@ -8,7 +8,7 @@ export const fetchRecommendations = () => {
         let state = getState()
         const apiToken = state.auth.apiToken
         dispatch(setLoaded(false))
-        axios.get(`${baseUrl}/recommendations?api_token=${apiToken}`)
+        axios.get(`${baseUrl}/recommendations?api_token=${apiToken}&nofilter=true`)
             .then(res => {
                 dispatch(setRecommendations(res.data.data))
                 dispatch(setLoaded(true))
