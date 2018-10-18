@@ -33,7 +33,7 @@ const LoginInfo = props => (
                                 <div className="form-group">
                                     <input
                                         type="text"
-                                        onKeyDown={props.setEmail}
+                                        onKeyUp={props.setEmail}
                                         ref={props.emailRef}
                                         className="input-material" />
                                     <label
@@ -45,7 +45,7 @@ const LoginInfo = props => (
                                 <div className="form-group">
                                     <input
                                         type="password"
-                                        onKeyDown={props.setPassword}
+                                        onKeyUp={props.setPassword}
                                         ref={props.passwordRef}
                                         className="input-material" />
                                     <label

@@ -13,8 +13,8 @@ class Auth extends Component {
         super(props)
         this.emailRef = React.createRef()
         this.passwordRef = React.createRef()
-        this.setEmail = debounce(this.setEmail, 800)
-        this.setPassword = debounce(this.setPassword, 800)
+        this.setEmail = debounce(this.setEmail, 400)
+        this.setPassword = debounce(this.setPassword, 400)
     }
 
     componentDidMount = () => {
