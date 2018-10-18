@@ -59,8 +59,8 @@ class SourcesList extends Component {
                                                     <tr key={source.id}>
                                                         <th scope="row">{source.id}</th>
                                                         <td>{source.name}</td>
-                                                        <td>{source.created_at}</td>
-                                                        <td>{source.updated_at}</td>
+                                                        <td className="small">{source.created_at}</td>
+                                                        <td className="small">{source.updated_at}</td>
                                                         <td>
                                                             <Link
                                                                 className="btn btn-sm btn-outline-secondary mr-2"

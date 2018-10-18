@@ -29,6 +29,7 @@ import { loadJs } from '../../util/helpers'
 import RecommendationItemsCreate from '../RecommendationItems/RecommendationItemsCreate';
 import RecommendationItemsEdit from '../RecommendationItems/RecommendationItemsEdit';
 import RecommendationItemsDelete from '../RecommendationItems/RecommendationItemsDelete';
+import RecommendationsSearch from '../Recommendations/RecommendationsSearch'
 
 class Dashboard extends Component {
 
@@ -58,6 +59,7 @@ class Dashboard extends Component {
                         <Route path='/dashboard/create_recommendation' component={RecommendationsCreate} />
                         <Route path='/dashboard/edit_recommendation/:id' component={RecommendationsEdit} />
                         <Route path='/dashboard/delete_recommendation/:id' component={RecommendationsDelete} />
+                        <Route path='/dashboard/search_recommendation' component={RecommendationsSearch} />
 
                         <Route path='/dashboard/items/:id' component={RecommendationItems} />
                         <Route path='/dashboard/create_item/:id' component={RecommendationItemsCreate} />

@@ -58,8 +58,8 @@ class GenresList extends Component {
                                                     <tr key={genre.id}>
                                                         <th scope="row">{genre.id}</th>
                                                         <td>{genre.name}</td>
-                                                        <td>{genre.created_at}</td>
-                                                        <td>{genre.updated_at}</td>
+                                                        <td className="small">{genre.created_at}</td>
+                                                        <td className="small">{genre.updated_at}</td>
                                                         <td>
                                                             <Link
                                                                 className="btn btn-sm btn-outline-secondary mr-2"

@@ -60,8 +60,8 @@ class UserList extends Component {
                                                         <th scope="row">{user.id}</th>
                                                         <td>{user.name}</td>
                                                         <td>{user.email}</td>
-                                                        <td>{user.created_at}</td>
-                                                        <td>{user.updated_at}</td>
+                                                        <td className="small">{user.created_at}</td>
+                                                        <td className="small">{user.updated_at}</td>
                                                         <td>
                                                             <Link
                                                                 className="btn btn-sm btn-outline-secondary mr-2"

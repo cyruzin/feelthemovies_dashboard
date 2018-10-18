@@ -11,11 +11,7 @@ class Users extends Component {
     }
 
     fetchUsers = () => {
-        const { data, userDeleted, userEdited } = this.props.users
-
-        if (data.length === 0 || userDeleted !== '' || userEdited !== '') {
-            this.props.actions.fetchUsers(this.props.users)
-        }
+        this.props.actions.fetchUsers(this.props.users)
     }
 
     render() {

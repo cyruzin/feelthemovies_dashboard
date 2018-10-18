@@ -59,8 +59,8 @@ class KeywordsList extends Component {
                                                     <tr key={keyword.id}>
                                                         <th scope="row">{keyword.id}</th>
                                                         <td>{keyword.name}</td>
-                                                        <td>{keyword.created_at}</td>
-                                                        <td>{keyword.updated_at}</td>
+                                                        <td className="small">{keyword.created_at}</td>
+                                                        <td className="small">{keyword.updated_at}</td>
                                                         <td>
                                                             <Link
                                                                 className="btn btn-sm btn-outline-secondary mr-2"

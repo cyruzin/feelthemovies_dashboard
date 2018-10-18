@@ -103,10 +103,13 @@ export const loadJs = () => {
     });
 }
 
-export const getYear = date => {
+export const getYear = (date, parentheses = true) => {
     if (date !== "" && date !== isNaN) {
         let d = new Date(date)
-        return `(${d.getFullYear()})`
+        if (parentheses) {
+            return `(${d.getFullYear()})`
+        }
+        return d.getFullYear()
     }
     return ''
 }
