@@ -93,9 +93,28 @@ export const fetchRecommendationImages = search => {
     }
 }
 
+export const searchRecommendation = rec => {
+    let query = encodeURIComponent(rec)
+    return dispatch => {
+        axios.get(`${baseUrl}/search_recommendation?api_token=${apiToken}&q=${query}`)
+            .then(res => {
+                dispatch(setRecommendationsSearch(res.data.data))
+            })
+            .catch(() => {
+                dispatch(setRecommendationError('Something went wrong'))
+            })
+    }
+}
+
 export const setRecommendations = value => {
     return {
         type: type.RECOMMENDATIONS_FETCH, data: value
+    }
+}
+
+export const setRecommendationsSearch = value => {
+    return {
+        type: type.RECOMMENDATIONS_SEARCH, search: value
     }
 }
 

@@ -39,10 +39,6 @@ class RecommendationsEdit extends Component {
 
     }
 
-    componentWillUnmount() {
-        this.props.actions.resetRecommendation()
-    }
-
     setFields = () => {
         if (this.props.recommendations.editLoaded) {
             this.props.actions.recommendationEditLoaded(false)

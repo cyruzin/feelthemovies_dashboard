@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { bindActionCreators } from 'redux'
+import { bindActionCreators, compose } from 'redux'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import * as actions from '../../store/actions/RecommendationsActions'
 import Alert from '../Layout/Alert'
 import debounce from 'lodash/debounce'
@@ -12,10 +12,16 @@ class RecommendationsList extends Component {
         super(props)
 
         this.deleteMessage = debounce(this.deleteMessage, 2000)
+        this.searchRef = React.createRef()
     }
 
     componentDidMount() {
         this.deleteMessage()
+        window.addEventListener('keypress', this.isEnterPressed)
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('keypress', this.isEnterPressed)
     }
 
     deleteMessage = () => {
@@ -24,9 +30,19 @@ class RecommendationsList extends Component {
         }
     }
 
+    isEnterPressed = e => {
+        const { current } = this.searchRef
+        if (e.keyCode === 13) {
+            if (document.activeElement === current && current.value !== '') {
+                this.props.history.push(`/dashboard/search_recommendation?q=${current.value}`)
+            }
+        }
+    }
+
     render() {
         return (
             <div>
+
                 <section className="no-padding-top">
                     <div className="container-fluid">
                         <div className="row">
@@ -43,6 +59,17 @@ class RecommendationsList extends Component {
                                             to='/dashboard/create_recommendation'>
                                             New
                                         </Link>
+                                        <div className="form-group row">
+                                            <div className="col-lg-6">
+                                                <input
+                                                    ref={this.searchRef}
+                                                    type="text"
+                                                    placeholder="Search"
+                                                    className="form-control" />
+                                            </div>
+                                        </div>
+                                        <div className="line"></div>
+
                                         <table className="table table-striped table-sm">
                                             <thead>
                                                 <tr>
@@ -114,4 +141,7 @@ const mapDispatchToProps = dispatch => ({
     actions: bindActionCreators(actions, dispatch)
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(RecommendationsList)
+export default compose(
+    withRouter,
+    connect(mapStateToProps, mapDispatchToProps)
+)(RecommendationsList)

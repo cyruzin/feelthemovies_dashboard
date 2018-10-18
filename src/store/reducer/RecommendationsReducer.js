@@ -7,6 +7,7 @@ const initialState = {
     edited: false,
     editedLoaded: false,
     deleted: false,
+    search: [],
     data: [],
     genres: [],
     genresValue: [],
@@ -73,6 +74,11 @@ export default (state = initialState, action) => {
                 ...state,
                 imagesValue: action.imagesValue,
                 images: action.images
+            }
+        case type.RECOMMENDATIONS_SEARCH:
+            return {
+                ...state,
+                search: action.search
             }
         case type.RECOMMENDATIONS_ERROR:
             return {
