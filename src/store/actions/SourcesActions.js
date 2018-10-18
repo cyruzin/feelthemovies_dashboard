@@ -1,13 +1,11 @@
 import type from '../types/SourcesTypes'
 import axios from 'axios'
 import { baseUrl } from '../../util/constants'
-import { loadState } from '../../util/helpers'
-
-const state = loadState()
-const apiToken = state.auth.apiToken
 
 export const fetchSources = () => {
-    return dispatch => {
+    return (dispatch, getState) => {
+        let state = getState()
+        const apiToken = state.auth.apiToken
         dispatch(setLoaded(false))
         axios.get(`${baseUrl}/sources?api_token=${apiToken}`)
             .then(res => {
@@ -19,7 +17,9 @@ export const fetchSources = () => {
 }
 
 export const fetchSingleSource = id => {
-    return dispatch => {
+    return (dispatch, getState) => {
+        let state = getState()
+        const apiToken = state.auth.apiToken
         dispatch(setEditLoaded(false))
         axios.get(`${baseUrl}/source/${id}?api_token=${apiToken}`)
             .then(res => {
@@ -33,7 +33,9 @@ export const fetchSingleSource = id => {
 }
 
 export const createSource = source => {
-    return dispatch => {
+    return (dispatch, getState) => {
+        let state = getState()
+        const apiToken = state.auth.apiToken
         dispatch(setError(''))
         axios.post(`${baseUrl}/source?api_token=${apiToken}`, source)
             .then(() => {
@@ -47,7 +49,9 @@ export const createSource = source => {
 }
 
 export const editSource = (id, source) => {
-    return dispatch => {
+    return (dispatch, getState) => {
+        let state = getState()
+        const apiToken = state.auth.apiToken
         dispatch(setError(''))
         axios.put(`${baseUrl}/source/${id}?api_token=${apiToken}`, source)
             .then(() => {
@@ -61,7 +65,9 @@ export const editSource = (id, source) => {
 }
 
 export const deleteSource = id => {
-    return dispatch => {
+    return (dispatch, getState) => {
+        let state = getState()
+        const apiToken = state.auth.apiToken
         axios.delete(`${baseUrl}/source/${id}?api_token=${apiToken}`)
             .then(() => {
                 dispatch(setDeleted('Source removed successfully'))
@@ -75,7 +81,9 @@ export const deleteSource = id => {
 
 export const searchSources = sources => {
     let query = encodeURIComponent(sources)
-    return dispatch => {
+    return (dispatch, getState) => {
+        let state = getState()
+        const apiToken = state.auth.apiToken
         axios.get(`${baseUrl}/search_source?api_token=${apiToken}&q=${query}`)
             .then(res => {
                 dispatch(setSourcesSearch(res.data))

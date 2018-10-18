@@ -1,13 +1,11 @@
 import axios from 'axios'
 import type from '../types/RecommendationItemsTypes'
 import { baseUrl, tmdbToken } from '../../util/constants'
-import { loadState } from '../../util/helpers'
-
-const state = loadState()
-const apiToken = state.auth.apiToken
 
 export const fetchRecommendationItems = recommendationID => {
-    return dispatch => {
+    return (dispatch, getState) => {
+        let state = getState()
+        const apiToken = state.auth.apiToken
 
         dispatch({ type: type.RECOMMENDATION_ITEM_LOADED, loaded: false })
 
@@ -24,7 +22,9 @@ export const fetchRecommendationItems = recommendationID => {
 }
 
 export const fetchRecommendationItem = recommendationID => {
-    return dispatch => {
+    return (dispatch, getState) => {
+        let state = getState()
+        const apiToken = state.auth.apiToken
         dispatch(setRecommendationItemEditLoaded(false))
         axios.get(`${baseUrl}/recommendation_item/${recommendationID}?api_token=${apiToken}`)
             .then(res => {
@@ -39,7 +39,9 @@ export const fetchRecommendationItem = recommendationID => {
 }
 
 export const deleteRecommendationItem = recommendationID => {
-    return dispatch => {
+    return (dispatch, getState) => {
+        let state = getState()
+        const apiToken = state.auth.apiToken
         axios.delete(`${baseUrl}/recommendation_item/${recommendationID}?api_token=${apiToken}`)
             .then(() => {
                 dispatch(setDeleteRecommendationItem(true))
@@ -95,7 +97,9 @@ export const setRecommendationItemEditLoaded = value => {
 }
 
 export const createRecommendationItem = recommendation => {
-    return dispatch => {
+    return (dispatch, getState) => {
+        let state = getState()
+        const apiToken = state.auth.apiToken
         dispatch(setRecommendationItemError(''))
 
         axios.post(`${baseUrl}/recommendation_item?api_token=${apiToken}`, recommendation)
@@ -120,7 +124,9 @@ export const setRecommendationItemCreate = value => {
 }
 
 export const editRecommendationItem = (id, recommendation) => {
-    return dispatch => {
+    return (dispatch, getState) => {
+        let state = getState()
+        const apiToken = state.auth.apiToken
         dispatch(setRecommendationItemError(''))
         axios.put(`${baseUrl}/recommendation_item/${id}?api_token=${apiToken}`, recommendation)
             .then(() => {
@@ -174,7 +180,9 @@ export const recommendationItemDataChange = value => {
 
 export const recommedationItemSource = value => {
     let query = encodeURIComponent(value)
-    return dispatch => {
+    return (dispatch, getState) => {
+        let state = getState()
+        const apiToken = state.auth.apiToken
         axios.get(`${baseUrl}/search_source?api_token=${apiToken}&q=${query}`)
             .then(res => {
                 dispatch({

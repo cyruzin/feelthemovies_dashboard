@@ -1,13 +1,12 @@
 import type from '../types/GenresTypes'
 import axios from 'axios'
 import { baseUrl } from '../../util/constants'
-import { loadState } from '../../util/helpers'
 
-const state = loadState()
-const apiToken = state.auth.apiToken
 
 export const fetchGenres = () => {
-    return dispatch => {
+    return (dispatch, getState) => {
+        let state = getState()
+        const apiToken = state.auth.apiToken
         dispatch(setLoaded(false))
         axios.get(`${baseUrl}/genres?api_token=${apiToken}`)
             .then(res => {
@@ -19,7 +18,9 @@ export const fetchGenres = () => {
 }
 
 export const fetchSingleGenre = id => {
-    return dispatch => {
+    return (dispatch, getState) => {
+        let state = getState()
+        const apiToken = state.auth.apiToken
         dispatch(setEditLoaded(false))
         axios.get(`${baseUrl}/genre/${id}?api_token=${apiToken}`)
             .then(res => {
@@ -33,7 +34,9 @@ export const fetchSingleGenre = id => {
 }
 
 export const createGenre = genre => {
-    return dispatch => {
+    return (dispatch, getState) => {
+        let state = getState()
+        const apiToken = state.auth.apiToken
         dispatch(setError(''))
         axios.post(`${baseUrl}/genre?api_token=${apiToken}`, genre)
             .then(() => {
@@ -47,7 +50,9 @@ export const createGenre = genre => {
 }
 
 export const editGenre = (id, genre) => {
-    return dispatch => {
+    return (dispatch, getState) => {
+        let state = getState()
+        const apiToken = state.auth.apiToken
         dispatch(setError(''))
         axios.put(`${baseUrl}/genre/${id}?api_token=${apiToken}`, genre)
             .then(() => {
@@ -61,7 +66,9 @@ export const editGenre = (id, genre) => {
 }
 
 export const deleteGenre = id => {
-    return dispatch => {
+    return (dispatch, getState) => {
+        let state = getState()
+        const apiToken = state.auth.apiToken
         axios.delete(`${baseUrl}/genre/${id}?api_token=${apiToken}`)
             .then(() => {
                 dispatch(setDeleted('Genre removed successfully'))
@@ -75,7 +82,9 @@ export const deleteGenre = id => {
 
 export const searchGenres = genres => {
     let query = encodeURIComponent(genres)
-    return dispatch => {
+    return (dispatch, getState) => {
+        let state = getState()
+        const apiToken = state.auth.apiToken
         loadingGenresSearch(true)
         axios.get(`${baseUrl}/search_genre?api_token=${apiToken}&q=${query}`)
             .then(res => {
