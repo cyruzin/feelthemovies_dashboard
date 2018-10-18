@@ -1,6 +1,10 @@
 import axios from 'axios'
 import type from '../types/RecommendationItemsTypes'
-import { apiToken, baseUrl, tmdbToken } from '../../util/constants'
+import { baseUrl, tmdbToken } from '../../util/constants'
+import { loadState } from '../../util/helpers'
+
+const state = loadState()
+const apiToken = state.auth.apiToken
 
 export const fetchRecommendationItems = recommendationID => {
     return dispatch => {

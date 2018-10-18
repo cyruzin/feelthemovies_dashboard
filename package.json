@@ -2,6 +2,7 @@
   "name": "feelthemovies_dashboard",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://dashboard.feelthemovies.com.br/",
   "dependencies": {
     "@tinymce/tinymce-react": "^2.3.0",
     "antd": "^3.10.0",

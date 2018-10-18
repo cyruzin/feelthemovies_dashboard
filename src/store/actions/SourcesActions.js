@@ -1,6 +1,10 @@
 import type from '../types/SourcesTypes'
 import axios from 'axios'
-import { apiToken, baseUrl } from '../../util/constants'
+import { baseUrl } from '../../util/constants'
+import { loadState } from '../../util/helpers'
+
+const state = loadState()
+const apiToken = state.auth.apiToken
 
 export const fetchSources = () => {
     return dispatch => {

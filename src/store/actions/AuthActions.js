@@ -1,9 +1,10 @@
 import axios from 'axios'
 import type from '../types/AuthTypes'
+import { authUrl } from '../../util/constants'
 
 export const fetchAuth = ({ email, password }) => {
     return dispatch => {
-        axios.post(`http://feelthemovies.test/auth`, {
+        axios.post(authUrl, {
             email: email,
             password: password
         })

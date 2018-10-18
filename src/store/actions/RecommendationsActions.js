@@ -1,6 +1,10 @@
 import type from '../types/RecommendationsTypes'
 import axios from 'axios'
-import { apiToken, baseUrl, tmdbToken } from '../../util/constants'
+import { baseUrl, tmdbToken } from '../../util/constants'
+import { loadState } from '../../util/helpers'
+
+const state = loadState()
+const apiToken = state.auth.apiToken
 
 export const fetchRecommendations = () => {
     return dispatch => {
@@ -21,6 +25,7 @@ export const fetchSingleRecommendation = id => {
         axios.get(`${baseUrl}/recommendation/${id}?api_token=${apiToken}`)
             .then(res => {
                 dispatch({
+                    apiToken,
                     type: type.RECOMMENDATIONS_FETCH_SINGLE,
                     recommendationData: res.data
                 })
