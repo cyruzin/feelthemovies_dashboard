@@ -35,6 +35,7 @@ class GenresCreate extends Component {
         this.props.actions.createGenre(genre)
 
         name = this.nameRef.current.value = ''
+        this.nameRef.current.focus()
     }
 
     render() {

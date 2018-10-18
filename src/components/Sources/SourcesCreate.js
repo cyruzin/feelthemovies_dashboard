@@ -35,6 +35,7 @@ class SourcesCreate extends Component {
         this.props.actions.createSource(source)
 
         name = this.nameRef.current.value = ''
+        this.nameRef.current.focus()
     }
 
     render() {

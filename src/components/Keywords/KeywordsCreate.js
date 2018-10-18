@@ -35,6 +35,7 @@ class KeywordsCreate extends Component {
         this.props.actions.createKeyword(keyword)
 
         name = this.nameRef.current.value = ''
+        this.nameRef.current.focus()
     }
 
     render() {
