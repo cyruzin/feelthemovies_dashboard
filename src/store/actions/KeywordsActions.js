@@ -20,7 +20,7 @@ export const fetchSingleKeyword = id => {
         dispatch(setEditLoaded(false))
         axios.get(`${baseUrl}/keyword/${id}?api_token=${apiToken}`)
             .then(res => {
-                dispatch({ type: type.FETCH_SINGLE_KEYWORD, keywordData: res.data })
+                dispatch({ type: type.KEYWORDS_FETCH_SINGLE, keywordData: res.data })
                 dispatch(setEditLoaded(true))
             })
             .catch(() => {
@@ -88,60 +88,60 @@ export const searchKeywords = keyword => {
 
 export const setKeywords = value => {
     return {
-        type: type.FETCH_KEYWORDS, data: value
-    }
-}
-
-export const setKeywordsSearch = value => {
-    return {
-        type: type.SEARCH_KEYWORDS, keywords: value
-    }
-}
-
-export const loadingKeywordsSearch = value => {
-    return {
-        type: type.LOADING_KEYWORDS_SEARCH, loadingSearch: value
-    }
-}
-
-export const keywordsChange = value => {
-    return {
-        type: type.SEARCH_KEYWORDS_VALUE, keywordsValue: value, keywords: []
+        type: type.KEYWORDS_FETCH, data: value
     }
 }
 
 export const setLoaded = value => {
     return {
-        type: type.LOADED_KEYWORDS, loaded: value
+        type: type.KEYWORDS_LOADED, loaded: value
     }
 }
 
-export const setError = value => {
+export const setKeywordsSearch = value => {
     return {
-        type: type.ERROR_KEYWORD, error: value
+        type: type.KEYWORDS_SEARCH, keywords: value
     }
 }
 
-export const setDeleted = value => {
+export const keywordsChange = value => {
     return {
-        type: type.DELETE_KEYWORD, deleted: value
+        type: type.KEYWORDS_SEARCH_VALUE, keywordsValue: value, keywords: []
     }
 }
 
-export const setEditLoaded = value => {
+export const loadingKeywordsSearch = value => {
     return {
-        type: type.KEYWORD_EDIT_LOADED, editLoaded: value
+        type: type.KEYWORDS_SEARCH_LOADING, loadingSearch: value
     }
 }
 
 export const setCreateKeyword = value => {
     return {
-        type: type.CREATE_KEYWORD, created: value
+        type: type.KEYWORDS_CREATE, created: value
     }
 }
 
 export const setEdited = value => {
     return {
-        type: type.EDIT_KEYWORD, edited: value
+        type: type.KEYWORDS_EDIT, edited: value
+    }
+}
+
+export const setEditLoaded = value => {
+    return {
+        type: type.KEYWORDS_EDIT_LOADED, editLoaded: value
+    }
+}
+
+export const setDeleted = value => {
+    return {
+        type: type.KEYWORDS_DELETE, deleted: value
+    }
+}
+
+export const setError = value => {
+    return {
+        type: type.KEYWORDS_ERROR, error: value
     }
 }

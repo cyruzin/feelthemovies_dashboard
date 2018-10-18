@@ -21,7 +21,7 @@ export const fetchSingleRecommendation = id => {
         axios.get(`${baseUrl}/recommendation/${id}?api_token=${apiToken}`)
             .then(res => {
                 dispatch({
-                    type: type.FETCH_SINGLE_RECOMMENDATION,
+                    type: type.RECOMMENDATIONS_FETCH_SINGLE,
                     recommendationData: res.data
                 })
                 dispatch(setEditLoaded(true))
@@ -85,7 +85,7 @@ export const fetchRecommendationImages = search => {
                 let images = res.data.results
                     .filter(v => v.media_type !== 'person' && v.backdrop_path !== null)
                 dispatch({
-                    type: type.FETCH_RECOMMENDATION_IMAGE,
+                    type: type.RECOMMENDATIONS_FETCH_IMAGE,
                     images: images
                 })
             })
@@ -95,50 +95,50 @@ export const fetchRecommendationImages = search => {
 
 export const setRecommendations = value => {
     return {
-        type: type.FETCH_RECOMMENDATIONS, data: value
+        type: type.RECOMMENDATIONS_FETCH, data: value
     }
 }
 
 export const setLoaded = value => {
     return {
-        type: type.LOADED_RECOMMENDATIONS, loaded: value
-    }
-}
-
-export const setRecommendationError = value => {
-    return {
-        type: type.ERROR_RECOMMENDATION, error: value
-    }
-}
-
-export const setDeleted = value => {
-    return {
-        type: type.DELETE_RECOMMENDATION, deleted: value
-    }
-}
-
-export const setEditLoaded = value => {
-    return {
-        type: type.RECOMMENDATION_EDIT_LOADED, editLoaded: value
+        type: type.RECOMMENDATIONS_LOADED, loaded: value
     }
 }
 
 export const setCreateRecommendation = value => {
     return {
-        type: type.CREATE_RECOMMENDATION, created: value
+        type: type.RECOMMENDATIONS_CREATE, created: value
+    }
+}
+
+export const setEditRecommendation = value => {
+    return {
+        type: type.RECOMMENDATIONS_EDIT, edited: value
+    }
+}
+
+export const setEditLoaded = value => {
+    return {
+        type: type.RECOMMENDATIONS_EDIT_LOADED, editLoaded: value
+    }
+}
+
+export const recommendationEditLoaded = value => {
+    return {
+        type: type.RECOMMENDATIONS_EDIT_LOADED, editLoaded: value
     }
 }
 
 
-export const setEditRecommendation = value => {
+export const setDeleted = value => {
     return {
-        type: type.EDIT_RECOMMENDATION, edited: value
+        type: type.RECOMMENDATIONS_DELETE, deleted: value
     }
 }
 
 export const setRecommendationImages = (poster, backdrop) => {
     return {
-        type: type.RECOMMENDATION_IMAGES,
+        type: type.RECOMMENDATIONS_IMAGES,
         poster: poster,
         backdrop: backdrop
     }
@@ -146,18 +146,18 @@ export const setRecommendationImages = (poster, backdrop) => {
 
 export const imagesChange = value => {
     return {
-        type: type.RECOMMENDATION_IMAGES_VALUE, imagesValue: value, images: []
+        type: type.RECOMMENDATIONS_IMAGES_VALUE, imagesValue: value, images: []
     }
 }
 
 export const resetRecommendation = () => {
     return {
-        type: type.RESET_RECOMMENDATION
+        type: type.RECOMMENDATIONS_RESET
     }
 }
 
-export const recommendationEditLoaded = value => {
+export const setRecommendationError = value => {
     return {
-        type: type.EDIT_LOADED, editLoaded: value
+        type: type.RECOMMENDATIONS_ERROR, error: value
     }
 }

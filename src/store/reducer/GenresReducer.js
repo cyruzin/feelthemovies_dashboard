@@ -16,58 +16,58 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case type.FETCH_GENRES:
+        case type.GENRES_FETCH:
             return {
                 ...state,
                 data: action.data
             }
-        case type.FETCH_SINGLE_GENRE:
+        case type.GENRES_FETCH_SINGLE:
             return {
                 ...state,
                 genreData: action.genreData
             }
-        case type.SEARCH_GENRES:
+        case type.GENRES_SEARCH:
             return {
                 ...state,
                 genres: action.genres
             }
-        case type.SEARCH_GENRES_VALUE:
+        case type.GENRES_SEARCH_VALUE:
             return {
                 ...state,
                 genresValue: action.genresValue,
                 genres: action.genres
             }
-        case type.LOADING_GENRES_SEARCH:
+        case type.GENRES_SEARCH_LOADING:
             return {
                 ...state,
                 loadingSearch: action.loadingSearch
             }
-        case type.LOADED_GENRES:
+        case type.GENRES_LOADED:
             return {
                 ...state,
                 loaded: action.loaded
             }
-        case type.CREATE_GENRE:
+        case type.GENRES_CREATE:
             return {
                 ...state,
                 created: action.created
             }
-        case type.EDIT_GENRE:
+        case type.GENRES_EDIT:
             return {
                 ...state,
                 edited: action.edited
             }
-        case type.GENRE_EDIT_LOADED:
+        case type.GENRES_EDIT_LOADED:
             return {
                 ...state,
                 editLoaded: action.editLoaded
             }
-        case type.DELETE_GENRE:
+        case type.GENRES_DELETE:
             return {
                 ...state,
                 deleted: action.deleted
             }
-        case type.ERROR_GENRE:
+        case type.GENRES_ERROR:
             return {
                 ...state,
                 error: action.error

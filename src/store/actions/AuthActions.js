@@ -9,7 +9,7 @@ export const fetchAuth = ({ email, password }) => {
         })
             .then(res => {
                 dispatch({
-                    type: type.AUTHORIZED,
+                    type: type.AUTH_AUTHORIZED,
                     authorized: true,
                     apiToken: res.data.api_token,
                     password: '',
@@ -19,24 +19,24 @@ export const fetchAuth = ({ email, password }) => {
             })
             .catch(err => {
                 const { message } = err.response.data
-                dispatch({ type: type.ERROR, error: message })
+                dispatch({ type: type.AUTH_ERROR, error: message })
             })
     }
 }
 
 export const setEmail = email => {
     return {
-        type: type.EMAIL, email: email
+        type: type.AUTH_EMAIL, email: email
     }
 }
 
 export const setPassword = password => {
-    return { type: type.PASSWORD, password: password }
+    return { type: type.AUTH_PASSWORD, password: password }
 }
 export const setError = value => {
-    return { type: type.ERROR, error: value }
+    return { type: type.AUTH_ERROR, error: value }
 }
 
 export const logout = () => {
-    return { type: type.LOGOUT }
+    return { type: type.AUTH_LOGOUT }
 }

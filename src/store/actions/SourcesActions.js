@@ -5,7 +5,6 @@ import { apiToken, baseUrl } from '../../util/constants'
 export const fetchSources = () => {
     return dispatch => {
         dispatch(setLoaded(false))
-
         axios.get(`${baseUrl}/sources?api_token=${apiToken}`)
             .then(res => {
                 dispatch(setSources(res.data.data))
@@ -20,7 +19,7 @@ export const fetchSingleSource = id => {
         dispatch(setEditLoaded(false))
         axios.get(`${baseUrl}/source/${id}?api_token=${apiToken}`)
             .then(res => {
-                dispatch({ type: type.FETCH_SINGLE_SOURCE, sourceData: res.data })
+                dispatch({ type: type.SOURCES_FETCH_SINGLE, sourceData: res.data })
                 dispatch(setEditLoaded(true))
             })
             .catch(() => {
@@ -32,7 +31,6 @@ export const fetchSingleSource = id => {
 export const createSource = source => {
     return dispatch => {
         dispatch(setError(''))
-
         axios.post(`${baseUrl}/source?api_token=${apiToken}`, source)
             .then(() => {
                 dispatch(setCreateSource('Source created successfully'))
@@ -73,42 +71,42 @@ export const deleteSource = id => {
 
 export const setSources = value => {
     return {
-        type: type.FETCH_SOURCES, data: value
+        type: type.SOURCES_FETCH, data: value
     }
 }
 
 export const setLoaded = value => {
     return {
-        type: type.LOADED_SOURCES, loaded: value
-    }
-}
-
-export const setError = value => {
-    return {
-        type: type.ERROR_SOURCE, error: value
-    }
-}
-
-export const setDeleted = value => {
-    return {
-        type: type.DELETE_SOURCE, deleted: value
-    }
-}
-
-export const setEditLoaded = value => {
-    return {
-        type: type.SOURCE_EDIT_LOADED, editLoaded: value
+        type: type.SOURCES_LOADED, loaded: value
     }
 }
 
 export const setCreateSource = value => {
     return {
-        type: type.CREATE_SOURCE, created: value
+        type: type.SOURCES_CREATE, created: value
     }
 }
 
 export const setEdited = value => {
     return {
-        type: type.EDIT_SOURCE, edited: value
+        type: type.SOURCES_EDIT, edited: value
+    }
+}
+
+export const setEditLoaded = value => {
+    return {
+        type: type.SOURCES_EDIT_LOADED, editLoaded: value
+    }
+}
+
+export const setDeleted = value => {
+    return {
+        type: type.SOURCES_DELETE, deleted: value
+    }
+}
+
+export const setError = value => {
+    return {
+        type: type.SOURCES_ERROR, error: value
     }
 }

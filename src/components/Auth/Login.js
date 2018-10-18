@@ -4,6 +4,7 @@ import LoginInfo from './LoginInfo'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { loadJs } from '../../util/helpers'
+import debounce from 'lodash/debounce'
 import * as actions from '../../store/actions/AuthActions'
 
 class Auth extends Component {
@@ -12,6 +13,8 @@ class Auth extends Component {
         super(props)
         this.emailRef = React.createRef()
         this.passwordRef = React.createRef()
+        this.setEmail = debounce(this.setEmail, 800)
+        this.setPassword = debounce(this.setPassword, 800)
     }
 
     componentDidMount = () => {

@@ -16,58 +16,58 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case type.FETCH_KEYWORDS:
+        case type.KEYWORDS_FETCH:
             return {
                 ...state,
                 data: action.data
             }
-        case type.FETCH_SINGLE_KEYWORD:
+        case type.KEYWORDS_FETCH_SINGLE:
             return {
                 ...state,
                 keywordData: action.keywordData
             }
-        case type.SEARCH_KEYWORDS:
+        case type.KEYWORDS_SEARCH:
             return {
                 ...state,
                 keywords: action.keywords
             }
-        case type.SEARCH_KEYWORDS_VALUE:
+        case type.KEYWORDS_SEARCH_VALUE:
             return {
                 ...state,
                 keywordsValue: action.keywordsValue,
                 keywords: action.keywords
             }
-        case type.LOADING_KEYWORDS_SEARCH:
+        case type.KEYWORDS_SEARCH_LOADING:
             return {
                 ...state,
                 loadingSearch: action.loadingSearch
             }
-        case type.LOADED_KEYWORDS:
+        case type.KEYWORDS_LOADED:
             return {
                 ...state,
                 loaded: action.loaded
             }
-        case type.CREATE_KEYWORD:
+        case type.KEYWORDS_CREATE:
             return {
                 ...state,
                 created: action.created
             }
-        case type.EDIT_KEYWORD:
+        case type.KEYWORDS_EDIT:
             return {
                 ...state,
                 edited: action.edited
             }
-        case type.KEYWORD_EDIT_LOADED:
+        case type.KEYWORDS_EDIT_LOADED:
             return {
                 ...state,
                 editLoaded: action.editLoaded
             }
-        case type.DELETE_KEYWORD:
+        case type.KEYWORDS_DELETE:
             return {
                 ...state,
                 deleted: action.deleted
             }
-        case type.ERROR_KEYWORD:
+        case type.KEYWORDS_ERROR:
             return {
                 ...state,
                 error: action.error

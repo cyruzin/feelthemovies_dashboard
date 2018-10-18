@@ -13,42 +13,42 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case type.FETCH_SOURCES:
+        case type.SOURCES_FETCH:
             return {
                 ...state,
                 data: action.data
             }
-        case type.FETCH_SINGLE_SOURCE:
+        case type.SOURCES_FETCH_SINGLE:
             return {
                 ...state,
                 sourceData: action.sourceData
             }
-        case type.LOADED_SOURCES:
+        case type.SOURCES_LOADED:
             return {
                 ...state,
                 loaded: action.loaded
             }
-        case type.CREATE_SOURCE:
+        case type.SOURCES_CREATE:
             return {
                 ...state,
                 created: action.created
             }
-        case type.EDIT_SOURCE:
+        case type.SOURCES_EDIT:
             return {
                 ...state,
                 edited: action.edited
             }
-        case type.SOURCE_EDIT_LOADED:
+        case type.SOURCES_EDIT_LOADED:
             return {
                 ...state,
                 editLoaded: action.editLoaded
             }
-        case type.DELETE_SOURCE:
+        case type.SOURCES_DELETE:
             return {
                 ...state,
                 deleted: action.deleted
             }
-        case type.ERROR_SOURCE:
+        case type.SOURCES_ERROR:
             return {
                 ...state,
                 error: action.error

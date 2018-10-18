@@ -61,6 +61,9 @@ class RecommendationsCreate extends Component {
         }
 
         this.props.actions.createRecommendation(recommendation)
+
+        this.props.actions.resetRecommendation()
+
     }
 
     handleType = e => {

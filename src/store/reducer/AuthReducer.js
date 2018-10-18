@@ -11,17 +11,17 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case type.EMAIL:
+        case type.AUTH_EMAIL:
             return {
                 ...state,
                 email: action.email
             }
-        case type.PASSWORD:
+        case type.AUTH_PASSWORD:
             return {
                 ...state,
                 password: action.password
             }
-        case type.AUTHORIZED:
+        case type.AUTH_AUTHORIZED:
             return {
                 ...state,
                 authorized: action.authorized,
@@ -30,9 +30,9 @@ export default (state = initialState, action) => {
                 id: action.id,
                 error: action.error
             }
-        case type.LOGOUT:
+        case type.AUTH_LOGOUT:
             return initialState
-        case type.ERROR:
+        case type.AUTH_ERROR:
             return {
                 ...state,
                 error: action.error

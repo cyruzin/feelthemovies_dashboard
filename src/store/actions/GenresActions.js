@@ -5,7 +5,6 @@ import { apiToken, baseUrl } from '../../util/constants'
 export const fetchGenres = () => {
     return dispatch => {
         dispatch(setLoaded(false))
-
         axios.get(`${baseUrl}/genres?api_token=${apiToken}`)
             .then(res => {
                 dispatch(setGenres(res.data.data))
@@ -20,7 +19,7 @@ export const fetchSingleGenre = id => {
         dispatch(setEditLoaded(false))
         axios.get(`${baseUrl}/genre/${id}?api_token=${apiToken}`)
             .then(res => {
-                dispatch({ type: type.FETCH_SINGLE_GENRE, genreData: res.data })
+                dispatch({ type: type.GENRES_FETCH_SINGLE, genreData: res.data })
                 dispatch(setEditLoaded(true))
             })
             .catch(() => {
@@ -32,7 +31,6 @@ export const fetchSingleGenre = id => {
 export const createGenre = genre => {
     return dispatch => {
         dispatch(setError(''))
-
         axios.post(`${baseUrl}/genre?api_token=${apiToken}`, genre)
             .then(() => {
                 dispatch(setCreateGenre('Genre created successfully'))
@@ -88,60 +86,61 @@ export const searchGenres = genres => {
 
 export const setGenres = value => {
     return {
-        type: type.FETCH_GENRES, data: value
+        type: type.GENRES_FETCH, data: value
     }
 }
 
 export const setLoaded = value => {
     return {
-        type: type.LOADED_GENRES, loaded: value
+        type: type.GENRES_LOADED, loaded: value
     }
 }
 
 export const setGenresSearch = value => {
     return {
-        type: type.SEARCH_GENRES, genres: value
-    }
-}
-
-export const loadingGenresSearch = value => {
-    return {
-        type: type.LOADING_GENRES_SEARCH, loadingGenres: value
+        type: type.GENRES_SEARCH, genres: value
     }
 }
 
 export const genresChange = value => {
     return {
-        type: type.SEARCH_GENRES_VALUE, genresValue: value, genres: []
+        type: type.GENRES_SEARCH_VALUE, genresValue: value, genres: []
     }
 }
 
-export const setError = value => {
+export const loadingGenresSearch = value => {
     return {
-        type: type.ERROR_GENRE, error: value
-    }
-}
-
-export const setDeleted = value => {
-    return {
-        type: type.DELETE_GENRE, deleted: value
-    }
-}
-
-export const setEditLoaded = value => {
-    return {
-        type: type.GENRE_EDIT_LOADED, editLoaded: value
+        type: type.GENRES_SEARCH_LOADING, loadingGenres: value
     }
 }
 
 export const setCreateGenre = value => {
     return {
-        type: type.CREATE_GENRE, created: value
+        type: type.GENRES_CREATE, created: value
     }
 }
 
 export const setEdited = value => {
     return {
-        type: type.EDIT_GENRE, edited: value
+        type: type.GENRES_EDIT, edited: value
     }
 }
+
+export const setEditLoaded = value => {
+    return {
+        type: type.GENRES_EDIT_LOADED, editLoaded: value
+    }
+}
+
+export const setDeleted = value => {
+    return {
+        type: type.GENRES_DELETE, deleted: value
+    }
+}
+
+export const setError = value => {
+    return {
+        type: type.GENRES_ERROR, error: value
+    }
+}
+

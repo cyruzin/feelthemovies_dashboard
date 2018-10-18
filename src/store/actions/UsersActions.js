@@ -11,7 +11,7 @@ export const fetchUsers = ({ listLoaded }) => {
         axios.get(`${baseUrl}/users?api_token=${apiToken}`)
             .then(res => {
                 dispatch({
-                    type: type.FETCH_USERS,
+                    type: type.USERS_FETCH,
                     data: res.data.data,
                 })
                 dispatch(setListLoaded(true))
@@ -27,7 +27,7 @@ export const fetchSingleUser = id => {
         dispatch(setEditLoaded(false))
         axios.get(`${baseUrl}/user/${id}?api_token=${apiToken}`)
             .then(res => {
-                dispatch({ type: type.FETCH_SINGLE_USER, userData: res.data })
+                dispatch({ type: type.USERS_FETCH_SINGLE, userData: res.data })
                 dispatch(setEditLoaded(true))
             })
             .catch(() => {
@@ -80,36 +80,37 @@ export const deleteUser = id => {
 
 export const setListLoaded = value => {
     return {
-        type: type.LIST_LOADED, listLoaded: value
+        type: type.USERS_LOADED, listLoaded: value
     }
 }
 
 export const setUserRegister = value => {
     return {
-        type: type.USER_REGISTER, userRegister: value
+        type: type.USERS_REGISTER, userRegister: value
     }
 }
 
 export const setEdited = value => {
     return {
-        type: type.USER_EDITED, userEdited: value
-    }
-}
-
-export const setDeleted = value => {
-    return {
-        type: type.USER_DELETED, userDeleted: value
-    }
-}
-
-export const setError = value => {
-    return {
-        type: type.USER_ERROR, error: value
+        type: type.USERS_EDIT, userEdited: value
     }
 }
 
 export const setEditLoaded = value => {
     return {
-        type: type.EDIT_LOADED, editLoaded: value
+        type: type.USERS_EDIT_LOADED, editLoaded: value
     }
 }
+
+export const setDeleted = value => {
+    return {
+        type: type.USERS_DELETE, userDeleted: value
+    }
+}
+
+export const setError = value => {
+    return {
+        type: type.USERS_ERROR, error: value
+    }
+}
+

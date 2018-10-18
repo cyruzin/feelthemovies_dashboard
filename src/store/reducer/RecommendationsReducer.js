@@ -10,6 +10,8 @@ const initialState = {
     data: [],
     genres: [],
     genresValue: [],
+    keywords: [],
+    keywordsValue: [],
     images: [],
     imagesValue: [],
     poster: '',
@@ -20,70 +22,65 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case type.FETCH_RECOMMENDATIONS:
+        case type.RECOMMENDATIONS_FETCH:
             return {
                 ...state,
                 data: action.data
             }
-        case type.FETCH_SINGLE_RECOMMENDATION:
+        case type.RECOMMENDATIONS_FETCH_SINGLE:
             return {
                 ...state,
                 recommendationData: action.recommendationData
             }
-        case type.FETCH_RECOMMENDATION_IMAGE:
+        case type.RECOMMENDATIONS_FETCH_IMAGE:
             return {
                 ...state,
                 images: action.images
             }
-        case type.LOADED_RECOMMENDATIONS:
+        case type.RECOMMENDATIONS_LOADED:
             return {
                 ...state,
                 loaded: action.loaded
             }
-        case type.CREATE_RECOMMENDATION:
+        case type.RECOMMENDATIONS_CREATE:
             return {
                 ...state,
                 created: action.created
             }
-        case type.EDIT_RECOMMENDATION:
+        case type.RECOMMENDATIONS_EDIT:
             return {
                 ...state,
                 edited: action.edited
             }
-        case type.EDIT_LOADED:
+        case type.RECOMMENDATIONS_EDIT_LOADED:
             return {
                 ...state,
                 editedLoaded: action.editedLoaded
             }
-        case type.RECOMMENDATION_EDIT_LOADED:
-            return {
-                ...state,
-                editLoaded: action.editLoaded
-            }
-        case type.DELETE_RECOMMENDATION:
+        case type.RECOMMENDATIONS_DELETE:
             return {
                 ...state,
                 deleted: action.deleted
             }
-        case type.RECOMMENDATION_IMAGES:
+        case type.RECOMMENDATIONS_IMAGES:
             return {
                 ...state,
                 poster: action.poster,
                 backdrop: action.backdrop
             }
-        case type.RECOMMENDATION_IMAGES_VALUE:
+        case type.RECOMMENDATIONS_IMAGES_VALUE:
             return {
                 ...state,
                 imagesValue: action.imagesValue,
                 images: action.images
             }
-        case type.ERROR_RECOMMENDATION:
+        case type.RECOMMENDATIONS_ERROR:
             return {
                 ...state,
                 error: action.error
             }
-        case type.RESET_RECOMMENDATION:
-            return state
+        case type.RECOMMENDATIONS_RESET:
+            return initialState
         default:
             return state
     }
