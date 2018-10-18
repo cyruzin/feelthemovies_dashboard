@@ -19,19 +19,17 @@ class RecommendationItemsCreate extends Component {
         this.searchItemData = debounce(this.searchItemData, 800)
         this.searchSources = debounce(this.searchSources, 800)
         this.handleEditorChange = debounce(this.handleEditorChange, 800)
-        this.reset = debounce(this.reset, 2000)
 
+        this.editorRef = React.createRef()
     }
 
-    // componentWillUnmount() {
-    //     const { tmdbValue, sourcesValue, commentary } = this.props.recommendationItems
-    //     if (tmdbValue !== '' || sourcesValue !== '' || commentary !== '') {
-    //         this.reset()
-    //     }
-    // }
+    componentDidMount() {
+        this.props.actions.setRecommendationItemCreate(false)
+    }
 
     reset = () => {
         this.props.actions.recommedationItemReset()
+        this.editorRef.current.editor.setContent('')
     }
 
     searchItemData = value => {
@@ -93,13 +91,13 @@ class RecommendationItemsCreate extends Component {
         }
 
         if (name === '') {
-            this.props.actions.setRecommendationItemError('Please, search field')
+            this.props.actions.setRecommendationItemError('Please, fill search field')
             return false
         }
 
         this.props.actions.createRecommendationItem(recommendationItem)
 
-        // this.reset()
+        this.reset()
     }
 
     searchSources = value => {
@@ -183,6 +181,7 @@ class RecommendationItemsCreate extends Component {
                                                             toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | code'
                                                         }}
                                                         apiKey="524aoctgpx14f8bvkwp4nwtstg3qzosyouqmz0dkqto0mv11"
+                                                        ref={this.editorRef}
                                                         onChange={this.handleEditorChange}
                                                     />
                                                 </div>

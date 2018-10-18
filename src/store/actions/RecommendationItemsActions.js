@@ -86,7 +86,7 @@ export const fetchRecommendationItemTrailer = (id, titleType) => {
 
 export const setRecommendationItemEditLoaded = value => {
     return {
-        type: type.RECOMMENDATION_ITEM_EDIT_LOADED, editLoaded: true
+        type: type.RECOMMENDATION_ITEM_EDIT_LOADED, editLoaded: value
     }
 }
 
@@ -106,6 +106,12 @@ export const createRecommendationItem = recommendation => {
                 })
                 dispatch(setRecommendationItemError('Something went wrong'))
             })
+    }
+}
+
+export const setRecommendationItemCreate = value => {
+    return {
+        type: type.RECOMMENDATION_ITEM_CREATE, data: value
     }
 }
 
@@ -186,18 +192,7 @@ export const recommendationItemSourceChange = value => {
 
 export const recommedationItemReset = () => {
     return {
-        type: type.RECOMMENDATION_ITEM_RESET,
-        sources: '',
-        sourcesValue: '',
-        commentary: '',
-        movie_id: '',
-        name: '',
-        year: '',
-        trailer: '',
-        overview: '',
-        poster: '',
-        backdrop: '',
-
+        type: type.RECOMMENDATION_ITEM_RESET
     }
 }
 

@@ -108,19 +108,7 @@ export default (state = initialState, action) => {
                 commentary: action.commentary
             }
         case type.RECOMMENDATION_ITEM_RESET:
-            return {
-                ...state,
-                sources: action.sources,
-                sourcesValue: action.sourcesValue,
-                commentary: action.commentary,
-                name: action.name,
-                movie_id: action.movie_id,
-                year: action.year,
-                trailer: action.trailer,
-                overview: action.overview,
-                poster: action.poster,
-                backdrop: action.backdrop
-            }
+            return initialState
         case type.RECOMMENDATION_ITEM_EDIT_VALUES:
             return {
                 ...state,
