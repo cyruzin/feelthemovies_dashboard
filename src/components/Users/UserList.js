@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { bindActionCreators } from 'redux'
+import { bindActionCreators, compose } from 'redux'
 import { connect } from 'react-redux'
 import * as actions from '../../store/actions/UsersActions'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import Alert from '../Layout/Alert'
 import debounce from 'lodash/debounce'
 
@@ -12,15 +12,30 @@ class UserList extends Component {
         super(props)
 
         this.deleteMessage = debounce(this.deleteMessage, 2000)
+        this.searchUserRef = React.createRef()
     }
 
     componentDidMount() {
         this.deleteMessage()
+        window.addEventListener('keypress', this.isEnterPressed)
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('keypress', this.isEnterPressed)
     }
 
     deleteMessage = () => {
         if (this.props.users.userDeleted !== '') {
             this.props.actions.setDeleted('')
+        }
+    }
+
+    isEnterPressed = e => {
+        const { current } = this.searchUserRef
+        if (e.keyCode === 13) {
+            if (document.activeElement === current && current.value !== '') {
+                this.props.history.push(`/dashboard/search_user?q=${current.value}`)
+            }
         }
     }
 
@@ -42,7 +57,17 @@ class UserList extends Component {
                                             className="btn btn btn-outline-success mb-3 float-right"
                                             to='/dashboard/create_user'>
                                             New
-                                </Link>
+                                         </Link>
+                                        <div className="form-group row">
+                                            <div className="col-lg-6">
+                                                <input
+                                                    ref={this.searchUserRef}
+                                                    type="text"
+                                                    placeholder="Search"
+                                                    className="form-control" />
+                                            </div>
+                                        </div>
+                                        <div className="line"></div>
                                         <table className="table table-striped table-sm">
                                             <thead>
                                                 <tr>
@@ -104,4 +129,6 @@ const mapDispatchToProps = dispatch => ({
     actions: bindActionCreators(actions, dispatch)
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserList)
+export default compose(
+    withRouter,
+    connect(mapStateToProps, mapDispatchToProps))(UserList)

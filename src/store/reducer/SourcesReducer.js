@@ -7,6 +7,7 @@ const initialState = {
     edited: false,
     deleted: false,
     data: [],
+    search: [],
     sourceData: '',
     error: ''
 }
@@ -47,6 +48,11 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 deleted: action.deleted
+            }
+        case type.SOURCES_SEARCH:
+            return {
+                ...state,
+                search: action.search
             }
         case type.SOURCES_ERROR:
             return {

@@ -78,6 +78,19 @@ export const deleteUser = id => {
     }
 }
 
+export const searchUsers = users => {
+    let query = encodeURIComponent(users)
+    return dispatch => {
+        axios.get(`${baseUrl}/search_user?api_token=${apiToken}&q=${query}`)
+            .then(res => {
+                dispatch(setUsersSearch(res.data))
+            })
+            .catch(() => {
+                dispatch(setError('Something went wrong'))
+            })
+    }
+}
+
 export const setListLoaded = value => {
     return {
         type: type.USERS_LOADED, listLoaded: value
@@ -105,6 +118,12 @@ export const setEditLoaded = value => {
 export const setDeleted = value => {
     return {
         type: type.USERS_DELETE, userDeleted: value
+    }
+}
+
+export const setUsersSearch = value => {
+    return {
+        type: type.USERS_SEARCH, search: value
     }
 }
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { bindActionCreators } from 'redux'
+import { bindActionCreators, compose } from 'redux'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import * as actions from '../../store/actions/GenresActions'
 import Alert from '../Layout/Alert'
 import debounce from 'lodash/debounce'
@@ -12,15 +12,29 @@ class GenresList extends Component {
         super(props)
 
         this.deleteMessage = debounce(this.deleteMessage, 2000)
+        this.searchGenresRef = React.createRef()
     }
 
     componentDidMount() {
         this.deleteMessage()
+        window.addEventListener('keypress', this.isEnterPressed)
     }
 
+    componentWillUnmount() {
+        window.removeEventListener('keypress', this.isEnterPressed)
+    }
     deleteMessage = () => {
         if (this.props.genres.deleted) {
             this.props.actions.setDeleted('')
+        }
+    }
+
+    isEnterPressed = e => {
+        const { current } = this.searchGenresRef
+        if (e.keyCode === 13) {
+            if (document.activeElement === current && current.value !== '') {
+                this.props.history.push(`/dashboard/search_genre?q=${current.value}`)
+            }
         }
     }
 
@@ -43,6 +57,16 @@ class GenresList extends Component {
                                             to='/dashboard/create_genre'>
                                             New
                                         </Link>
+                                        <div className="form-group row">
+                                            <div className="col-lg-6">
+                                                <input
+                                                    ref={this.searchGenresRef}
+                                                    type="text"
+                                                    placeholder="Search"
+                                                    className="form-control" />
+                                            </div>
+                                        </div>
+                                        <div className="line"></div>
                                         <table className="table table-striped table-sm">
                                             <thead>
                                                 <tr>
@@ -102,4 +126,6 @@ const mapDispatchToProps = dispatch => ({
     actions: bindActionCreators(actions, dispatch)
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(GenresList)
+export default compose(
+    withRouter,
+    connect(mapStateToProps, mapDispatchToProps))(GenresList)

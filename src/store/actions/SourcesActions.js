@@ -69,6 +69,19 @@ export const deleteSource = id => {
     }
 }
 
+export const searchSources = sources => {
+    let query = encodeURIComponent(sources)
+    return dispatch => {
+        axios.get(`${baseUrl}/search_source?api_token=${apiToken}&q=${query}`)
+            .then(res => {
+                dispatch(setSourcesSearch(res.data))
+            })
+            .catch(() => {
+                dispatch(setError('Something went wrong'))
+            })
+    }
+}
+
 export const setSources = value => {
     return {
         type: type.SOURCES_FETCH, data: value
@@ -102,6 +115,12 @@ export const setEditLoaded = value => {
 export const setDeleted = value => {
     return {
         type: type.SOURCES_DELETE, deleted: value
+    }
+}
+
+export const setSourcesSearch = value => {
+    return {
+        type: type.SOURCES_SEARCH, search: value
     }
 }
 
