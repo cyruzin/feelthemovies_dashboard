@@ -67,6 +67,8 @@ export default (state = initialState, action) => {
                 ...state,
                 deleted: action.deleted
             }
+        case type.GENRES_RESET:
+            return initialState
         case type.GENRES_ERROR:
             return {
                 ...state,

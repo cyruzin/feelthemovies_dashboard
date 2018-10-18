@@ -24,6 +24,8 @@ class RecommendationsCreate extends Component {
     constructor(props) {
         super(props)
         this.titleRef = React.createRef()
+        this.editorRef = React.createRef()
+        this.typeRef = React.createRef()
 
         this.searchKeywords = debounce(this.searchKeywords, 800)
         this.searchGenres = debounce(this.searchGenres, 800)
@@ -60,10 +62,20 @@ class RecommendationsCreate extends Component {
             return false
         }
 
+        //create
         this.props.actions.createRecommendation(recommendation)
 
-        this.props.actions.resetRecommendation()
+        //reset form after
+        this.reset()
+    }
 
+    reset = () => {
+        this.props.actions.setRecommendationReset()
+        this.props.actions.setGenresReset()
+        this.props.actions.setKeywordsReset()
+        this.titleRef.current.value = ''
+        this.editorRef.current.editor.setContent('')
+        this.typeRef.current.value = 0
     }
 
     handleType = e => {
@@ -154,6 +166,7 @@ class RecommendationsCreate extends Component {
                                                     }}
                                                     apiKey="524aoctgpx14f8bvkwp4nwtstg3qzosyouqmz0dkqto0mv11"
                                                     onChange={this.handleEditorChange}
+                                                    ref={this.editorRef}
                                                 />
                                             </div>
                                         </div>
@@ -162,7 +175,7 @@ class RecommendationsCreate extends Component {
                                         <div className="form-group row">
                                             <label className="col-lg-3 form-control-label">Type</label>
                                             <div className="col-lg-9">
-                                                <select onChange={this.handleType} className="form-control mb-3">
+                                                <select onChange={this.handleType} ref={this.typeRef} className="form-control mb-3">
                                                     <option value="0" defaultValue>Movie</option>
                                                     <option value="1">Serie</option>
                                                     <option value="2">Mixed</option>

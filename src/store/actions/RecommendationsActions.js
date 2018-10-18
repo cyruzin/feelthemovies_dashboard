@@ -65,10 +65,10 @@ export const deleteRecommendation = id => {
     return dispatch => {
         axios.delete(`${baseUrl}/recommendation/${id}?api_token=${apiToken}`)
             .then(() => {
-                dispatch(setDeleted('Recommendation removed successfully'))
+                dispatch(setDeleted(true))
             })
             .catch(() => {
-                dispatch(setDeleted(''))
+                dispatch(setDeleted(false))
                 dispatch(setRecommendationError('Something went wrong'))
             })
     }
@@ -150,7 +150,7 @@ export const imagesChange = value => {
     }
 }
 
-export const resetRecommendation = () => {
+export const setRecommendationReset = () => {
     return {
         type: type.RECOMMENDATIONS_RESET
     }

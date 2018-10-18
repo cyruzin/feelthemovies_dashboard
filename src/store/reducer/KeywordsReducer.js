@@ -67,6 +67,8 @@ export default (state = initialState, action) => {
                 ...state,
                 deleted: action.deleted
             }
+        case type.KEYWORDS_RESET:
+            return initialState
         case type.KEYWORDS_ERROR:
             return {
                 ...state,

@@ -4,8 +4,26 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import * as actions from '../../store/actions/SourcesActions'
 import Alert from '../Layout/Alert'
+import debounce from 'lodash/debounce'
 
 class SourcesList extends Component {
+
+    constructor(props) {
+        super(props)
+
+        this.deleteMessage = debounce(this.deleteMessage, 2000)
+    }
+
+    componentDidMount() {
+        this.deleteMessage()
+    }
+
+    deleteMessage = () => {
+        if (this.props.sources.deleted) {
+            this.props.actions.setDeleted('')
+        }
+    }
+
 
     render() {
         return (

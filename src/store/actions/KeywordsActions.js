@@ -140,6 +140,12 @@ export const setDeleted = value => {
     }
 }
 
+export const setKeywordsReset = () => {
+    return {
+        type: type.KEYWORDS_RESET
+    }
+}
+
 export const setError = value => {
     return {
         type: type.KEYWORDS_ERROR, error: value

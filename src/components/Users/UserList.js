@@ -4,8 +4,25 @@ import { connect } from 'react-redux'
 import * as actions from '../../store/actions/UsersActions'
 import { Link } from 'react-router-dom'
 import Alert from '../Layout/Alert'
+import debounce from 'lodash/debounce'
 
 class UserList extends Component {
+
+    constructor(props) {
+        super(props)
+
+        this.deleteMessage = debounce(this.deleteMessage, 2000)
+    }
+
+    componentDidMount() {
+        this.deleteMessage()
+    }
+
+    deleteMessage = () => {
+        if (this.props.users.userDeleted !== '') {
+            this.props.actions.setDeleted('')
+        }
+    }
 
     render() {
         return (

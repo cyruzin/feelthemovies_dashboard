@@ -138,6 +138,12 @@ export const setDeleted = value => {
     }
 }
 
+export const setGenresReset = () => {
+    return {
+        type: type.GENRES_RESET
+    }
+}
+
 export const setError = value => {
     return {
         type: type.GENRES_ERROR, error: value

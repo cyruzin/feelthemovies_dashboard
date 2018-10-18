@@ -55,7 +55,7 @@ export default (state = initialState, action) => {
         case type.RECOMMENDATIONS_EDIT_LOADED:
             return {
                 ...state,
-                editedLoaded: action.editedLoaded
+                editLoaded: action.editLoaded
             }
         case type.RECOMMENDATIONS_DELETE:
             return {

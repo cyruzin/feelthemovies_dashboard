@@ -4,8 +4,25 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import * as actions from '../../store/actions/RecommendationsActions'
 import Alert from '../Layout/Alert'
+import debounce from 'lodash/debounce'
 
 class RecommendationsList extends Component {
+
+    constructor(props) {
+        super(props)
+
+        this.deleteMessage = debounce(this.deleteMessage, 2000)
+    }
+
+    componentDidMount() {
+        this.deleteMessage()
+    }
+
+    deleteMessage = () => {
+        if (this.props.recommendations.deleted) {
+            this.props.actions.setDeleted(false)
+        }
+    }
 
     render() {
         return (
