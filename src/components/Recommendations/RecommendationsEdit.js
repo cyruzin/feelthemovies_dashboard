@@ -25,6 +25,8 @@ class RecommendationsEdit extends Component {
     constructor(props) {
         super(props)
         this.titleRef = React.createRef()
+        this.editorRef = React.createRef()
+        this.typeRef = React.createRef()
 
         this.searchKeywords = debounce(this.searchKeywords, 800)
         this.searchGenres = debounce(this.searchGenres, 800)
@@ -36,7 +38,19 @@ class RecommendationsEdit extends Component {
         this.props.actions.setEditRecommendation(false)
         this.fetchSingleRecommendation()
         this.setFields()
+    }
 
+    componentWillUnmount() {
+        this.reset()
+    }
+
+    reset = () => {
+        this.props.actions.setRecommendationReset()
+        this.props.actions.setGenresReset()
+        this.props.actions.setKeywordsReset()
+        this.titleRef.current.value = ''
+        this.editorRef.current.editor.setContent('')
+        this.typeRef.current.value = 0
     }
 
     setFields = () => {
@@ -204,6 +218,7 @@ class RecommendationsEdit extends Component {
                                                         }}
                                                         initialValue={this.props.recommendations.recommendationData.body}
                                                         apiKey="524aoctgpx14f8bvkwp4nwtstg3qzosyouqmz0dkqto0mv11"
+                                                        ref={this.editorRef}
                                                         onChange={this.handleEditorChange}
                                                     />
                                                 </div>
@@ -215,6 +230,7 @@ class RecommendationsEdit extends Component {
                                                 <div className="col-lg-9">
                                                     <select onChange={this.handleType}
                                                         defaultValue={this.props.recommendations.recommendationData.type}
+                                                        ref={this.typeRef}
                                                         className="form-control mb-3">
                                                         <option value="0">Movie</option>
                                                         <option value="1">Serie</option>

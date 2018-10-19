@@ -20,11 +20,22 @@ class RecommendationItemsEdit extends Component {
         this.searchItemData = debounce(this.searchItemData, 800)
         this.searchSources = debounce(this.searchSources, 800)
         this.handleEditorChange = debounce(this.handleEditorChange, 800)
+
+        this.editorRef = React.createRef()
     }
 
     componentDidMount() {
         this.fetchRecommendationItem()
         this.setFields()
+    }
+
+    componentWillUnmount() {
+        this.reset()
+    }
+
+    reset = () => {
+        this.props.actions.recommedationItemReset()
+        this.editorRef.current.editor.setContent('')
     }
 
     fetchRecommendationItem = () => {
@@ -206,6 +217,7 @@ class RecommendationItemsEdit extends Component {
                                                         }}
                                                         initialValue={this.props.recommendationItems.item.commentary}
                                                         apiKey="524aoctgpx14f8bvkwp4nwtstg3qzosyouqmz0dkqto0mv11"
+                                                        ref={this.editorRef}
                                                         onChange={this.handleEditorChange}
                                                     />
                                                 </div>
