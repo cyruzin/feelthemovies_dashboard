@@ -1,16 +1,14 @@
-import axios from 'axios'
-import { baseUrl } from '../../util/constants'
+import axios from '../../util/constants/axios'
 import type from '../types/UsersTypes'
 
 export const fetchUsers = ({ listLoaded }) => {
-    return (dispatch, getState) => {
-        let state = getState()
-        const apiToken = state.auth.apiToken
+    return dispatch => {
+
         if (listLoaded) {
             dispatch(setListLoaded(false))
         }
 
-        axios.get(`${baseUrl}/users?api_token=${apiToken}`)
+        axios.get(`/users`)
             .then(res => {
                 dispatch({
                     type: type.USERS_FETCH,
@@ -25,11 +23,9 @@ export const fetchUsers = ({ listLoaded }) => {
 
 
 export const fetchSingleUser = id => {
-    return (dispatch, getState) => {
-        let state = getState()
-        const apiToken = state.auth.apiToken
+    return dispatch => {
         dispatch(setEditLoaded(false))
-        axios.get(`${baseUrl}/user/${id}?api_token=${apiToken}`)
+        axios.get(`/user/${id}`)
             .then(res => {
                 dispatch({ type: type.USERS_FETCH_SINGLE, userData: res.data })
                 dispatch(setEditLoaded(true))
@@ -41,12 +37,9 @@ export const fetchSingleUser = id => {
 }
 
 export const registerUser = user => {
-    return (dispatch, getState) => {
-        let state = getState()
-        const apiToken = state.auth.apiToken
+    return dispatch => {
         dispatch(setError(''))
-
-        axios.post(`${baseUrl}/user?api_token=${apiToken}`, user)
+        axios.post(`/user`, user)
             .then(() => {
                 dispatch(setUserRegister('User created successfully'))
             })
@@ -58,11 +51,9 @@ export const registerUser = user => {
 }
 
 export const editUser = (id, user) => {
-    return (dispatch, getState) => {
-        let state = getState()
-        const apiToken = state.auth.apiToken
+    return dispatch => {
         dispatch(setError(''))
-        axios.put(`${baseUrl}/user/${id}?api_token=${apiToken}`, user)
+        axios.put(`/user/${id}`, user)
             .then(() => {
                 dispatch(setEdited('User edited successfully'))
             })
@@ -74,10 +65,8 @@ export const editUser = (id, user) => {
 }
 
 export const deleteUser = id => {
-    return (dispatch, getState) => {
-        let state = getState()
-        const apiToken = state.auth.apiToken
-        axios.delete(`${baseUrl}/user/${id}?api_token=${apiToken}`)
+    return dispatch => {
+        axios.delete(`/user/${id}`)
             .then(() => {
                 dispatch(setDeleted('User removed successfully'))
             })
@@ -90,10 +79,8 @@ export const deleteUser = id => {
 
 export const searchUsers = users => {
     let query = encodeURIComponent(users)
-    return (dispatch, getState) => {
-        let state = getState()
-        const apiToken = state.auth.apiToken
-        axios.get(`${baseUrl}/search_user?api_token=${apiToken}&q=${query}`)
+    return dispatch => {
+        axios.get(`/search_user?q=${query}`)
             .then(res => {
                 dispatch(setUsersSearch(res.data))
             })

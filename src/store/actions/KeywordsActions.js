@@ -1,15 +1,10 @@
 import type from '../types/KeywordsTypes'
-import axios from 'axios'
-import { baseUrl } from '../../util/constants'
-
+import axios from '../../util/constants/axios'
 
 export const fetchKeywords = () => {
-    return (dispatch, getState) => {
-        let state = getState()
-        const apiToken = state.auth.apiToken
+    return dispatch => {
         dispatch(setLoaded(false))
-
-        axios.get(`${baseUrl}/keywords?api_token=${apiToken}`)
+        axios.get(`/keywords`)
             .then(res => {
                 dispatch(setKeywords(res.data.data))
                 dispatch(setLoaded(true))
@@ -19,11 +14,9 @@ export const fetchKeywords = () => {
 }
 
 export const fetchSingleKeyword = id => {
-    return (dispatch, getState) => {
-        let state = getState()
-        const apiToken = state.auth.apiToken
+    return dispatch => {
         dispatch(setEditLoaded(false))
-        axios.get(`${baseUrl}/keyword/${id}?api_token=${apiToken}`)
+        axios.get(`/keyword/${id}`)
             .then(res => {
                 dispatch({ type: type.KEYWORDS_FETCH_SINGLE, keywordData: res.data })
                 dispatch(setEditLoaded(true))
@@ -35,12 +28,9 @@ export const fetchSingleKeyword = id => {
 }
 
 export const createKeyword = keyword => {
-    return (dispatch, getState) => {
-        let state = getState()
-        const apiToken = state.auth.apiToken
+    return dispatch => {
         dispatch(setError(''))
-
-        axios.post(`${baseUrl}/keyword?api_token=${apiToken}`, keyword)
+        axios.post(`/keyword`, keyword)
             .then(() => {
                 dispatch(setCreateKeyword('Keyword created successfully'))
             })
@@ -52,11 +42,9 @@ export const createKeyword = keyword => {
 }
 
 export const editKeyword = (id, keyword) => {
-    return (dispatch, getState) => {
-        let state = getState()
-        const apiToken = state.auth.apiToken
+    return dispatch => {
         dispatch(setError(''))
-        axios.put(`${baseUrl}/keyword/${id}?api_token=${apiToken}`, keyword)
+        axios.put(`/keyword/${id}`, keyword)
             .then(() => {
                 dispatch(setEdited('Keyword edited successfully'))
             })
@@ -68,10 +56,8 @@ export const editKeyword = (id, keyword) => {
 }
 
 export const deleteKeyword = id => {
-    return (dispatch, getState) => {
-        let state = getState()
-        const apiToken = state.auth.apiToken
-        axios.delete(`${baseUrl}/keyword/${id}?api_token=${apiToken}`)
+    return dispatch => {
+        axios.delete(`/keyword/${id}`)
             .then(() => {
                 dispatch(setDeleted('Keyword removed successfully'))
             })
@@ -84,11 +70,9 @@ export const deleteKeyword = id => {
 
 export const searchKeywords = keyword => {
     let query = encodeURIComponent(keyword)
-    return (dispatch, getState) => {
-        let state = getState()
-        const apiToken = state.auth.apiToken
+    return dispatch => {
         loadingKeywordsSearch(true)
-        axios.get(`${baseUrl}/search_keyword?api_token=${apiToken}&q=${query}`)
+        axios.get(`/search_keyword?q=${query}`)
             .then(res => {
                 dispatch(setKeywordsSearch(res.data))
                 loadingKeywordsSearch(false)
