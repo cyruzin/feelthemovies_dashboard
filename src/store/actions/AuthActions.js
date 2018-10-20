@@ -17,6 +17,7 @@ export const fetchAuth = ({ email, password }) => {
                     id: res.data.id,
                     error: ''
                 })
+                dispatch(checkAuthTimeout())
             })
             .catch(err => {
                 const { message } = err.response.data
@@ -40,4 +41,12 @@ export const setError = value => {
 
 export const logout = () => {
     return { type: type.AUTH_LOGOUT }
+}
+
+export const checkAuthTimeout = () => {
+    return dispatch => {
+        setTimeout(() => {
+            dispatch({ type: type.AUTH_LOGOUT })
+        }, 3600000)
+    }
 }
