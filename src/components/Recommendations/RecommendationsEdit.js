@@ -219,6 +219,7 @@ class RecommendationsEdit extends Component {
                                                         initialValue={this.props.recommendations.recommendationData.body}
                                                         apiKey="524aoctgpx14f8bvkwp4nwtstg3qzosyouqmz0dkqto0mv11"
                                                         ref={this.editorRef}
+                                                        onFocusOut={this.handleEditorChange}
                                                         onChange={this.handleEditorChange}
                                                     />
                                                 </div>

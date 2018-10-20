@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '../../util/constants/axios'
 import type from '../types/UsersTypes'
 
 export const fetchUsers = ({ listLoaded }) => {

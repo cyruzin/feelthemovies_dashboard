@@ -1,7 +1,5 @@
 import type from '../types/RecommendationsTypes'
-import axios from 'axios'
-import axiosTmdb from 'axios'
-import { tmdbToken } from '../../util/constants'
+import axios, { axiosTmdb } from '../../util/constants/axios'
 
 export const fetchRecommendations = () => {
     return dispatch => {
@@ -80,7 +78,7 @@ export const fetchRecommendationImages = search => {
 
     return dispatch => {
 
-        axiosTmdb.get(`https://api.themoviedb.org/3/search/multi?api_key=${tmdbToken}&language=en-US&query=${query}&page=1&include_adult=false`)
+        axiosTmdb.get(`/search/multi?language=en-US&query=${query}&page=1&include_adult=false`)
             .then(res => {
                 let images = res.data.results
                     .filter(v => v.media_type !== 'person' && v.backdrop_path !== null)

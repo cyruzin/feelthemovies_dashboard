@@ -1,5 +1,5 @@
 import type from '../types/SourcesTypes'
-import axios from 'axios'
+import axios from '../../util/constants/axios'
 
 export const fetchSources = () => {
     return dispatch => {

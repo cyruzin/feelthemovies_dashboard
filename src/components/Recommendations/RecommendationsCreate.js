@@ -165,6 +165,7 @@ class RecommendationsCreate extends Component {
                                                         toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | code'
                                                     }}
                                                     apiKey="524aoctgpx14f8bvkwp4nwtstg3qzosyouqmz0dkqto0mv11"
+                                                    onFocusOut={this.handleEditorChange}
                                                     onChange={this.handleEditorChange}
                                                     ref={this.editorRef}
                                                 />

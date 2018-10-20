@@ -1,6 +1,5 @@
 import $ from 'jquery'
-import { baseURL } from '../constants'
-import axios from 'axios'
+import axios from '../constants/axios'
 
 export const loadState = () => {
     try {
@@ -29,7 +28,6 @@ export const getTokenMiddleware = store => {
                 if (req.url.includes('themoviedb') === false) {
                     let apiToken = store.getState().auth.apiToken
                     req.headers.common['Api-Token'] = apiToken
-                    req.baseURL = baseURL
                     return req
                 }
                 return req

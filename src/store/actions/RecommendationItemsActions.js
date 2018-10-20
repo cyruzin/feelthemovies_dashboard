@@ -1,7 +1,5 @@
-import axiosTmdb from 'axios'
-import axios from 'axios'
+import axios, { axiosTmdb } from '../../util/constants/axios'
 import type from '../types/RecommendationItemsTypes'
-import { tmdbToken } from '../../util/constants'
 
 export const fetchRecommendationItems = recommendationID => {
     return dispatch => {
@@ -51,7 +49,7 @@ export const deleteRecommendationItem = recommendationID => {
 export const fetchRecommendationItemData = search => {
     let query = encodeURIComponent(search)
     return dispatch => {
-        axiosTmdb.get(`https://api.themoviedb.org/3/search/multi?api_key=${tmdbToken}&language=en-US&query=${query}&page=1&include_adult=false`)
+        axiosTmdb.get(`/search/multi?language=en-US&query=${query}&page=1&include_adult=false`)
             .then(res => {
                 let tmdb = res.data.results
                     .filter(v => v.media_type !== 'person' && v.backdrop_path !== null)
@@ -67,7 +65,7 @@ export const fetchRecommendationItemData = search => {
 // tmdb trailer data
 export const fetchRecommendationItemTrailer = (id, titleType) => {
     return dispatch => {
-        axiosTmdb.get(`https://api.themoviedb.org/3/${titleType}/${id}?api_key=${tmdbToken}&language=en-US&append_to_response=videos`)
+        axiosTmdb.get(`/${titleType}/${id}?language=en-US&append_to_response=videos`)
             .then(res => {
                 if (res.data.videos.results.length > 0) {
                     dispatch({
