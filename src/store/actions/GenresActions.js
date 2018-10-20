@@ -1,10 +1,5 @@
 import type from '../types/GenresTypes'
-import axios from '../../util/constants/axios'
-
-// axios.interceptors.request.use(request => {
-//     console.log(request)
-//     return request
-// })
+import axios from 'axios'
 
 export const fetchGenres = () => {
     return dispatch => {

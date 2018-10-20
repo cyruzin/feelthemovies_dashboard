@@ -1,5 +1,5 @@
 import type from '../types/RecommendationsTypes'
-import axios from '../../util/constants/axios'
+import axios from 'axios'
 import axiosTmdb from 'axios'
 import { tmdbToken } from '../../util/constants'
 

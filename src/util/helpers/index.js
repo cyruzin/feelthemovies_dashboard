@@ -1,4 +1,6 @@
 import $ from 'jquery'
+import { baseURL } from '../constants'
+import axios from 'axios'
 
 export const loadState = () => {
     try {
@@ -17,6 +19,29 @@ export const saveState = state => {
         const serializedState = JSON.stringify(state)
         localStorage.setItem('state', serializedState)
     } catch (err) { }
+}
+
+
+export const getTokenMiddleware = store => {
+    return next => {
+        return action => {
+            axios.interceptors.request.use(req => {
+                if (req.url.includes('themoviedb') === false) {
+                    let apiToken = store.getState().auth.apiToken
+                    req.headers.common['Api-Token'] = apiToken
+                    req.baseURL = baseURL
+                    return req
+                }
+                return req
+            },
+                error => Promise.reject(error)
+            )
+
+            const result = next(action)
+
+            return result
+        }
+    }
 }
 
 export const loadJs = () => {

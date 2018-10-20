@@ -1,5 +1,5 @@
 import axiosTmdb from 'axios'
-import axios from '../../util/constants/axios'
+import axios from 'axios'
 import type from '../types/RecommendationItemsTypes'
 import { tmdbToken } from '../../util/constants'
 
@@ -173,7 +173,7 @@ export const recommedationItemSource = value => {
     return dispatch => {
 
 
-        axios.get(`/search_source&q=${query}`)
+        axios.get(`/search_source?q=${query}`)
             .then(res => {
                 dispatch({
                     type: type.RECOMMENDATION_ITEM_SOURCE_SEARCH,
