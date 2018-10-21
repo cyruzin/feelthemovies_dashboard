@@ -17,6 +17,7 @@ class KeywordsSearch extends Component {
     }
 
     render() {
+        const { searchLoaded } = this.props.keywords
         return (
             <div>
                 <div className="container-fluid">
@@ -29,62 +30,64 @@ class KeywordsSearch extends Component {
                         <li className="breadcrumb-item active">Search</li>
                     </ul>
                 </div>
-
-                <section className="no-padding-top">
-                    <div className="container-fluid">
-                        <div className="row">
-                            <div className="col-lg-12">
-                                <div className="block">
-                                    <div className="table-responsive">
-                                        <table className="table table-striped table-sm">
-                                            <thead>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Name</th>
-                                                    <th>Created at</th>
-                                                    <th>Updated at</th>
-                                                    <th>Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {this.props.keywords.keywords.map(k => (
-                                                    <tr key={k.id}>
-                                                        <th scope="row">{k.id}</th>
-                                                        <td>{k.name}</td>
-                                                        <td className="small">
-                                                            {k.created_at}
-                                                        </td>
-                                                        <td className="small">
-                                                            {k.updated_at}
-                                                        </td>
-                                                        <td>
-                                                            <Link
-                                                                className="btn btn-sm btn-outline-secondary mr-2"
-                                                                to={`/dashboard/edit_keyword/${k.id}`}
-                                                            >
-                                                                <i className="fa fa-edit"></i>
-                                                            </Link>
-
-                                                            <Link
-                                                                className="btn btn-sm btn-outline-danger"
-                                                                to={`/dashboard/delete_keyword/${k.id}`}
-                                                                onClick={() => this.props.actions.setDeleted(false)}
-                                                            >
-                                                                <i className="fa fa-trash"></i>
-                                                            </Link>
-                                                        </td>
+                {searchLoaded ?
+                    <section className="no-padding-top">
+                        <div className="container-fluid">
+                            <div className="row">
+                                <div className="col-lg-12">
+                                    <div className="block">
+                                        <div className="table-responsive">
+                                            <table className="table table-striped table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Name</th>
+                                                        <th>Created at</th>
+                                                        <th>Updated at</th>
+                                                        <th>Actions</th>
                                                     </tr>
-                                                ))
-                                                }
-                                            </tbody>
-                                        </table>
+                                                </thead>
+                                                <tbody>
+                                                    {this.props.keywords.keywords.map(k => (
+                                                        <tr key={k.id}>
+                                                            <th scope="row">{k.id}</th>
+                                                            <td>{k.name}</td>
+                                                            <td className="small">
+                                                                {k.created_at}
+                                                            </td>
+                                                            <td className="small">
+                                                                {k.updated_at}
+                                                            </td>
+                                                            <td>
+                                                                <Link
+                                                                    className="btn btn-sm btn-outline-secondary mr-2"
+                                                                    to={`/dashboard/edit_keyword/${k.id}`}
+                                                                >
+                                                                    <i className="fa fa-edit"></i>
+                                                                </Link>
+
+                                                                <Link
+                                                                    className="btn btn-sm btn-outline-danger"
+                                                                    to={`/dashboard/delete_keyword/${k.id}`}
+                                                                    onClick={() => this.props.actions.setDeleted(false)}
+                                                                >
+                                                                    <i className="fa fa-trash"></i>
+                                                                </Link>
+                                                            </td>
+                                                        </tr>
+                                                    ))
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
-
+                    </section>
+                    :
+                    null
+                }
             </div>
         )
     }

@@ -4,6 +4,7 @@ const initialState = {
     listLoaded: false,
     editLoaded: false,
     data: [],
+    searchLoaded: false,
     search: [],
     createUserLoaded: false,
     userRegister: '',
@@ -54,6 +55,11 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 userDeleted: action.userDeleted
+            }
+        case type.USERS_SEARCH_LOADED:
+            return {
+                ...state,
+                searchLoaded: action.searchLoaded
             }
         case type.USERS_SEARCH:
             return {

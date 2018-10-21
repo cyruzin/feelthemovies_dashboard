@@ -94,9 +94,11 @@ export const fetchRecommendationImages = search => {
 export const searchRecommendation = rec => {
     let query = encodeURIComponent(rec)
     return dispatch => {
+        dispatch(setRecommendationsSearchLoaded(false))
         axios.get(`/search_recommendation?q=${query}`)
             .then(res => {
                 dispatch(setRecommendationsSearch(res.data.data))
+                dispatch(setRecommendationsSearchLoaded(true))
             })
             .catch(() => {
                 dispatch(setRecommendationError('Something went wrong'))
@@ -170,6 +172,12 @@ export const imagesChange = value => {
 export const setRecommendationReset = () => {
     return {
         type: type.RECOMMENDATIONS_RESET
+    }
+}
+
+export const setRecommendationsSearchLoaded = value => {
+    return {
+        type: type.RECOMMENDATIONS_SEARCH_LOADED, searchLoaded: value
     }
 }
 

@@ -3,6 +3,7 @@ import type from '../types/GenresTypes'
 const initialState = {
     loaded: false,
     editLoaded: false,
+    searchLoaded: false,
     created: false,
     edited: false,
     deleted: false,
@@ -41,6 +42,11 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 loadingSearch: action.loadingSearch
+            }
+        case type.GENRES_SEARCH_LOADED:
+            return {
+                ...state,
+                searchLoaded: action.searchLoaded
             }
         case type.GENRES_LOADED:
             return {

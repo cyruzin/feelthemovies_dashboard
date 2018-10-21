@@ -8,6 +8,7 @@ const initialState = {
     deleted: false,
     data: [],
     search: [],
+    searchLoaded: false,
     sourceData: '',
     error: ''
 }
@@ -53,6 +54,11 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 search: action.search
+            }
+        case type.SOURCES_SEARCH_LOADED:
+            return {
+                ...state,
+                searchLoaded: action.searchLoaded
             }
         case type.SOURCES_ERROR:
             return {

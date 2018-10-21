@@ -4,6 +4,7 @@ const initialState = {
     loaded: false,
     editLoaded: false,
     created: false,
+    searchLoaded: false,
     edited: false,
     deleted: false,
     loadingSearch: false,
@@ -41,6 +42,11 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 loadingSearch: action.loadingSearch
+            }
+        case type.KEYWORDS_SEARCH_LOADED:
+            return {
+                ...state,
+                searchLoaded: action.searchLoaded
             }
         case type.KEYWORDS_LOADED:
             return {

@@ -71,9 +71,11 @@ export const deleteSource = id => {
 export const searchSources = sources => {
     let query = encodeURIComponent(sources)
     return dispatch => {
+        dispatch(setSourcesSearchLoaded(false))
         axios.get(`/search_source?q=${query}`)
             .then(res => {
                 dispatch(setSourcesSearch(res.data))
+                dispatch(setSourcesSearchLoaded(true))
             })
             .catch(() => {
                 dispatch(setError('Something went wrong'))
@@ -122,6 +124,13 @@ export const setSourcesSearch = value => {
         type: type.SOURCES_SEARCH, search: value
     }
 }
+
+export const setSourcesSearchLoaded = value => {
+    return {
+        type: type.SOURCES_SEARCH_LOADED, searchLoaded: value
+    }
+}
+
 
 export const setError = value => {
     return {

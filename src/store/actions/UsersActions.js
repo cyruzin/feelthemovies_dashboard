@@ -80,9 +80,11 @@ export const deleteUser = id => {
 export const searchUsers = users => {
     let query = encodeURIComponent(users)
     return dispatch => {
+        dispatch(setUsersSearchLoaded(false))
         axios.get(`/search_user?q=${query}`)
             .then(res => {
                 dispatch(setUsersSearch(res.data))
+                dispatch(setUsersSearchLoaded(true))
             })
             .catch(() => {
                 dispatch(setError('Something went wrong'))
@@ -123,6 +125,12 @@ export const setDeleted = value => {
 export const setUsersSearch = value => {
     return {
         type: type.USERS_SEARCH, search: value
+    }
+}
+
+export const setUsersSearchLoaded = value => {
+    return {
+        type: type.USERS_SEARCH_LOADED, searchLoaded: value
     }
 }
 

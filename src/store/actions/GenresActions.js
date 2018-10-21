@@ -71,11 +71,13 @@ export const deleteGenre = id => {
 export const searchGenres = genres => {
     let query = encodeURIComponent(genres)
     return dispatch => {
-        loadingGenresSearch(true)
+        dispatch(loadingGenresSearch(true))
+        dispatch(setGenresSearchLoaded(false))
         axios.get(`/search_genre?q=${query}`)
             .then(res => {
                 dispatch(setGenresSearch(res.data))
-                loadingGenresSearch(false)
+                dispatch(loadingGenresSearch(false))
+                dispatch(setGenresSearchLoaded(true))
             })
             .catch(() => {
                 dispatch(setError('Something went wrong'))
@@ -112,6 +114,13 @@ export const loadingGenresSearch = value => {
         type: type.GENRES_SEARCH_LOADING, loadingGenres: value
     }
 }
+
+export const setGenresSearchLoaded = value => {
+    return {
+        type: type.GENRES_SEARCH_LOADED, searchLoaded: value
+    }
+}
+
 
 export const setCreateGenre = value => {
     return {

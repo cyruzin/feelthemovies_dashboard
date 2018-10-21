@@ -8,6 +8,7 @@ const initialState = {
     editedLoaded: false,
     deleted: false,
     search: [],
+    searchLoaded: false,
     data: [],
     genres: [],
     genresValue: [],
@@ -79,6 +80,11 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 search: action.search
+            }
+        case type.RECOMMENDATIONS_SEARCH_LOADED:
+            return {
+                ...state,
+                searchLoaded: action.searchLoaded
             }
         case type.RECOMMENDATIONS_ERROR:
             return {

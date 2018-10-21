@@ -71,11 +71,14 @@ export const deleteKeyword = id => {
 export const searchKeywords = keyword => {
     let query = encodeURIComponent(keyword)
     return dispatch => {
-        loadingKeywordsSearch(true)
+        dispatch(loadingKeywordsSearch(true))
+        dispatch(setKeywordsSearchLoaded(false))
         axios.get(`/search_keyword?q=${query}`)
             .then(res => {
                 dispatch(setKeywordsSearch(res.data))
-                loadingKeywordsSearch(false)
+                dispatch(loadingKeywordsSearch(false))
+                dispatch(setKeywordsSearchLoaded(true))
+
             })
             .catch(() => {
                 dispatch(setError('Something went wrong'))
@@ -142,6 +145,13 @@ export const setKeywordsReset = () => {
         type: type.KEYWORDS_RESET
     }
 }
+
+export const setKeywordsSearchLoaded = value => {
+    return {
+        type: type.KEYWORDS_SEARCH_LOADED, searchLoaded: value
+    }
+}
+
 
 export const setError = value => {
     return {
