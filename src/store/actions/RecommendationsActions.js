@@ -3,29 +3,39 @@ import axios, { axiosTmdb } from '../../util/constants/axios'
 
 export const fetchRecommendations = () => {
     return dispatch => {
-        dispatch(setLoaded(false))
+        dispatch(setRecommendationLoaded(false))
         axios.get(`/recommendations?nofilter=true`)
             .then(res => {
                 dispatch(setRecommendations(res.data.data))
-                dispatch(setLoaded(true))
+                dispatch(setRecommendationLoaded(true))
             })
-            .catch(() => dispatch(setRecommendationError('Something went wrong')))
+            .catch(err => {
+                dispatch(setRecommendationLoaded(true))
+                const { status, statusText } = err.response
+                dispatch(setRecommendationError(`
+                ERROR!
+                Status: ${status}
+                Message: ${statusText}
+                `))
+            })
     }
 }
 
-export const fetchSingleRecommendation = id => {
+export const fetchRecommendation = id => {
     return dispatch => {
-        dispatch(setEditLoaded(false))
+        dispatch(setRecommendationEditLoaded(false))
         axios.get(`/recommendation/${id}`)
             .then(res => {
-                dispatch({
-                    type: type.RECOMMENDATIONS_FETCH_SINGLE,
-                    recommendationData: res.data
-                })
-                dispatch(setEditLoaded(true))
+                dispatch(setRecommendationFetch(res.data))
+                dispatch(setRecommendationEditLoaded(true))
             })
-            .catch(() => {
-                dispatch(setRecommendationError('Something went wrong'))
+            .catch(err => {
+                const { status, statusText } = err.response
+                dispatch(setRecommendationError(`
+                ERROR!
+                Status: ${status}
+                Message: ${statusText}
+                `))
             })
     }
 }
@@ -50,10 +60,10 @@ export const editRecommendation = (id, recommendation) => {
         dispatch(setRecommendationError(''))
         axios.put(`/recommendation/${id}`, recommendation)
             .then(() => {
-                dispatch(setEditRecommendation('Recommendation edited successfully'))
+                setEditRecommendation('Recommendation edited successfully')
             })
             .catch(() => {
-                dispatch(setEditRecommendation(''))
+                setEditRecommendation('')
                 dispatch(setRecommendationError('Something went wrong'))
             })
     }
@@ -63,10 +73,10 @@ export const deleteRecommendation = id => {
     return dispatch => {
         axios.delete(`/recommendation/${id}`)
             .then(() => {
-                dispatch(setDeleted(true))
+                dispatch(setRecommendationDeleted(true))
             })
             .catch(() => {
-                dispatch(setDeleted(false))
+                dispatch(setRecommendationDeleted(false))
                 dispatch(setRecommendationError('Something went wrong'))
             })
     }
@@ -82,10 +92,7 @@ export const fetchRecommendationImages = search => {
             .then(res => {
                 let images = res.data.results
                     .filter(v => v.media_type !== 'person' && v.backdrop_path !== null)
-                dispatch({
-                    type: type.RECOMMENDATIONS_FETCH_IMAGE,
-                    images: images
-                })
+                dispatch(setRecommendationFetchImage(images))
             })
             .catch(() => dispatch(setRecommendationError('Something went wrong')))
     }
@@ -108,50 +115,71 @@ export const searchRecommendation = rec => {
 
 export const setRecommendations = value => {
     return {
-        type: type.RECOMMENDATIONS_FETCH, data: value
+        type: type.RECOMMENDATIONS_FETCH,
+        data: value
+    }
+}
+
+export const setRecommendationFetch = value => {
+    return {
+        type: type.RECOMMENDATIONS_FETCH_SINGLE,
+        recommendationData: value
+    }
+}
+
+export const setRecommendationLoaded = value => {
+    return {
+        type: type.RECOMMENDATIONS_LOADED,
+        loaded: value
     }
 }
 
 export const setRecommendationsSearch = value => {
     return {
-        type: type.RECOMMENDATIONS_SEARCH, search: value
+        type: type.RECOMMENDATIONS_SEARCH,
+        search: value
     }
 }
 
-export const setLoaded = value => {
+export const setRecommendationsSearchLoaded = value => {
     return {
-        type: type.RECOMMENDATIONS_LOADED, loaded: value
+        type: type.RECOMMENDATIONS_SEARCH_LOADED,
+        searchLoaded: value
     }
 }
 
 export const setCreateRecommendation = value => {
     return {
-        type: type.RECOMMENDATIONS_CREATE, created: value
+        type: type.RECOMMENDATIONS_CREATE,
+        created: value
     }
 }
 
 export const setEditRecommendation = value => {
     return {
-        type: type.RECOMMENDATIONS_EDIT, edited: value
+        type: type.RECOMMENDATIONS_EDIT,
+        edited: value
     }
 }
 
-export const setEditLoaded = value => {
+export const setRecommendationEditLoaded = value => {
     return {
-        type: type.RECOMMENDATIONS_EDIT_LOADED, editLoaded: value
+        type: type.RECOMMENDATIONS_EDIT_LOADED,
+        editLoaded: value
     }
 }
 
-export const recommendationEditLoaded = value => {
+export const setRecommendationDeleted = value => {
     return {
-        type: type.RECOMMENDATIONS_EDIT_LOADED, editLoaded: value
+        type: type.RECOMMENDATIONS_DELETE,
+        deleted: value
     }
 }
 
-
-export const setDeleted = value => {
+export const setRecommendationFetchImage = value => {
     return {
-        type: type.RECOMMENDATIONS_DELETE, deleted: value
+        type: type.RECOMMENDATIONS_FETCH_IMAGE,
+        images: value
     }
 }
 
@@ -163,9 +191,10 @@ export const setRecommendationImages = (poster, backdrop) => {
     }
 }
 
-export const imagesChange = value => {
+export const setRecommendationImagesChange = value => {
     return {
-        type: type.RECOMMENDATIONS_IMAGES_VALUE, imagesValue: value, images: []
+        type: type.RECOMMENDATIONS_IMAGES_VALUE,
+        imagesValue: value, images: []
     }
 }
 
@@ -175,14 +204,10 @@ export const setRecommendationReset = () => {
     }
 }
 
-export const setRecommendationsSearchLoaded = value => {
-    return {
-        type: type.RECOMMENDATIONS_SEARCH_LOADED, searchLoaded: value
-    }
-}
 
 export const setRecommendationError = value => {
     return {
-        type: type.RECOMMENDATIONS_ERROR, error: value
+        type: type.RECOMMENDATIONS_ERROR,
+        error: value
     }
 }

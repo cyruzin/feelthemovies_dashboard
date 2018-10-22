@@ -113,7 +113,7 @@ class RecommendationsCreate extends Component {
             value = `${image[0].title} ${getYear(image[0].release_date)}`
         }
 
-        this.props.actions.imagesChange(value)
+        this.props.actions.setRecommendationImagesChange(value)
     }
 
     render() {

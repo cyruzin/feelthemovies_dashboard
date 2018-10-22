@@ -36,7 +36,7 @@ class RecommendationsEdit extends Component {
 
     componentDidMount() {
         this.props.actions.setEditRecommendation(false)
-        this.fetchSingleRecommendation()
+        this.fetchRecommendation()
         this.setFields()
     }
 
@@ -55,13 +55,13 @@ class RecommendationsEdit extends Component {
 
     setFields = () => {
         if (this.props.recommendations.editLoaded) {
-            this.props.actions.recommendationEditLoaded(false)
+            this.props.actions.setRecommendationEditLoaded(false)
         }
 
         body = this.props.recommendations.recommendationData.body
         type = this.props.recommendations.recommendationData.type
 
-        this.props.actions.imagesChange(this.props.recommendations.recommendationData.backdrop)
+        this.props.actions.setRecommendationImagesChange(this.props.recommendations.recommendationData.backdrop)
 
         this.props.actions.setRecommendationImages(
             this.props.recommendations.recommendationData.poster,
@@ -85,12 +85,12 @@ class RecommendationsEdit extends Component {
         this.genresChange(genres)
         this.keywordsChange(keywords)
 
-        this.props.actions.recommendationEditLoaded(true)
+        this.props.actions.setRecommendationEditLoaded(true)
 
     }
 
-    fetchSingleRecommendation = () => {
-        this.props.actions.fetchSingleRecommendation(this.props.match.params.id)
+    fetchRecommendation = () => {
+        this.props.actions.fetchRecommendation(this.props.match.params.id)
     }
 
     editRecommendation = () => {

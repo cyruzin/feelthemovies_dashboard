@@ -26,7 +26,7 @@ class RecommendationsList extends Component {
 
     deleteMessage = () => {
         if (this.props.recommendations.deleted) {
-            this.props.actions.setDeleted(false)
+            this.props.actions.setRecommendationDeleted(false)
         }
     }
 
@@ -40,6 +40,7 @@ class RecommendationsList extends Component {
     }
 
     render() {
+        const { error } = this.props.recommendations
         return (
             <div>
 
@@ -49,7 +50,18 @@ class RecommendationsList extends Component {
                             <div className="col-lg-12">
                                 <div className="block">
                                     {this.props.recommendations.deleted ?
-                                        <Alert type='success' message="Recommendation removed successfully" />
+                                        <Alert
+                                            type='success'
+                                            message="Recommendation removed successfully"
+                                        />
+                                        :
+                                        null
+                                    }
+                                    {error !== '' ?
+                                        <Alert
+                                            type='danger'
+                                            message={error}
+                                        />
                                         :
                                         null
                                     }

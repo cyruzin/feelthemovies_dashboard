@@ -23,6 +23,7 @@ class Recommendations extends Component {
                         <h2 className="h5 no-margin-bottom">Recommendations</h2>
                     </div>
                 </div>
+
                 {loaded ?
                     <RecommendationsList />
                     :
