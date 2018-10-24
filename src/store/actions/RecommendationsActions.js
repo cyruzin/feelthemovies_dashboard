@@ -48,9 +48,14 @@ export const createRecommendation = recommendation => {
             .then(() => {
                 dispatch(setCreateRecommendation('recommendation created successfully'))
             })
-            .catch(() => {
+            .catch(err => {
                 dispatch(setCreateRecommendation(''))
-                dispatch(setRecommendationError('Something went wrong'))
+                const { status, statusText } = err.response
+                dispatch(setRecommendationError(`
+                ERROR!
+                Status: ${status}
+                Message: ${statusText}
+                `))
             })
     }
 }
@@ -62,9 +67,14 @@ export const editRecommendation = (id, recommendation) => {
             .then(() => {
                 setEditRecommendation('Recommendation edited successfully')
             })
-            .catch(() => {
+            .catch(err => {
                 setEditRecommendation('')
-                dispatch(setRecommendationError('Something went wrong'))
+                const { status, statusText } = err.response
+                dispatch(setRecommendationError(`
+                ERROR!
+                Status: ${status}
+                Message: ${statusText}
+                `))
             })
     }
 }
@@ -75,9 +85,14 @@ export const deleteRecommendation = id => {
             .then(() => {
                 dispatch(setRecommendationDeleted(true))
             })
-            .catch(() => {
+            .catch(err => {
                 dispatch(setRecommendationDeleted(false))
-                dispatch(setRecommendationError('Something went wrong'))
+                const { status, statusText } = err.response
+                dispatch(setRecommendationError(`
+                ERROR!
+                Status: ${status}
+                Message: ${statusText}
+                `))
             })
     }
 }
@@ -94,7 +109,14 @@ export const fetchRecommendationImages = search => {
                     .filter(v => v.media_type !== 'person' && v.backdrop_path !== null)
                 dispatch(setRecommendationFetchImage(images))
             })
-            .catch(() => dispatch(setRecommendationError('Something went wrong')))
+            .catch(err => {
+                const { status, statusText } = err.response
+                dispatch(setRecommendationError(`
+                ERROR!
+                Status: ${status}
+                Message: ${statusText}
+                `))
+            })
     }
 }
 
@@ -107,8 +129,13 @@ export const searchRecommendation = rec => {
                 dispatch(setRecommendationsSearch(res.data.data))
                 dispatch(setRecommendationsSearchLoaded(true))
             })
-            .catch(() => {
-                dispatch(setRecommendationError('Something went wrong'))
+            .catch(err => {
+                const { status, statusText, message } = err.response
+                dispatch(setRecommendationError(`
+                ERROR!
+                Status: ${status} - ${statusText}
+                Message: ${message}
+                `))
             })
     }
 }

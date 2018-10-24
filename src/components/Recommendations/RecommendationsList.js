@@ -40,7 +40,7 @@ class RecommendationsList extends Component {
     }
 
     render() {
-        const { error } = this.props.recommendations
+        const { error, deleted, data } = this.props.recommendations
         return (
             <div>
 
@@ -49,7 +49,7 @@ class RecommendationsList extends Component {
                         <div className="row">
                             <div className="col-lg-12">
                                 <div className="block">
-                                    {this.props.recommendations.deleted ?
+                                    {deleted ?
                                         <Alert
                                             type='success'
                                             message="Recommendation removed successfully"
@@ -94,34 +94,34 @@ class RecommendationsList extends Component {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {this.props.recommendations.data.map(recommendation => (
-                                                    <tr key={recommendation.id}>
-                                                        <th scope="row">{recommendation.id}</th>
-                                                        <td>{recommendation.title}</td>
-                                                        <td>{recommendation.status}</td>
+                                                {data.map(r => (
+                                                    <tr key={r.id}>
+                                                        <th scope="row">{r.id}</th>
+                                                        <td>{r.title}</td>
+                                                        <td>{r.status}</td>
                                                         <td className="small">
-                                                            {recommendation.created_at}
+                                                            {r.created_at}
                                                         </td>
                                                         <td className="small">
-                                                            {recommendation.updated_at}
+                                                            {r.updated_at}
                                                         </td>
                                                         <td>
                                                             <Link
                                                                 className="btn btn-sm btn-outline-success mr-2"
-                                                                to={`/dashboard/items/${recommendation.id}`}
+                                                                to={`/dashboard/items/${r.id}`}
                                                             >
                                                                 <i className="fa fa-plus"></i>
                                                             </Link>
                                                             <Link
                                                                 className="btn btn-sm btn-outline-secondary mr-2"
-                                                                to={`/dashboard/edit_recommendation/${recommendation.id}`}
+                                                                to={`/dashboard/edit_recommendation/${r.id}`}
                                                             >
                                                                 <i className="fa fa-edit"></i>
                                                             </Link>
 
                                                             <Link
                                                                 className="btn btn-sm btn-outline-danger"
-                                                                to={`/dashboard/delete_recommendation/${recommendation.id}`}
+                                                                to={`/dashboard/delete_recommendation/${r.id}`}
                                                                 onClick={() => this.props.actions.setDeleted(false)}
                                                             >
                                                                 <i className="fa fa-trash"></i>

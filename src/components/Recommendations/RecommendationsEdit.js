@@ -13,20 +13,19 @@ import * as actions from '../../store/actions/RecommendationsActions'
 import * as keywordsActions from '../../store/actions/KeywordsActions'
 import * as genresActions from '../../store/actions/GenresActions'
 import { getYear } from '../../util/helpers'
+import { tinyMCEKey } from '../../util/constants'
 
 const Option = Select.Option;
-
-let type = '0'
-let status = '0'
-let body = ''
 
 class RecommendationsEdit extends Component {
 
     constructor(props) {
         super(props)
+
         this.titleRef = React.createRef()
         this.editorRef = React.createRef()
         this.typeRef = React.createRef()
+        this.statusRef = React.createRef()
 
         this.searchKeywords = debounce(this.searchKeywords, 800)
         this.searchGenres = debounce(this.searchGenres, 800)
@@ -38,28 +37,17 @@ class RecommendationsEdit extends Component {
         this.props.actions.setEditRecommendation(false)
         this.fetchRecommendation()
         this.setFields()
+
     }
 
     componentWillUnmount() {
         this.reset()
     }
 
-    reset = () => {
-        this.props.actions.setRecommendationReset()
-        this.props.actions.setGenresReset()
-        this.props.actions.setKeywordsReset()
-        this.titleRef.current.value = ''
-        this.editorRef.current.editor.setContent('')
-        this.typeRef.current.value = 0
-    }
-
     setFields = () => {
         if (this.props.recommendations.editLoaded) {
             this.props.actions.setRecommendationEditLoaded(false)
         }
-
-        body = this.props.recommendations.recommendationData.body
-        type = this.props.recommendations.recommendationData.type
 
         this.props.actions.setRecommendationImagesChange(this.props.recommendations.recommendationData.backdrop)
 
@@ -84,13 +72,7 @@ class RecommendationsEdit extends Component {
 
         this.genresChange(genres)
         this.keywordsChange(keywords)
-
         this.props.actions.setRecommendationEditLoaded(true)
-
-    }
-
-    fetchRecommendation = () => {
-        this.props.actions.fetchRecommendation(this.props.match.params.id)
     }
 
     editRecommendation = () => {
@@ -103,9 +85,9 @@ class RecommendationsEdit extends Component {
 
         let recommendation = {
             title: title,
-            body: body,
-            type: type,
-            status: status,
+            body: this.editorRef.current.editor.getContent(),
+            type: this.typeRef.current.value,
+            status: this.statusRef.current.value,
             genres: genres,
             poster: this.props.recommendations.poster,
             backdrop: this.props.recommendations.backdrop,
@@ -113,40 +95,8 @@ class RecommendationsEdit extends Component {
             user_id: this.props.auth.id
         }
 
-        if (title === '' || type === '' || body === '') {
-            this.props.actions.setRecommendationError('Please, fill all fields')
-            return false
-        }
-
         this.props.actions.editRecommendation(this.props.match.params.id, recommendation)
-
         this.props.actions.setEditRecommendation(true)
-    }
-
-    handleType = e => {
-        type = e.target.value
-    }
-
-    handleStatus = e => {
-        console.log(e.target.value)
-        status = e.target.value
-    }
-
-    handleEditorChange = e => {
-        body = e.target.getContent()
-    }
-    searchKeywords = value => this.props.actions.searchKeywords(value)
-
-    keywordsChange = value => this.props.actions.keywordsChange(value)
-
-    searchGenres = value => this.props.actions.searchGenres(value)
-
-    genresChange = value => {
-        this.props.actions.genresChange(value)
-    }
-
-    fetchRecommendationImages = value => {
-        this.props.actions.fetchRecommendationImages(value)
     }
 
     handleRecommendationImage = value => {
@@ -166,7 +116,30 @@ class RecommendationsEdit extends Component {
         this.props.actions.imagesChange(value)
     }
 
+    reset = () => {
+        this.props.actions.setRecommendationReset()
+        this.props.actions.setGenresReset()
+        this.props.actions.setKeywordsReset()
+        this.titleRef.current.value = ''
+        this.editorRef.current.editor.setContent('')
+        this.typeRef.current.value = 0
+    }
+
+    fetchRecommendation = () => this.props.actions.fetchRecommendation(this.props.match.params.id)
+
+    searchKeywords = value => this.props.actions.searchKeywords(value)
+
+    keywordsChange = value => this.props.actions.keywordsChange(value)
+
+    searchGenres = value => this.props.actions.searchGenres(value)
+
+    genresChange = value => this.props.actions.genresChange(value)
+
+    fetchRecommendationImages = value => this.props.actions.fetchRecommendationImages(value)
+
     render() {
+        const { error, edited, editLoaded } = this.props.recommendations
+        const { title, body, type, status } = this.props.recommendations.recommendationData
         return (
             <div>
                 <div className="container-fluid">
@@ -179,7 +152,7 @@ class RecommendationsEdit extends Component {
                         <li className="breadcrumb-item active">Edit</li>
                     </ul>
                 </div>
-                {this.props.recommendations.editLoaded ?
+                {editLoaded ?
                     <section className="no-padding-top">
                         <div className="container-fluid">
                             <div className="row">
@@ -190,19 +163,20 @@ class RecommendationsEdit extends Component {
                                             <strong>Edit recommendation</strong>
                                         </div>
                                         <div className="block-body">
-                                            {this.props.recommendations.error !== '' ?
-                                                <Alert message={this.props.recommendations.error} type='primary' />
+                                            {error !== '' ?
+                                                <Alert message={error} type='primary' />
                                                 : null
                                             }
-                                            {this.props.recommendations.edited ?
-                                                <Alert message="Recommendations edited successfully" type='success' />
+                                            {edited && error === '' ?
+                                                <Alert
+                                                    message="Recommendations edited successfully" type='success' />
                                                 : null
                                             }
                                             <div className="form-group row">
                                                 <label className="col-lg-3 form-control-label">Title</label>
                                                 <div className="col-lg-9">
                                                     <input ref={this.titleRef}
-                                                        defaultValue={this.props.recommendations.recommendationData.title}
+                                                        defaultValue={title}
                                                         type="text"
                                                         className="form-control" />
                                                 </div>
@@ -216,11 +190,9 @@ class RecommendationsEdit extends Component {
                                                         init={{
                                                             toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | code'
                                                         }}
-                                                        initialValue={this.props.recommendations.recommendationData.body}
-                                                        apiKey="524aoctgpx14f8bvkwp4nwtstg3qzosyouqmz0dkqto0mv11"
+                                                        initialValue={body}
+                                                        apiKey={tinyMCEKey}
                                                         ref={this.editorRef}
-                                                        onFocusOut={this.handleEditorChange}
-                                                        onChange={this.handleEditorChange}
                                                     />
                                                 </div>
                                             </div>
@@ -229,8 +201,8 @@ class RecommendationsEdit extends Component {
                                             <div className="form-group row">
                                                 <label className="col-lg-3 form-control-label">Type</label>
                                                 <div className="col-lg-9">
-                                                    <select onChange={this.handleType}
-                                                        defaultValue={this.props.recommendations.recommendationData.type}
+                                                    <select
+                                                        defaultValue={type}
                                                         ref={this.typeRef}
                                                         className="form-control mb-3">
                                                         <option value="0">Movie</option>
@@ -245,8 +217,8 @@ class RecommendationsEdit extends Component {
                                                 <label className="col-lg-3 form-control-label">Status</label>
                                                 <div className="col-lg-9">
                                                     <select
-                                                        onChange={this.handleStatus}
-                                                        defaultValue={this.props.recommendations.recommendationData.status}
+                                                        ref={this.statusRef}
+                                                        defaultValue={status}
                                                         className="form-control mb-3">
                                                         <option value="0">Inactive</option>
                                                         <option value="1">Active</option>
@@ -331,7 +303,6 @@ class RecommendationsEdit extends Component {
                                             </div>
                                             <div className="line"></div>
 
-
                                             <div className="form-group row">
                                                 <div className="col-sm-9 ml-auto">
                                                     <button
@@ -371,4 +342,6 @@ const mapDispatchToProps = dispatch => ({
     }, dispatch)
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(RecommendationsEdit)
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps)(RecommendationsEdit)
