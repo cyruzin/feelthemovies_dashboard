@@ -8,7 +8,9 @@ import Modal from '../Layout/Modal'
 class RecommendationsDelete extends Component {
 
     deleteRecommendation = () => {
-        this.props.actions.deleteRecommendation(this.props.match.params.id)
+        const { id } = this.props.match.params
+        const { deleteRecommendation } = this.props.actions
+        deleteRecommendation(id)
     }
 
     isDeleted = () => {
@@ -18,20 +20,25 @@ class RecommendationsDelete extends Component {
     }
 
     render() {
+        const { id } = this.props.match.params
         return (
             <div>
                 {this.isDeleted()}
                 <div className="container-fluid">
                     <ul className="breadcrumb">
                         <li className="breadcrumb-item">
-                            <Link to='/dashboard/recommendations'>Recommendations</Link>
+                            <Link to='/dashboard/recommendations'>
+                                Recommendations
+                            </Link>
                         </li>
-                        <li className="breadcrumb-item active">Delete</li>
+                        <li className="breadcrumb-item active">
+                            Delete
+                        </li>
                     </ul>
                 </div>
                 <Modal
                     message={`Are you sure that you want to 
-                    remove recommedation ${this.props.match.params.id}?`}
+                    remove recommedation ${id}?`}
                     cancelPath='/dashboard/recommendations'
                     action={this.deleteRecommendation} />
             </div>
@@ -49,4 +56,6 @@ const mapDispatchToProps = dispatch => ({
     actions: bindActionCreators(actions, dispatch)
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(RecommendationsDelete)
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps)(RecommendationsDelete)

@@ -13,15 +13,26 @@ class KeywordsCreate extends Component {
     }
 
     componentDidMount() {
-        if (this.props.keywords.created) {
-            this.props.actions.setCreateKeyword(false)
+        this.reset()
+    }
+
+    reset = () => {
+        const { error, created } = this.props.keywords
+        const { setError, setCreateKeyword } = this.props.actions
+
+        if (created) {
+            setCreateKeyword(false)
+        }
+
+        if (error !== '') {
+            setError('')
         }
     }
 
     createKeyword = () => {
         let name = this.nameRef.current.value
 
-        this.props.actions.setCreateKeyword('')
+        this.props.actions.setCreateKeyword(false)
 
         let keyword = {
             name: name

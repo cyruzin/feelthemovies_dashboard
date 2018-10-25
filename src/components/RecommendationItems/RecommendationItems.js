@@ -16,11 +16,7 @@ class RecommendationItemsActions extends Component {
                         </h2>
                     </div>
                 </div>
-
-
                 <RecommendationItemsList />
-
-
             </div>
         )
     }
@@ -37,4 +33,6 @@ const mapDispatchToProps = dispatch => ({
 })
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(RecommendationItemsActions)
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps)(RecommendationItemsActions)

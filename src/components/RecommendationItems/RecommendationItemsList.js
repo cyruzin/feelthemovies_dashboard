@@ -54,7 +54,9 @@ class RecommendationItemsList extends Component {
                                 <div className="col-lg-12">
                                     <div className="block">
                                         {this.props.recommendationItems.deleted ?
-                                            <Alert type='success' message="Item removed successfully" />
+                                            <Alert
+                                                type='success'
+                                                message="Item removed successfully" />
                                             :
                                             null
                                         }
@@ -130,4 +132,6 @@ const mapDispatchToProps = dispatch => ({
 
 export default compose(
     withRouter,
-    connect(mapStateToProps, mapDispatchToProps))(RecommendationItemsList)
+    connect(
+        mapStateToProps,
+        mapDispatchToProps))(RecommendationItemsList)

@@ -106,4 +106,6 @@ const mapDispatchToProps = dispatch => ({
     actions: bindActionCreators(actions, dispatch)
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserSearch)
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps)(UserSearch)

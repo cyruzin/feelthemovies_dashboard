@@ -121,9 +121,7 @@ class RecommendationsList extends Component {
 
                                                             <Link
                                                                 className="btn btn-sm btn-outline-danger"
-                                                                to={`/dashboard/delete_recommendation/${r.id}`}
-                                                                onClick={() => this.props.actions.setDeleted(false)}
-                                                            >
+                                                                to={`/dashboard/delete_recommendation/${r.id}`}>
                                                                 <i className="fa fa-trash"></i>
                                                             </Link>
                                                         </td>

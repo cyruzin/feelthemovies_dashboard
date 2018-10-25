@@ -138,8 +138,13 @@ class RecommendationsEdit extends Component {
     fetchRecommendationImages = value => this.props.actions.fetchRecommendationImages(value)
 
     render() {
-        const { error, edited, editLoaded } = this.props.recommendations
-        const { title, body, type, status } = this.props.recommendations.recommendationData
+        const {
+            error, edited, editLoaded,
+            images, imagesValue
+        }
+            = this.props.recommendations
+        const { title, body, type, status }
+            = this.props.recommendations.recommendationData
         return (
             <div>
                 <div className="container-fluid">
@@ -169,11 +174,14 @@ class RecommendationsEdit extends Component {
                                             }
                                             {edited && error === '' ?
                                                 <Alert
-                                                    message="Recommendations edited successfully" type='success' />
+                                                    message="Recommendations edited successfully"
+                                                    type='success' />
                                                 : null
                                             }
                                             <div className="form-group row">
-                                                <label className="col-lg-3 form-control-label">Title</label>
+                                                <label className="col-lg-3 form-control-label">
+                                                    Title
+                                                </label>
                                                 <div className="col-lg-9">
                                                     <input ref={this.titleRef}
                                                         defaultValue={title}
@@ -184,11 +192,18 @@ class RecommendationsEdit extends Component {
                                             <div className="line"></div>
 
                                             <div className="form-group row">
-                                                <label className="col-lg-3 form-control-label">Body</label>
+                                                <label className="col-lg-3 form-control-label">
+                                                    Body
+                                                </label>
                                                 <div className="col-lg-9">
                                                     <Editor
                                                         init={{
-                                                            toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | code'
+                                                            toolbar: `undo redo | 
+                                                            bold italic | 
+                                                            alignleft 
+                                                            aligncenter 
+                                                            alignright | 
+                                                            code`
                                                         }}
                                                         initialValue={body}
                                                         apiKey={tinyMCEKey}
@@ -233,7 +248,7 @@ class RecommendationsEdit extends Component {
                                                     <Select
                                                         showSearch
                                                         size='large'
-                                                        value={this.props.recommendations.imagesValue}
+                                                        value={imagesValue}
                                                         style={{ width: '100%' }}
                                                         defaultActiveFirstOption={false}
                                                         showArrow={false}
@@ -242,7 +257,7 @@ class RecommendationsEdit extends Component {
                                                         onChange={this.handleRecommendationImage}
                                                         notFoundContent={null}
                                                     >
-                                                        {this.props.recommendations.images.map(v =>
+                                                        {images.map(v =>
 
                                                             <Option key={v.id} value={v.id}>
                                                                 {v.hasOwnProperty('name') ?

@@ -37,6 +37,10 @@ class RecommendationsCreate extends Component {
         }
     }
 
+    componentWillUnmount() {
+        this.props.actions.setRecommendationError('')
+    }
+
     createRecommendation = () => {
         let title = this.titleRef.current.value
         let genres = this.props.genres.genresValue.map(v => v.key)
@@ -96,6 +100,7 @@ class RecommendationsCreate extends Component {
     fetchRecommendationImages = value => this.props.actions.fetchRecommendationImages(value)
 
     render() {
+        const { created, error, images, imagesValue } = this.props.recommendations
         return (
             <div>
                 <div className="container-fluid">
@@ -118,13 +123,13 @@ class RecommendationsCreate extends Component {
                                         <strong>Create recommendation</strong>
                                     </div>
                                     <div className="block-body">
-                                        {this.props.recommendations.error !== '' ?
+                                        {error !== '' ?
                                             <Alert
-                                                message={this.props.recommendations.error}
+                                                message={error}
                                                 type='primary' />
                                             : null
                                         }
-                                        {this.props.recommendations.created ?
+                                        {created && error === '' ?
                                             <Alert
                                                 message="Recommendation created successfully"
                                                 type='success' />
@@ -150,9 +155,12 @@ class RecommendationsCreate extends Component {
                                                 <Editor
                                                     init={{
                                                         toolbar: `
-                                                        undo redo | bold italic | 
-                                                        alignleft aligncenter alignright 
-                                                        | code`
+                                                        undo redo | 
+                                                        bold italic | 
+                                                        alignleft 
+                                                        aligncenter 
+                                                        alignright | 
+                                                        code`
                                                     }}
                                                     apiKey={tinyMCEKey}
                                                     ref={this.editorRef}
@@ -188,7 +196,7 @@ class RecommendationsCreate extends Component {
                                                 <Select
                                                     showSearch
                                                     size='large'
-                                                    value={this.props.recommendations.imagesValue}
+                                                    value={imagesValue}
                                                     style={{ width: '100%' }}
                                                     defaultActiveFirstOption={false}
                                                     showArrow={false}
@@ -197,8 +205,7 @@ class RecommendationsCreate extends Component {
                                                     onChange={this.handleRecommendationImage}
                                                     notFoundContent={null}
                                                 >
-                                                    {this.props.recommendations.images.map(v =>
-
+                                                    {images.map(v =>
                                                         <Option key={v.id} value={v.id}>
                                                             {v.hasOwnProperty('name') ?
                                                                 `${v.name} ${getYear(v.first_air_date)}`

@@ -51,4 +51,6 @@ const mapDispatchToProps = dispatch => ({
     actions: bindActionCreators(actions, dispatch)
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserDelete)
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps)(UserDelete)

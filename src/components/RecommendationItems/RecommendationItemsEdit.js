@@ -8,6 +8,7 @@ import Alert from '../Layout/Alert'
 import { Editor } from '@tinymce/tinymce-react'
 import debounce from 'lodash/debounce'
 import { getYear } from '../../util/helpers'
+import { tinyMCEKey } from '../../util/constants'
 
 const Option = Select.Option;
 
@@ -101,15 +102,17 @@ class RecommendationItemsEdit extends Component {
     }
 
     editRecommendationItem = () => {
-
+        const { recommendation_id } = this.props.recommendationItems.item
+        const { id } = this.props.match.params
         const {
             name, year, overview, poster,
             backdrop, trailer, movie_id,
             sourcesValue, commentary
         } = this.props.recommendationItems
-
-        const { recommendation_id } = this.props.recommendationItems.item
-        const { id } = this.props.match.params
+        const {
+            setRecommendationItemError,
+            editRecommendationItem
+        } = this.props.actions
 
         let sources = sourcesValue.map(v => v.key)
 
@@ -127,11 +130,11 @@ class RecommendationItemsEdit extends Component {
         }
 
         if (name === '') {
-            this.props.actions.setRecommendationItemError('Please, search field')
+            setRecommendationItemError('Please, search field')
             return false
         }
 
-        this.props.actions.editRecommendationItem(id, recommendationItem)
+        editRecommendationItem(id, recommendationItem)
     }
 
     searchSources = value => {
@@ -143,17 +146,26 @@ class RecommendationItemsEdit extends Component {
     }
 
     render() {
-        const { recommendation_id } = this.props.recommendationItems.item
-        const { editLoaded } = this.props.recommendationItems
+        const { recommendation_id, commentary }
+            = this.props.recommendationItems.item
+        const {
+            editLoaded, error, edited, tmdb, tmdbValue,
+            sources, sourcesValue
+        }
+            = this.props.recommendationItems
         return (
             <div>
                 <div className="container-fluid">
                     <ul className="breadcrumb">
                         <li className="breadcrumb-item">
-                            <Link to='/dashboard/recommendations'>Recommendation</Link>
+                            <Link to='/dashboard/recommendations'>
+                                Recommendation
+                            </Link>
                         </li>
                         <li className="breadcrumb-item">
-                            <Link to={`/dashboard/items/${recommendation_id}`}>Recommendation Item</Link>
+                            <Link to={`/dashboard/items/${recommendation_id}`}>
+                                Recommendation Item
+                            </Link>
                         </li>
                         <li className="breadcrumb-item active">Edit</li>
                     </ul>
@@ -169,12 +181,16 @@ class RecommendationItemsEdit extends Component {
                                             <strong>Edit Item</strong>
                                         </div>
                                         <div className="block-body">
-                                            {this.props.recommendationItems.error !== '' ?
-                                                <Alert message={this.props.recommendationItems.error} type='primary' />
+                                            {error !== '' ?
+                                                <Alert
+                                                    message={error}
+                                                    type='primary' />
                                                 : null
                                             }
-                                            {this.props.recommendationItems.edited ?
-                                                <Alert message="Item edited successfully" type='success' />
+                                            {edited ?
+                                                <Alert
+                                                    message="Item edited successfully"
+                                                    type='success' />
                                                 : null
                                             }
                                             <div className="form-group row">
@@ -187,19 +203,21 @@ class RecommendationItemsEdit extends Component {
                                                         showSearch
                                                         notFoundContent={false}
                                                         showArrow={false}
-                                                        value={this.props.recommendationItems.tmdbValue}
+                                                        value={tmdbValue}
                                                         size="large"
                                                         filterOption={false}
                                                         onSearch={this.searchItemData}
                                                         onChange={this.ItemDataChange}
                                                         style={{ width: '100%' }}
                                                     >
-                                                        {this.props.recommendationItems.tmdb.map(v =>
+                                                        {tmdb.map(v =>
                                                             <Option key={v.id} value={v.id}>
                                                                 {v.hasOwnProperty('name') ?
-                                                                    `${v.name} ${getYear(v.first_air_date)}`
+                                                                    `${v.name} 
+                                                                    ${getYear(v.first_air_date)}`
                                                                     :
-                                                                    `${v.title} ${getYear(v.release_date)}`
+                                                                    `${v.title} 
+                                                                    ${getYear(v.release_date)}`
                                                                 }
                                                             </Option>)
                                                         }
@@ -209,14 +227,22 @@ class RecommendationItemsEdit extends Component {
                                             <div className="line"></div>
 
                                             <div className="form-group row">
-                                                <label className="col-lg-3 form-control-label">Commentary</label>
+                                                <label className="col-lg-3 form-control-label">
+                                                    Commentary
+                                                </label>
                                                 <div className="col-lg-9">
                                                     <Editor
                                                         init={{
-                                                            toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | code'
+                                                            toolbar: `
+                                                            undo redo | 
+                                                            bold italic | 
+                                                            alignleft 
+                                                            aligncenter 
+                                                            alignright | 
+                                                            code`
                                                         }}
-                                                        initialValue={this.props.recommendationItems.item.commentary}
-                                                        apiKey="524aoctgpx14f8bvkwp4nwtstg3qzosyouqmz0dkqto0mv11"
+                                                        initialValue={commentary}
+                                                        apiKey={tinyMCEKey}
                                                         ref={this.editorRef}
                                                         onFocusOut={this.handleEditorChange}
                                                         onChange={this.handleEditorChange}
@@ -234,7 +260,7 @@ class RecommendationItemsEdit extends Component {
                                                         allowClear
                                                         mode="multiple"
                                                         labelInValue
-                                                        value={this.props.recommendationItems.sourcesValue}
+                                                        value={sourcesValue}
                                                         size="large"
                                                         notFoundContent={false}
                                                         filterOption={false}
@@ -242,14 +268,15 @@ class RecommendationItemsEdit extends Component {
                                                         onChange={this.sourcesChange}
                                                         style={{ width: '100%' }}
                                                     >
-                                                        {this.props.recommendationItems.sources.map(k =>
-                                                            <Option key={k.id} value={k.id}>{k.name}</Option>)
+                                                        {sources.map(k =>
+                                                            <Option key={k.id} value={k.id}>
+                                                                {k.name}
+                                                            </Option>)
                                                         }
                                                     </Select>
                                                 </div>
                                             </div>
                                             <div className="line"></div>
-
 
                                             <div className="form-group row">
                                                 <div className="col-sm-9 ml-auto">
@@ -260,7 +287,6 @@ class RecommendationItemsEdit extends Component {
                                                 </button>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
 
@@ -287,4 +313,6 @@ const mapDispatchToProps = dispatch => ({
 })
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(RecommendationItemsEdit)
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps)(RecommendationItemsEdit)

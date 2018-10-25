@@ -15,15 +15,38 @@ class UserRegistration extends Component {
     }
 
     componentDidMount() {
-        this.props.actions.setUserRegister('')
+        this.reset()
     }
+
+    reset = () => {
+        const { error, userRegister } = this.props.users
+        const {
+            setError,
+            setUserRegister
+        } = this.props.actions
+
+        if (error !== '') {
+            setError('')
+        }
+
+        if (userRegister !== '') {
+            setUserRegister('')
+        }
+    }
+
 
     registerUser = () => {
         let name = this.nameRef.current.value;
         let email = this.emailRef.current.value;
         let password = this.passwordRef.current.value;
 
-        this.props.actions.setUserRegister('')
+        const {
+            setError,
+            setUserRegister,
+            registerUser
+        } = this.props.actions
+
+        setUserRegister('')
 
         let user = {
             name: name,
@@ -32,11 +55,11 @@ class UserRegistration extends Component {
         }
 
         if (name === '' || email === '' || password === '') {
-            this.props.actions.setError('Please, fill all fields')
+            setError('Please, fill all fields')
             return false
         }
 
-        this.props.actions.registerUser(user)
+        registerUser(user)
 
         name = this.nameRef.current.value = ''
         email = this.emailRef.current.value = ''
@@ -45,6 +68,7 @@ class UserRegistration extends Component {
     }
 
     render() {
+        const { error, userRegister } = this.props.users
         return (
             <div>
                 <div className="container-fluid">
@@ -54,7 +78,9 @@ class UserRegistration extends Component {
                                 Users
                             </Link>
                         </li>
-                        <li className="breadcrumb-item active">Registration</li>
+                        <li className="breadcrumb-item active">
+                            Registration
+                        </li>
                     </ul>
                 </div>
                 <section className="no-padding-top">
@@ -67,16 +93,22 @@ class UserRegistration extends Component {
                                         <strong>User registration</strong>
                                     </div>
                                     <div className="block-body">
-                                        {this.props.users.error !== '' ?
-                                            <Alert message={this.props.users.error} type='primary' />
+                                        {error !== '' ?
+                                            <Alert
+                                                message={error}
+                                                type='primary' />
                                             : null
                                         }
-                                        {this.props.users.userRegister !== '' ?
-                                            <Alert message={this.props.users.userRegister} type='success' />
+                                        {userRegister !== '' ?
+                                            <Alert
+                                                message={userRegister}
+                                                type='success' />
                                             : null
                                         }
                                         <div className="form-group row">
-                                            <label className="col-lg-3 form-control-label">Name</label>
+                                            <label className="col-lg-3 form-control-label">
+                                                Name
+                                            </label>
                                             <div className="col-lg-9">
                                                 <input ref={this.nameRef}
                                                     type="text"
@@ -137,4 +169,6 @@ const mapDispatchToProps = dispatch => ({
     actions: bindActionCreators(actions, dispatch)
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserRegistration)
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps)(UserRegistration)

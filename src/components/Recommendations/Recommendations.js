@@ -20,7 +20,9 @@ class Recommendations extends Component {
             <div>
                 <div className="page-header">
                     <div className="container-fluid">
-                        <h2 className="h5 no-margin-bottom">Recommendations</h2>
+                        <h2 className="h5 no-margin-bottom">
+                            Recommendations
+                        </h2>
                     </div>
                 </div>
 
@@ -45,4 +47,6 @@ const mapDispatchToProps = dispatch => ({
     actions: bindActionCreators(actions, dispatch)
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Recommendations)
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps)(Recommendations)

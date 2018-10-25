@@ -34,12 +34,18 @@ class RecommendationItemsDelete extends Component {
                 <div className="container-fluid">
                     <ul className="breadcrumb">
                         <li className="breadcrumb-item">
-                            <Link to='/dashboard/recommendations'>Recommendation</Link>
+                            <Link to='/dashboard/recommendations'>
+                                Recommendation
+                            </Link>
                         </li>
                         <li className="breadcrumb-item">
-                            <Link to={`/dashboard/items/${recommendation_id}`}>Recommendation Item</Link>
+                            <Link to={`/dashboard/items/${recommendation_id}`}>
+                                Recommendation Item
+                            </Link>
                         </li>
-                        <li className="breadcrumb-item active">Delete</li>
+                        <li className="breadcrumb-item active">
+                            Delete
+                        </li>
                     </ul>
                 </div>
                 <Modal
@@ -62,5 +68,6 @@ const mapDispatchToProps = dispatch => ({
     actions: bindActionCreators(actions, dispatch)
 })
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(RecommendationItemsDelete)
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps)(RecommendationItemsDelete)

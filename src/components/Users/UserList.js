@@ -40,6 +40,9 @@ class UserList extends Component {
     }
 
     render() {
+        const { data } = this.props.users
+        const { userDeleted } = this.props.users
+
         return (
             <div>
                 <section className="no-padding-top">
@@ -47,8 +50,10 @@ class UserList extends Component {
                         <div className="row">
                             <div className="col-lg-12">
                                 <div className="block">
-                                    {this.props.users.userDeleted !== '' ?
-                                        <Alert type='success' message={this.props.users.userDeleted} />
+                                    {userDeleted !== '' ?
+                                        <Alert
+                                            type='success'
+                                            message={userDeleted} />
                                         :
                                         null
                                     }
@@ -80,13 +85,17 @@ class UserList extends Component {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {this.props.users.data.map(user => (
+                                                {data.map(user => (
                                                     <tr key={user.id}>
                                                         <th scope="row">{user.id}</th>
                                                         <td>{user.name}</td>
                                                         <td>{user.email}</td>
-                                                        <td className="small">{user.created_at}</td>
-                                                        <td className="small">{user.updated_at}</td>
+                                                        <td className="small">
+                                                            {user.created_at}
+                                                        </td>
+                                                        <td className="small">
+                                                            {user.updated_at}
+                                                        </td>
                                                         <td>
                                                             <Link
                                                                 className="btn btn-sm btn-outline-secondary mr-2"
@@ -131,4 +140,6 @@ const mapDispatchToProps = dispatch => ({
 
 export default compose(
     withRouter,
-    connect(mapStateToProps, mapDispatchToProps))(UserList)
+    connect(
+        mapStateToProps,
+        mapDispatchToProps))(UserList)

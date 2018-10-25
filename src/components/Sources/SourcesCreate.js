@@ -13,8 +13,19 @@ class SourcesCreate extends Component {
     }
 
     componentDidMount() {
-        if (this.props.sources.created) {
-            this.props.actions.setCreateSource(false)
+        this.reset()
+    }
+
+    reset = () => {
+        const { error, created } = this.props.sources
+        const { setError, setCreateSource } = this.props.actions
+
+        if (created) {
+            setCreateSource(false)
+        }
+
+        if (error !== '') {
+            setError('')
         }
     }
 

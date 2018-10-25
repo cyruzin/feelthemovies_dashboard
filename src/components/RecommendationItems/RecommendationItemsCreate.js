@@ -8,6 +8,7 @@ import Alert from '../Layout/Alert'
 import { Editor } from '@tinymce/tinymce-react'
 import debounce from 'lodash/debounce'
 import { getYear } from '../../util/helpers'
+import { tinyMCEKey } from '../../util/constants'
 
 const Option = Select.Option;
 
@@ -27,19 +28,7 @@ class RecommendationItemsCreate extends Component {
         this.props.actions.setRecommendationItemCreate(false)
     }
 
-    reset = () => {
-        this.props.actions.recommedationItemReset()
-        this.editorRef.current.editor.setContent('')
-    }
-
-    searchItemData = value => {
-        if (value !== '') {
-            this.props.actions.fetchRecommendationItemData(value)
-        }
-    }
-
     ItemDataChange = value => {
-
         let item = this.props.recommendationItems.tmdb
             .filter(v => v.id === value)
 
@@ -57,16 +46,7 @@ class RecommendationItemsCreate extends Component {
         this.props.actions.recommendationItemDataChange(value)
     }
 
-    getItemTrailer = (id, type) => {
-        this.props.actions.fetchRecommendationItemTrailer(id, type)
-    }
-
-    handleEditorChange = e => {
-        this.props.actions.setRecommendationItemCommentary(e.target.getContent())
-    }
-
     createRecommendationItem = () => {
-
         const {
             name, year, overview, poster,
             backdrop, trailer, movie_id,
@@ -74,6 +54,11 @@ class RecommendationItemsCreate extends Component {
         } = this.props.recommendationItems
 
         const { id } = this.props.match.params
+
+        const {
+            setRecommendationItemError,
+            createRecommendationItem
+        } = this.props.actions
 
         let sources = sourcesValue.map(v => v.key)
 
@@ -91,13 +76,32 @@ class RecommendationItemsCreate extends Component {
         }
 
         if (name === '') {
-            this.props.actions.setRecommendationItemError('Please, fill search field')
+            setRecommendationItemError('Please, fill search field')
             return false
         }
 
-        this.props.actions.createRecommendationItem(recommendationItem)
+        createRecommendationItem(recommendationItem)
 
         this.reset()
+    }
+
+    reset = () => {
+        this.props.actions.recommedationItemReset()
+        this.editorRef.current.editor.setContent('')
+    }
+
+    searchItemData = value => {
+        if (value !== '') {
+            this.props.actions.fetchRecommendationItemData(value)
+        }
+    }
+
+    getItemTrailer = (id, type) => {
+        this.props.actions.fetchRecommendationItemTrailer(id, type)
+    }
+
+    handleEditorChange = e => {
+        this.props.actions.setRecommendationItemCommentary(e.target.getContent())
     }
 
     searchSources = value => {
@@ -109,6 +113,10 @@ class RecommendationItemsCreate extends Component {
     }
 
     render() {
+        const {
+            error, created, tmdb, tmdbValue,
+            sources, sourcesValue
+        } = this.props.recommendationItems
         const { id } = this.props.match.params
 
         return (
@@ -116,12 +124,18 @@ class RecommendationItemsCreate extends Component {
                 <div className="container-fluid">
                     <ul className="breadcrumb">
                         <li className="breadcrumb-item">
-                            <Link to='/dashboard/recommendations'>Recommendation</Link>
+                            <Link to='/dashboard/recommendations'>
+                                Recommendation
+                            </Link>
                         </li>
                         <li className="breadcrumb-item">
-                            <Link to={`/dashboard/items/${id}`}>Recommendation Item</Link>
+                            <Link to={`/dashboard/items/${id}`}>
+                                Recommendation Item
+                            </Link>
                         </li>
-                        <li className="breadcrumb-item active">Create</li>
+                        <li className="breadcrumb-item active">
+                            Create
+                        </li>
                     </ul>
                     <section className="no-padding-top">
                         <div className="container-fluid">
@@ -133,12 +147,16 @@ class RecommendationItemsCreate extends Component {
                                             <strong>New Item</strong>
                                         </div>
                                         <div className="block-body">
-                                            {this.props.recommendationItems.error !== '' ?
-                                                <Alert message={this.props.recommendationItems.error} type='primary' />
+                                            {error !== '' ?
+                                                <Alert
+                                                    message={error}
+                                                    type='primary' />
                                                 : null
                                             }
-                                            {this.props.recommendationItems.created ?
-                                                <Alert message="Item created successfully" type='success' />
+                                            {created ?
+                                                <Alert
+                                                    message="Item created successfully"
+                                                    type='success' />
                                                 : null
                                             }
 
@@ -152,19 +170,21 @@ class RecommendationItemsCreate extends Component {
                                                         showSearch
                                                         notFoundContent={false}
                                                         showArrow={false}
-                                                        value={this.props.recommendationItems.tmdbValue}
+                                                        value={tmdbValue}
                                                         size="large"
                                                         filterOption={false}
                                                         onSearch={this.searchItemData}
                                                         onChange={this.ItemDataChange}
                                                         style={{ width: '100%' }}
                                                     >
-                                                        {this.props.recommendationItems.tmdb.map(v =>
+                                                        {tmdb.map(v =>
                                                             <Option key={v.id} value={v.id}>
                                                                 {v.hasOwnProperty('name') ?
-                                                                    `${v.name} ${getYear(v.first_air_date)}`
+                                                                    `${v.name} 
+                                                                    ${getYear(v.first_air_date)}`
                                                                     :
-                                                                    `${v.title} ${getYear(v.release_date)}`
+                                                                    `${v.title} 
+                                                                    ${getYear(v.release_date)}`
                                                                 }
                                                             </Option>)
                                                         }
@@ -174,13 +194,21 @@ class RecommendationItemsCreate extends Component {
                                             <div className="line"></div>
 
                                             <div className="form-group row">
-                                                <label className="col-lg-3 form-control-label">Commentary</label>
+                                                <label className="col-lg-3 form-control-label">
+                                                    Commentary
+                                                </label>
                                                 <div className="col-lg-9">
                                                     <Editor
                                                         init={{
-                                                            toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | code'
+                                                            toolbar: `
+                                                            undo redo | 
+                                                            bold italic | 
+                                                            alignleft 
+                                                            aligncenter 
+                                                            alignright | 
+                                                            code`
                                                         }}
-                                                        apiKey="524aoctgpx14f8bvkwp4nwtstg3qzosyouqmz0dkqto0mv11"
+                                                        apiKey={tinyMCEKey}
                                                         ref={this.editorRef}
                                                         onFocusOut={this.handleEditorChange}
                                                         onChange={this.handleEditorChange}
@@ -198,7 +226,7 @@ class RecommendationItemsCreate extends Component {
                                                         allowClear
                                                         mode="multiple"
                                                         labelInValue
-                                                        value={this.props.recommendationItems.sourcesValue}
+                                                        value={sourcesValue}
                                                         size="large"
                                                         notFoundContent={false}
                                                         filterOption={false}
@@ -206,14 +234,15 @@ class RecommendationItemsCreate extends Component {
                                                         onChange={this.sourcesChange}
                                                         style={{ width: '100%' }}
                                                     >
-                                                        {this.props.recommendationItems.sources.map(k =>
-                                                            <Option key={k.id} value={k.id}>{k.name}</Option>)
+                                                        {sources.map(k =>
+                                                            <Option key={k.id} value={k.id}>
+                                                                {k.name}
+                                                            </Option>)
                                                         }
                                                     </Select>
                                                 </div>
                                             </div>
                                             <div className="line"></div>
-
 
                                             <div className="form-group row">
                                                 <div className="col-sm-9 ml-auto">
@@ -227,7 +256,6 @@ class RecommendationItemsCreate extends Component {
 
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -249,4 +277,6 @@ const mapDispatchToProps = dispatch => ({
 })
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(RecommendationItemsCreate)
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps)(RecommendationItemsCreate)

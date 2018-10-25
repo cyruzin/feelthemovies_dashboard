@@ -40,14 +40,21 @@ class UserEdit extends Component {
     }
 
     render() {
+        const { error, editLoaded, userEdited } = this.props.users
+        const { name, email } = this.props.users.userData
+
         return (
             <div>
                 <div className="container-fluid">
                     <ul className="breadcrumb">
                         <li className="breadcrumb-item">
-                            <Link to='/dashboard/users'>Users</Link>
+                            <Link to='/dashboard/users'>
+                                Users
+                            </Link>
                         </li>
-                        <li className="breadcrumb-item active">Edit</li>
+                        <li className="breadcrumb-item active">
+                            Edit
+                        </li>
                     </ul>
                 </div>
                 <section className="no-padding-top">
@@ -55,45 +62,61 @@ class UserEdit extends Component {
                         <div className="row">
                             <div className="col-lg-12">
 
-                                {this.props.users.editLoaded ?
+                                {editLoaded ?
                                     <div className="block">
                                         <div className="title">
                                             <strong>User edit</strong>
                                         </div>
                                         <div className="block-body">
-                                            {this.props.users.error !== '' ?
-                                                <Alert message={this.props.users.error} type='primary' />
+                                            {error !== '' ?
+                                                <Alert
+                                                    message={error}
+                                                    type='primary' />
                                                 : null
                                             }
-                                            {this.props.users.userEdited !== '' ?
-                                                <Alert message={this.props.users.userEdited} type='success' />
+                                            {userEdited !== '' ?
+                                                <Alert
+                                                    message={userEdited}
+                                                    type='success' />
                                                 : null
                                             }
                                             <div className="form-group row">
-                                                <label className="col-sm-3 form-control-label">Name</label>
+                                                <label className="col-sm-3 form-control-label">
+                                                    Name
+                                                </label>
                                                 <div className="col-sm-9">
-                                                    <input ref={this.nameRef} type="text" className="form-control"
-                                                        defaultValue={this.props.users.userData.name} />
+                                                    <input
+                                                        ref={this.nameRef}
+                                                        type="text"
+                                                        className="form-control"
+                                                        defaultValue={name} />
                                                 </div>
                                             </div>
                                             <div className="line"></div>
 
                                             <div className="form-group row">
-                                                <label className="col-sm-3 form-control-label">E-mail</label>
+                                                <label className="col-sm-3 form-control-label">
+                                                    E-mail
+                                                </label>
                                                 <div className="col-sm-9">
                                                     <input
                                                         ref={this.emailRef}
                                                         type="text"
                                                         className="form-control"
-                                                        defaultValue={this.props.users.userData.email} />
+                                                        defaultValue={email} />
                                                 </div>
                                             </div>
                                             <div className="line"></div>
 
                                             <div className="form-group row">
-                                                <label className="col-sm-3 form-control-label">Password</label>
+                                                <label className="col-sm-3 form-control-label">
+                                                    Password
+                                                </label>
                                                 <div className="col-sm-9">
-                                                    <input ref={this.passwordRef} type="password" className="form-control" />
+                                                    <input
+                                                        ref={this.passwordRef}
+                                                        type="password"
+                                                        className="form-control" />
                                                 </div>
                                             </div>
                                             <div className="line"></div>
@@ -106,11 +129,9 @@ class UserEdit extends Component {
                                                 </button>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
                                     : null}
-
                             </div>
                         </div>
                     </div>
@@ -130,4 +151,6 @@ const mapDispatchToProps = dispatch => ({
     actions: bindActionCreators(actions, dispatch)
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserEdit)
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps)(UserEdit)

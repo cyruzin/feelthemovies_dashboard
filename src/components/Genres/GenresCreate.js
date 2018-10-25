@@ -13,8 +13,19 @@ class GenresCreate extends Component {
     }
 
     componentDidMount() {
-        if (this.props.genres.created) {
-            this.props.actions.setCreateGenre(false)
+        this.reset()
+    }
+
+    reset = () => {
+        const { error, created } = this.props.genres
+        const { setError, setCreateGenre } = this.props.actions
+
+        if (created) {
+            setCreateGenre(false)
+        }
+
+        if (error !== '') {
+            setError('')
         }
     }
 

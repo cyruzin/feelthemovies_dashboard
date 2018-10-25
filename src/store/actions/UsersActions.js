@@ -1,5 +1,15 @@
-import axios from '../../util/constants/axios'
 import type from '../types/UsersTypes'
+import axios from '../../util/constants/axios'
+import store from '../../store'
+
+axios.interceptors.request.use(req => {
+    if (req.url.includes('themoviedb') === false) {
+        let apiToken = store.getState().auth.apiToken
+        req.headers.common['Api-Token'] = apiToken
+        return req
+    }
+    return req
+})
 
 export const fetchUsers = ({ listLoaded }) => {
     return dispatch => {
@@ -10,24 +20,19 @@ export const fetchUsers = ({ listLoaded }) => {
 
         axios.get(`/users`)
             .then(res => {
-                dispatch({
-                    type: type.USERS_FETCH,
-                    data: res.data.data,
-                })
+                dispatch(setFetchUser(res.data.data))
                 dispatch(setListLoaded(true))
             })
             .catch(() => dispatch(setError('Something went wrong')))
     }
 }
 
-
-
 export const fetchSingleUser = id => {
     return dispatch => {
         dispatch(setEditLoaded(false))
         axios.get(`/user/${id}`)
             .then(res => {
-                dispatch({ type: type.USERS_FETCH_SINGLE, userData: res.data })
+                dispatch(setFetchSingleUser(res.data))
                 dispatch(setEditLoaded(true))
             })
             .catch(() => {
@@ -92,51 +97,72 @@ export const searchUsers = users => {
     }
 }
 
+export const setFetchUser = value => {
+    return {
+        type: type.USERS_FETCH,
+        data: value
+    }
+}
+
+export const setFetchSingleUser = value => {
+    return {
+        type: type.USERS_FETCH_SINGLE,
+        userData: value
+    }
+}
+
 export const setListLoaded = value => {
     return {
-        type: type.USERS_LOADED, listLoaded: value
+        type: type.USERS_LOADED,
+        listLoaded: value
     }
 }
 
 export const setUserRegister = value => {
     return {
-        type: type.USERS_REGISTER, userRegister: value
+        type: type.USERS_REGISTER,
+        userRegister: value
     }
 }
 
 export const setEdited = value => {
     return {
-        type: type.USERS_EDIT, userEdited: value
+        type: type.USERS_EDIT,
+        userEdited: value
     }
 }
 
 export const setEditLoaded = value => {
     return {
-        type: type.USERS_EDIT_LOADED, editLoaded: value
+        type: type.USERS_EDIT_LOADED,
+        editLoaded: value
     }
 }
 
 export const setDeleted = value => {
     return {
-        type: type.USERS_DELETE, userDeleted: value
+        type: type.USERS_DELETE,
+        userDeleted: value
     }
 }
 
 export const setUsersSearch = value => {
     return {
-        type: type.USERS_SEARCH, search: value
+        type: type.USERS_SEARCH,
+        search: value
     }
 }
 
 export const setUsersSearchLoaded = value => {
     return {
-        type: type.USERS_SEARCH_LOADED, searchLoaded: value
+        type: type.USERS_SEARCH_LOADED,
+        searchLoaded: value
     }
 }
 
 export const setError = value => {
     return {
-        type: type.USERS_ERROR, error: value
+        type: type.USERS_ERROR,
+        error: value
     }
 }
-
