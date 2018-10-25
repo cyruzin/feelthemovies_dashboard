@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as actions from '../../store/actions/GenresActions'
+import NoResults from '../Layout/NoResults';
 
 class GenresSearch extends Component {
 
@@ -17,7 +18,7 @@ class GenresSearch extends Component {
     }
 
     render() {
-        const { searchLoaded } = this.props.genres
+        const { searchLoaded, genres } = this.props.genres
         return (
             <div>
                 <div className="container-fluid">
@@ -30,7 +31,7 @@ class GenresSearch extends Component {
                         <li className="breadcrumb-item active">Search</li>
                     </ul>
                 </div>
-                {searchLoaded ?
+                {searchLoaded && genres.length > 0 ?
                     <section className="no-padding-top">
                         <div className="container-fluid">
                             <div className="row">
@@ -48,7 +49,7 @@ class GenresSearch extends Component {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {this.props.genres.genres.map(g => (
+                                                    {genres.map(g => (
                                                         <tr key={g.id}>
                                                             <th scope="row">{g.id}</th>
                                                             <td>{g.name}</td>
@@ -86,7 +87,7 @@ class GenresSearch extends Component {
                         </div>
                     </section>
                     :
-                    null
+                    <NoResults message="No Results" />
                 }
             </div>
         )
@@ -103,4 +104,6 @@ const mapDispatchToProps = dispatch => ({
     actions: bindActionCreators(actions, dispatch)
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(GenresSearch)
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps)(GenresSearch)

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as actions from '../../store/actions/KeywordsActions'
+import NoResults from '../Layout/NoResults';
 
 class KeywordsSearch extends Component {
 
@@ -17,7 +18,7 @@ class KeywordsSearch extends Component {
     }
 
     render() {
-        const { searchLoaded } = this.props.keywords
+        const { searchLoaded, keywords } = this.props.keywords
         return (
             <div>
                 <div className="container-fluid">
@@ -30,7 +31,7 @@ class KeywordsSearch extends Component {
                         <li className="breadcrumb-item active">Search</li>
                     </ul>
                 </div>
-                {searchLoaded ?
+                {searchLoaded && keywords.length > 0 ?
                     <section className="no-padding-top">
                         <div className="container-fluid">
                             <div className="row">
@@ -48,7 +49,7 @@ class KeywordsSearch extends Component {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {this.props.keywords.keywords.map(k => (
+                                                    {keywords.map(k => (
                                                         <tr key={k.id}>
                                                             <th scope="row">{k.id}</th>
                                                             <td>{k.name}</td>
@@ -86,7 +87,7 @@ class KeywordsSearch extends Component {
                         </div>
                     </section>
                     :
-                    null
+                    <NoResults message="No Results" />
                 }
             </div>
         )

@@ -20,7 +20,6 @@ class RecommendationItemsEdit extends Component {
         this.setFields = debounce(this.setFields, 800)
         this.searchItemData = debounce(this.searchItemData, 800)
         this.searchSources = debounce(this.searchSources, 800)
-        //this.handleEditorChange = debounce(this.handleEditorChange, 800)
 
         this.editorRef = React.createRef()
     }

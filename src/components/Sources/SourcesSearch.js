@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as actions from '../../store/actions/SourcesActions'
+import NoResults from '../Layout/NoResults'
 
 class SourcesSearch extends Component {
 
@@ -17,7 +18,7 @@ class SourcesSearch extends Component {
     }
 
     render() {
-        const { searchLoaded } = this.props.sources
+        const { searchLoaded, search } = this.props.sources
         return (
             <div>
                 <div className="container-fluid">
@@ -30,7 +31,7 @@ class SourcesSearch extends Component {
                         <li className="breadcrumb-item active">Search</li>
                     </ul>
                 </div>
-                {searchLoaded ?
+                {searchLoaded && search.length > 0 ?
                     <section className="no-padding-top">
                         <div className="container-fluid">
                             <div className="row">
@@ -48,7 +49,7 @@ class SourcesSearch extends Component {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {this.props.sources.search.map(s => (
+                                                    {search.map(s => (
                                                         <tr key={s.id}>
                                                             <th scope="row">{s.id}</th>
                                                             <td>{s.name}</td>
@@ -86,7 +87,7 @@ class SourcesSearch extends Component {
                         </div>
                     </section>
                     :
-                    null
+                    <NoResults message="No Results" />
                 }
             </div>
         )
@@ -103,4 +104,6 @@ const mapDispatchToProps = dispatch => ({
     actions: bindActionCreators(actions, dispatch)
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(SourcesSearch)
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps)(SourcesSearch)

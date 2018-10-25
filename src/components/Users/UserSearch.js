@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as actions from '../../store/actions/UsersActions'
+import NoResults from '../Layout/NoResults'
 
 class UserSearch extends Component {
 
@@ -17,7 +18,7 @@ class UserSearch extends Component {
     }
 
     render() {
-        const { searchLoaded } = this.props.users
+        const { search, searchLoaded } = this.props.users
         return (
             <div>
                 <div className="container-fluid">
@@ -27,10 +28,12 @@ class UserSearch extends Component {
                                 Users
                             </Link>
                         </li>
-                        <li className="breadcrumb-item active">Search</li>
+                        <li className="breadcrumb-item active">
+                            Search
+                        </li>
                     </ul>
                 </div>
-                {searchLoaded ?
+                {searchLoaded && search.length > 0 ?
                     <section className="no-padding-top">
                         <div className="container-fluid">
                             <div className="row">
@@ -49,7 +52,7 @@ class UserSearch extends Component {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {this.props.users.search.map(u => (
+                                                    {search.map(u => (
                                                         <tr key={u.id}>
                                                             <th scope="row">{u.id}</th>
                                                             <td>{u.name}</td>
@@ -88,7 +91,7 @@ class UserSearch extends Component {
                         </div>
                     </section>
                     :
-                    null
+                    <NoResults message="No Results" />
                 }
 
             </div>

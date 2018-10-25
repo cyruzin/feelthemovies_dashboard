@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as actions from '../../store/actions/RecommendationsActions'
+import NoResults from '../Layout/NoResults';
 
 class RecommendationsSearch extends Component {
 
@@ -31,7 +32,7 @@ class RecommendationsSearch extends Component {
                     </ul>
                 </div>
 
-                {searchLoaded ?
+                {searchLoaded && search.length > 0 ?
                     <section className="no-padding-top">
                         <div className="container-fluid">
                             <div className="row">
@@ -95,7 +96,7 @@ class RecommendationsSearch extends Component {
                         </div>
                     </section>
                     :
-                    null
+                    <NoResults message="No Results" />
                 }
             </div>
         )
