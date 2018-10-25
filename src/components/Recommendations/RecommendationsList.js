@@ -87,6 +87,7 @@ class RecommendationsList extends Component {
                                                 <tr>
                                                     <th>#</th>
                                                     <th>Title</th>
+                                                    <th>Type</th>
                                                     <th>Status</th>
                                                     <th>Created at</th>
                                                     <th>Updated at</th>
@@ -98,6 +99,7 @@ class RecommendationsList extends Component {
                                                     <tr key={r.id}>
                                                         <th scope="row">{r.id}</th>
                                                         <td>{r.title}</td>
+                                                        <td>{r.type}</td>
                                                         <td>{r.status}</td>
                                                         <td className="small">
                                                             {r.created_at}
