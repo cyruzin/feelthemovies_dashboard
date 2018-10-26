@@ -114,11 +114,15 @@ class RecommendationItemsList extends Component {
                         </div>
                     </section>
                     :
+                    null
+                }
+                {loaded && items.length === 0 ?
                     <NoResults
-                        message="Empty recommendation"
+                        message="No items were created yet"
                         withButton
                         path={`/dashboard/create_item/${id}`} />
-                }
+                    :
+                    null}
             </div>
         )
     }

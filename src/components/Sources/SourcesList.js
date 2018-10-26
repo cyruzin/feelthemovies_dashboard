@@ -121,11 +121,17 @@ class SourcesList extends Component {
                         </div>
                     </section>
                     :
+                    null
+                }
+                {data.length === 0 ?
                     <NoResults
                         message="No sources were created yet"
                         withButton
                         path='/dashboard/create_source' />
+                    :
+                    null
                 }
+
             </div>
         )
     }

@@ -121,11 +121,15 @@ class KeywordsList extends Component {
                         </div>
                     </section>
                     :
+                    null
+                }
+                {data.length === 0 ?
                     <NoResults
                         message="No keywords were created yet"
                         withButton
                         path='/dashboard/create_keyword' />
-                }
+                    :
+                    null}
             </div>
         )
     }

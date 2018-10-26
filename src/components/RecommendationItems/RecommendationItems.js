@@ -7,12 +7,14 @@ import RecommendationItemsList from './RecommendationItemsList'
 class RecommendationItemsActions extends Component {
 
     render() {
+        const { id } = this.props.match.params
+
         return (
             <div>
                 <div className="page-header">
                     <div className="container-fluid">
                         <h2 className="h5 no-margin-bottom">
-                            Recommendation {this.props.match.params.id} - Items
+                            Recommendation {id} - Items
                         </h2>
                     </div>
                 </div>

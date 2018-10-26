@@ -121,11 +121,15 @@ class GenresList extends Component {
                         </div>
                     </section>
                     :
+                    null
+                }
+                {data.length === 0 ?
                     <NoResults
                         message="No genres were created yet"
                         withButton
                         path='/dashboard/create_genre' />
-                }
+                    :
+                    null}
             </div>
         )
     }
