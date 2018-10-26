@@ -5,6 +5,7 @@ import { withRouter, Link } from 'react-router-dom'
 import * as actions from '../../store/actions/RecommendationItemsActions'
 import Alert from '../Layout/Alert'
 import debounce from 'lodash/debounce'
+import NoResults from '../Layout/NoResults';
 import { getYear } from '../../util/helpers'
 
 class RecommendationItemsList extends Component {
@@ -33,7 +34,7 @@ class RecommendationItemsList extends Component {
     }
 
     render() {
-        const { loaded, items } = this.props.recommendationItems
+        const { loaded, items, deleted } = this.props.recommendationItems
         const { id } = this.props.match.params
         return (
             <div>
@@ -47,13 +48,13 @@ class RecommendationItemsList extends Component {
                         <li className="breadcrumb-item active">Items</li>
                     </ul>
                 </div>
-                {loaded ?
+                {loaded && items.length > 0 ?
                     <section className="no-padding-top">
                         <div className="container-fluid">
                             <div className="row">
                                 <div className="col-lg-12">
                                     <div className="block">
-                                        {this.props.recommendationItems.deleted ?
+                                        {deleted ?
                                             <Alert
                                                 type='success'
                                                 message="Item removed successfully" />
@@ -65,7 +66,7 @@ class RecommendationItemsList extends Component {
                                                 className="btn btn btn-outline-success mb-3 float-right"
                                                 to={`/dashboard/create_item/${id}`}>
                                                 New
-                                        </Link>
+                                            </Link>
                                             <table className="table table-striped table-sm">
                                                 <thead>
                                                     <tr>
@@ -78,6 +79,7 @@ class RecommendationItemsList extends Component {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+
                                                     {items.map(v => (
                                                         <tr key={v.id}>
                                                             <th scope="row">{v.id}</th>
@@ -112,7 +114,10 @@ class RecommendationItemsList extends Component {
                         </div>
                     </section>
                     :
-                    null
+                    <NoResults
+                        message="Empty recommendation"
+                        withButton
+                        path={`/dashboard/create_item/${id}`} />
                 }
             </div>
         )
