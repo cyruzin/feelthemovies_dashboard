@@ -27,6 +27,10 @@ class RecommendationItemsCreate extends Component {
         this.props.actions.setRecommendationItemCreate(false)
     }
 
+    componentWillUnmount() {
+        this.reset()
+    }
+
     ItemDataChange = value => {
         let item = this.props.recommendationItems.tmdb
             .filter(v => v.id === value)

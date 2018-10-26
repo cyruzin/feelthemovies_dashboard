@@ -38,7 +38,7 @@ class RecommendationsCreate extends Component {
     }
 
     componentWillUnmount() {
-        this.props.actions.setRecommendationError('')
+        this.reset()
     }
 
     createRecommendation = () => {
@@ -82,6 +82,7 @@ class RecommendationsCreate extends Component {
 
     reset = () => {
         this.props.actions.setRecommendationReset()
+        this.props.actions.setRecommendationError('')
         this.props.actions.setGenresReset()
         this.props.actions.setKeywordsReset()
         this.titleRef.current.value = ''
