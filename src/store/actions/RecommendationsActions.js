@@ -126,7 +126,7 @@ export const searchRecommendation = rec => {
         dispatch(setRecommendationsSearchLoaded(false))
         axios.get(`/search_recommendation?q=${query}`)
             .then(res => {
-                dispatch(setRecommendationsSearch(res.data.data))
+                dispatch(setRecommendationsSearch(res.data))
                 dispatch(setRecommendationsSearchLoaded(true))
             })
             .catch(err => {
