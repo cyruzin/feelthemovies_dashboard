@@ -86,7 +86,7 @@ export const searchUsers = users => {
     let query = encodeURIComponent(users)
     return dispatch => {
         dispatch(setUsersSearchLoaded(false))
-        axios.get(`/search_user?q=${query}`)
+        axios.post(`/search_user`, { q: query })
             .then(res => {
                 dispatch(setUsersSearch(res.data))
                 dispatch(setUsersSearchLoaded(true))

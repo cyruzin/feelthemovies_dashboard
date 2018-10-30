@@ -124,7 +124,7 @@ export const searchRecommendation = rec => {
     let query = encodeURIComponent(rec)
     return dispatch => {
         dispatch(setRecommendationsSearchLoaded(false))
-        axios.get(`/search_recommendation?q=${query}`)
+        axios.post(`/search_recommendation`, { q: query })
             .then(res => {
                 dispatch(setRecommendationsSearch(res.data))
                 dispatch(setRecommendationsSearchLoaded(true))
