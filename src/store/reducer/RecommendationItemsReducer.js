@@ -10,7 +10,6 @@ const initialState = {
     year: '',
     overview: '',
     trailer: '',
-    movie_id: '',
     poster: '',
     backdrop: '',
     commentary: '',
@@ -18,6 +17,7 @@ const initialState = {
     sourcesValue: [],
     items: [],
     item: '',
+    tmdb_id: '',
     tmdb: [],
     tdmbValue: [],
     error: ''
@@ -75,7 +75,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 name: action.name,
-                movie_id: action.movie_id,
+                tmdb_id: action.tmdb_id,
                 year: action.year,
                 overview: action.overview,
                 poster: action.poster,

@@ -52,7 +52,7 @@ class RecommendationItemsCreate extends Component {
     createRecommendationItem = () => {
         const {
             name, year, overview, poster,
-            backdrop, trailer, movie_id,
+            backdrop, trailer, tmdb_id,
             sourcesValue, commentary
         } = this.props.recommendationItems
 
@@ -67,7 +67,7 @@ class RecommendationItemsCreate extends Component {
 
         let recommendationItem = {
             name: name,
-            movie_id: movie_id,
+            tmdb_id: tmdb_id,
             year: year,
             overview: overview,
             poster: poster,
@@ -87,7 +87,7 @@ class RecommendationItemsCreate extends Component {
 
         this.reset()
     }
-
+    x
     reset = () => {
         this.props.actions.recommedationItemReset()
         this.editorRef.current.editor.setContent('')

@@ -204,7 +204,7 @@ export const setRecommendationItemData = item => {
         poster: item.poster_path,
         backdrop: item.backdrop_path,
         overview: item.overview,
-        movie_id: item.id,
+        tmdb_id: item.id,
     }
 }
 
