@@ -53,7 +53,7 @@ class RecommendationItemsCreate extends Component {
         const {
             name, year, overview, poster,
             backdrop, trailer, tmdb_id,
-            sourcesValue, commentary
+            sourcesValue, commentary, mediaType
         } = this.props.recommendationItems
 
         const { id } = this.props.match.params
@@ -72,6 +72,7 @@ class RecommendationItemsCreate extends Component {
             overview: overview,
             poster: poster,
             backdrop: backdrop,
+            media_type: mediaType,
             trailer: trailer,
             commentary: commentary,
             sources: sources,
@@ -87,7 +88,7 @@ class RecommendationItemsCreate extends Component {
 
         this.reset()
     }
-    x
+
     reset = () => {
         this.props.actions.recommedationItemReset()
         this.editorRef.current.editor.setContent('')

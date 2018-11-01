@@ -105,8 +105,8 @@ class RecommendationItemsEdit extends Component {
         const { id } = this.props.match.params
         const {
             name, year, overview, poster,
-            backdrop, trailer, movie_id,
-            sourcesValue, commentary
+            backdrop, trailer, tmdb_id,
+            sourcesValue, commentary, mediaType
         } = this.props.recommendationItems
         const {
             setRecommendationItemError,
@@ -117,11 +117,12 @@ class RecommendationItemsEdit extends Component {
 
         let recommendationItem = {
             name: name,
-            movie_id: movie_id,
+            tmdb_id: tmdb_id,
             year: year,
             overview: overview,
             poster: poster,
             backdrop: backdrop,
+            media_type: mediaType,
             trailer: trailer,
             commentary: commentary,
             sources: sources,

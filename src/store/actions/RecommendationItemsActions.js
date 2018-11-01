@@ -205,6 +205,7 @@ export const setRecommendationItemData = item => {
         backdrop: item.backdrop_path,
         overview: item.overview,
         tmdb_id: item.id,
+        mediaType: item.media_type
     }
 }
 

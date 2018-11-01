@@ -8,6 +8,7 @@ const initialState = {
     deleted: false,
     name: '',
     year: '',
+    mediaType: '',
     overview: '',
     trailer: '',
     poster: '',
@@ -79,7 +80,8 @@ export default (state = initialState, action) => {
                 year: action.year,
                 overview: action.overview,
                 poster: action.poster,
-                backdrop: action.backdrop
+                backdrop: action.backdrop,
+                mediaType: action.mediaType
             }
         case type.RECOMMENDATION_ITEM_FETCH_TMDB_TRAILER:
             return {
