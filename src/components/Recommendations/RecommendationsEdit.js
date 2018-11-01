@@ -95,6 +95,20 @@ class RecommendationsEdit extends Component {
             user_id: this.props.auth.id
         }
 
+        if (
+            title === ''
+            || genres.length === 0
+            || keywords.length === 0
+            || this.editorRef.current.editor.getContent() === ''
+            || this.typeRef.current.value === ''
+            || this.statusRef.current.value === ''
+            || this.props.recommendations.poster === ''
+            || this.props.recommendations.backdrop === ''
+        ) {
+            this.props.actions.setRecommendationError('Fill all fields')
+            return false
+        }
+
         this.props.actions.editRecommendation(this.props.match.params.id, recommendation)
         this.props.actions.setEditRecommendation(true)
     }

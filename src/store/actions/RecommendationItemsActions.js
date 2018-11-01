@@ -155,7 +155,9 @@ export const setRecommendationItemEditValues = recommendationItem => {
         commentary: recommendationItem.commentary,
         trailer: recommendationItem.trailer,
         poster: recommendationItem.poster,
-        backdrop: recommendationItem.backdrop
+        backdrop: recommendationItem.backdrop,
+        tmdb_id: recommendationItem.tmdb_id,
+        mediaType: recommendationItem.media_type
     }
 }
 

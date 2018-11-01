@@ -75,7 +75,6 @@ class RecommendationItemsEdit extends Component {
         this.props.actions.setRecommendationItemCommentary(e.target.getContent())
     }
 
-
     setFields = () => {
         if (this.props.recommendationItems.editLoaded) {
             this.props.actions.setRecommendationItemEditLoaded(false)
@@ -244,7 +243,7 @@ class RecommendationItemsEdit extends Component {
                                                         initialValue={commentary}
                                                         apiKey={tinyMCEKey}
                                                         ref={this.editorRef}
-                                                        onFocusOut={this.handleEditorChange}
+                                                        onBlur={this.handleEditorChange}
                                                         onChange={this.handleEditorChange}
                                                     />
                                                 </div>

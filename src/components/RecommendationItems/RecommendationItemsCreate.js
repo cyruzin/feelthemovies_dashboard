@@ -214,7 +214,7 @@ class RecommendationItemsCreate extends Component {
                                                         }}
                                                         apiKey={tinyMCEKey}
                                                         ref={this.editorRef}
-                                                        onFocusOut={this.handleEditorChange}
+                                                        onBlur={this.handleEditorChange}
                                                         onChange={this.handleEditorChange}
                                                     />
                                                 </div>

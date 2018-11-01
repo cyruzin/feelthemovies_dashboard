@@ -59,6 +59,19 @@ class RecommendationsCreate extends Component {
             user_id: this.props.auth.id
         }
 
+        if (
+            title === ''
+            || genres.length === 0
+            || keywords.length === 0
+            || this.editorRef.current.editor.getContent() === ''
+            || this.typeRef.current.value === ''
+            || this.props.recommendations.poster === ''
+            || this.props.recommendations.backdrop === ''
+        ) {
+            this.props.actions.setRecommendationError('Fill all fields')
+            return false
+        }
+
         this.props.actions.createRecommendation(recommendation)
         this.reset()
     }
@@ -88,6 +101,10 @@ class RecommendationsCreate extends Component {
         this.titleRef.current.value = ''
         this.editorRef.current.editor.setContent('')
         this.typeRef.current.value = 0
+    }
+
+    handleEditorChange = (e) => {
+        this.props.actions.setRecommendationItemCommentary(e.target.getContent())
     }
 
     searchKeywords = value => this.props.actions.searchKeywords(value)

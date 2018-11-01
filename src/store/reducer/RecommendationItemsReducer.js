@@ -121,7 +121,10 @@ export default (state = initialState, action) => {
                 commentary: action.commentary,
                 trailer: action.trailer,
                 poster: action.poster,
-                backdrop: action.backdrop
+                backdrop: action.backdrop,
+                tmdb_id: action.tmdb_id,
+                mediaType: action.mediaType,
+
             }
         default:
             return state
