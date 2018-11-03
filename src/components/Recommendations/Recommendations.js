@@ -15,7 +15,6 @@ class Recommendations extends Component {
     }
 
     render() {
-        const { loaded } = this.props.recommendations
         return (
             <div>
                 <div className="page-header">
@@ -25,12 +24,7 @@ class Recommendations extends Component {
                         </h2>
                     </div>
                 </div>
-
-                {loaded ?
-                    <RecommendationsList />
-                    :
-                    null
-                }
+                <RecommendationsList />
             </div>
         )
     }

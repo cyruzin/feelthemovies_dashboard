@@ -3,13 +3,16 @@ import axios from '../../util/constants/axios'
 
 export const fetchSources = () => {
     return dispatch => {
-        dispatch(setLoaded(false))
+        dispatch(setLoaded(true))
         axios.get(`/sources`)
             .then(res => {
                 dispatch(setSources(res.data.data))
-                dispatch(setLoaded(true))
+                dispatch(setLoaded(false))
             })
-            .catch(() => dispatch(setError('Something went wrong')))
+            .catch(() => {
+                dispatch(setLoaded(false))
+                dispatch(setError('Something went wrong'))
+            })
     }
 }
 
@@ -71,13 +74,14 @@ export const deleteSource = id => {
 export const searchSources = sources => {
     let query = encodeURIComponent(sources)
     return dispatch => {
-        dispatch(setSourcesSearchLoaded(false))
+        dispatch(setSourcesSearchLoaded(true))
         axios.get(`/search_source?q=${query}`)
             .then(res => {
                 dispatch(setSourcesSearch(res.data))
-                dispatch(setSourcesSearchLoaded(true))
+                dispatch(setSourcesSearchLoaded(false))
             })
             .catch(() => {
+                dispatch(setSourcesSearchLoaded(false))
                 dispatch(setError('Something went wrong'))
             })
     }
@@ -92,6 +96,12 @@ export const setSources = value => {
 export const setLoaded = value => {
     return {
         type: type.SOURCES_LOADED, loaded: value
+    }
+}
+
+export const setSourcesSearchLoading = value => {
+    return {
+        type: type.SOURCES_SEARCH_LOADING, loadingSearch: value
     }
 }
 

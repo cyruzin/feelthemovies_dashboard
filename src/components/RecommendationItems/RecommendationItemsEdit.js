@@ -4,6 +4,9 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import * as actions from '../../store/actions/RecommendationItemsActions'
 import Select from 'antd/lib/select'
+import Spin from 'antd/lib/spin'
+import 'antd/lib/select/style/css'
+import 'antd/lib/spin/style/css'
 import Alert from '../Layout/Alert'
 import { Editor } from '@tinymce/tinymce-react'
 import debounce from 'lodash/debounce'
@@ -137,7 +140,9 @@ class RecommendationItemsEdit extends Component {
     }
 
     searchSources = value => {
-        this.props.actions.recommedationItemSource(value)
+        if (value !== '') {
+            this.props.actions.recommedationItemSource(value)
+        }
     }
 
     sourcesChange = value => {
@@ -149,7 +154,7 @@ class RecommendationItemsEdit extends Component {
             = this.props.recommendationItems.item
         const {
             editLoaded, error, edited, tmdb, tmdbValue,
-            sources, sourcesValue
+            sources, sourcesValue, fetching
         }
             = this.props.recommendationItems
         return (
@@ -200,7 +205,11 @@ class RecommendationItemsEdit extends Component {
                                                     <Select
                                                         placeholder="Movie/Serie"
                                                         showSearch
-                                                        notFoundContent={false}
+                                                        notFoundContent={
+                                                            fetching ?
+                                                                <Spin size="small" />
+                                                                : null
+                                                        }
                                                         showArrow={false}
                                                         value={tmdbValue}
                                                         size="large"
@@ -261,7 +270,11 @@ class RecommendationItemsEdit extends Component {
                                                         labelInValue
                                                         value={sourcesValue}
                                                         size="large"
-                                                        notFoundContent={false}
+                                                        notFoundContent={
+                                                            fetching ?
+                                                                <Spin size="small" />
+                                                                : null
+                                                        }
                                                         filterOption={false}
                                                         onSearch={this.searchSources}
                                                         onChange={this.sourcesChange}

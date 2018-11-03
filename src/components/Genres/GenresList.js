@@ -6,6 +6,7 @@ import * as actions from '../../store/actions/GenresActions'
 import Alert from '../Layout/Alert'
 import debounce from 'lodash/debounce'
 import NoResults from '../Layout/NoResults'
+import Spinner from '../Layout/Spinner'
 
 class GenresList extends Component {
 
@@ -40,10 +41,12 @@ class GenresList extends Component {
     }
 
     render() {
-        const { data, deleted } = this.props.genres
+        const { data, deleted, loaded } = this.props.genres
         return (
             <div>
-                {data.length > 0 ?
+                {loaded ? <Spinner /> : null}
+
+                {!loaded && data.length > 0 ?
                     <section className="no-padding-top">
                         <div className="container-fluid">
                             <div className="row">
@@ -123,7 +126,7 @@ class GenresList extends Component {
                     :
                     null
                 }
-                {data.length === 0 ?
+                {!loaded && data.length === 0 ?
                     <NoResults
                         message="No genres were created yet"
                         withButton

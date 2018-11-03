@@ -11,11 +11,10 @@ class Users extends Component {
     }
 
     fetchUsers = () => {
-        this.props.actions.fetchUsers(this.props.users)
+        this.props.actions.fetchUsers()
     }
 
     render() {
-        const { listLoaded } = this.props.users
         return (
             <div>
                 <div className="page-header">
@@ -23,11 +22,7 @@ class Users extends Component {
                         <h2 className="h5 no-margin-bottom">Users</h2>
                     </div>
                 </div>
-                {listLoaded ?
-                    <UserList />
-                    :
-                    null
-                }
+                <UserList />
             </div>
         )
     }

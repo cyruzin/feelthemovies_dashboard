@@ -3,13 +3,16 @@ import axios from '../../util/constants/axios'
 
 export const fetchKeywords = () => {
     return dispatch => {
-        dispatch(setLoaded(false))
+        dispatch(setLoaded(true))
         axios.get(`/keywords`)
             .then(res => {
                 dispatch(setKeywords(res.data.data))
-                dispatch(setLoaded(true))
+                dispatch(setLoaded(false))
             })
-            .catch(() => dispatch(setError('Something went wrong')))
+            .catch(() => {
+                dispatch(setLoaded(false))
+                dispatch(setError('Something went wrong'))
+            })
     }
 }
 
@@ -72,15 +75,17 @@ export const searchKeywords = keyword => {
     let query = encodeURIComponent(keyword)
     return dispatch => {
         dispatch(loadingKeywordsSearch(true))
-        dispatch(setKeywordsSearchLoaded(false))
+        dispatch(setKeywordsSearchLoaded(true))
         axios.get(`/search_keyword?q=${query}`)
             .then(res => {
                 dispatch(setKeywordsSearch(res.data))
                 dispatch(loadingKeywordsSearch(false))
-                dispatch(setKeywordsSearchLoaded(true))
+                dispatch(setKeywordsSearchLoaded(false))
 
             })
             .catch(() => {
+                dispatch(loadingKeywordsSearch(false))
+                dispatch(setKeywordsSearchLoaded(false))
                 dispatch(setError('Something went wrong'))
             })
     }

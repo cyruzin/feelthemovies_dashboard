@@ -6,6 +6,7 @@ import * as actions from '../../store/actions/RecommendationsActions'
 import Alert from '../Layout/Alert'
 import debounce from 'lodash/debounce'
 import NoResults from '../Layout/NoResults'
+import Spinner from '../Layout/Spinner'
 
 class RecommendationsList extends Component {
 
@@ -41,10 +42,12 @@ class RecommendationsList extends Component {
     }
 
     render() {
-        const { error, deleted, data } = this.props.recommendations
+        const { error, deleted, data, loaded } = this.props.recommendations
         return (
             <div>
-                {data.length > 0 ?
+                {loaded ? <Spinner /> : null}
+
+                {!loaded && data.length > 0 ?
                     <section className="no-padding-top">
                         <div className="container-fluid">
                             <div className="row">
@@ -142,7 +145,7 @@ class RecommendationsList extends Component {
                     :
                     null
                 }
-                {data.length === 0 ?
+                {!loaded && data.length === 0 ?
                     <NoResults
                         message="No recommendations were created yet"
                         withButton

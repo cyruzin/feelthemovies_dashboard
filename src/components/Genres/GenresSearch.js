@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as actions from '../../store/actions/GenresActions'
 import NoResults from '../Layout/NoResults';
+import Spinner from '../Layout/Spinner';
 
 class GenresSearch extends Component {
 
@@ -31,7 +32,15 @@ class GenresSearch extends Component {
                         <li className="breadcrumb-item active">Search</li>
                     </ul>
                 </div>
-                {searchLoaded && genres.length > 0 ?
+                {searchLoaded ? <Spinner /> : null}
+
+                {!searchLoaded && genres.length === 0 ?
+                    <NoResults message="No Results" />
+                    :
+                    null
+                }
+
+                {!searchLoaded && genres.length > 0 ?
                     <section className="no-padding-top">
                         <div className="container-fluid">
                             <div className="row">
@@ -87,7 +96,7 @@ class GenresSearch extends Component {
                         </div>
                     </section>
                     :
-                    <NoResults message="No Results" />
+                    null
                 }
             </div>
         )

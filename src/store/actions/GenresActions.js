@@ -3,13 +3,17 @@ import axios from '../../util/constants/axios'
 
 export const fetchGenres = () => {
     return dispatch => {
-        dispatch(setLoaded(false))
+        dispatch(setLoaded(true))
         axios.get(`/genres`)
             .then(res => {
                 dispatch(setGenres(res.data.data))
-                dispatch(setLoaded(true))
+                dispatch(setLoaded(false))
             })
-            .catch(() => dispatch(setError('Something went wrong')))
+            .catch(() => {
+                dispatch(setLoaded(false))
+                dispatch(setError('Something went wrong'))
+            }
+            )
     }
 }
 
@@ -72,14 +76,16 @@ export const searchGenres = genres => {
     let query = encodeURIComponent(genres)
     return dispatch => {
         dispatch(loadingGenresSearch(true))
-        dispatch(setGenresSearchLoaded(false))
+        dispatch(setGenresSearchLoaded(true))
         axios.get(`/search_genre?q=${query}`)
             .then(res => {
                 dispatch(setGenresSearch(res.data))
                 dispatch(loadingGenresSearch(false))
-                dispatch(setGenresSearchLoaded(true))
+                dispatch(setGenresSearchLoaded(false))
             })
             .catch(() => {
+                dispatch(loadingGenresSearch(false))
+                dispatch(setGenresSearchLoaded(false))
                 dispatch(setError('Something went wrong'))
             })
     }
@@ -111,7 +117,7 @@ export const genresChange = value => {
 
 export const loadingGenresSearch = value => {
     return {
-        type: type.GENRES_SEARCH_LOADING, loadingGenres: value
+        type: type.GENRES_SEARCH_LOADING, loadingSearch: value
     }
 }
 

@@ -15,7 +15,6 @@ class Keywords extends Component {
     }
 
     render() {
-        const { loaded } = this.props.keywords
         return (
             <div>
                 <div className="page-header">
@@ -23,11 +22,7 @@ class Keywords extends Component {
                         <h2 className="h5 no-margin-bottom">Keywords</h2>
                     </div>
                 </div>
-                {loaded ?
-                    <KeywordsList />
-                    :
-                    null
-                }
+                <KeywordsList />
             </div >
         )
     }

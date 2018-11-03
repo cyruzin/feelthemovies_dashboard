@@ -3,14 +3,14 @@ import type from '../types/RecommendationItemsTypes'
 
 export const fetchRecommendationItems = recommendationID => {
     return dispatch => {
-        dispatch({ type: type.RECOMMENDATION_ITEM_LOADED, loaded: false })
+        dispatch(setRecommendationItemLoaded(true))
         axios.get(`/recommendation_items/${recommendationID}`)
             .then(res => {
-                dispatch({ type: type.RECOMMENDATION_ITEM_FETCH, data: res.data.data })
-                dispatch({ type: type.RECOMMENDATION_ITEM_LOADED, loaded: true })
+                dispatch(recommedationItemFetch(res.data.data))
+                dispatch(setRecommendationItemLoaded(false))
             })
             .catch(() => {
-
+                dispatch(setRecommendationItemLoaded(false))
                 dispatch(setRecommendationItemError('Could not fetch recommedation items'))
             })
     }
@@ -18,14 +18,14 @@ export const fetchRecommendationItems = recommendationID => {
 
 export const fetchRecommendationItem = recommendationID => {
     return dispatch => {
-        dispatch(setRecommendationItemEditLoaded(false))
+        dispatch(setRecommendationItemEditLoaded(true))
         axios.get(`/recommendation_item/${recommendationID}`)
             .then(res => {
-                dispatch({ type: type.RECOMMENDATION_ITEM_SINGLE_FETCH, data: res.data })
-                dispatch(setRecommendationItemEditLoaded(true))
+                dispatch(recommedationItemSingleFetch(res.data))
+                dispatch(setRecommendationItemEditLoaded(false))
             })
             .catch(() => {
-                dispatch(setRecommendationItemEditLoaded(true))
+                dispatch(setRecommendationItemEditLoaded(false))
                 dispatch(setRecommendationItemError('Could not fetch recommedation item'))
             })
     }
@@ -49,6 +49,7 @@ export const deleteRecommendationItem = recommendationID => {
 export const fetchRecommendationItemData = search => {
     let query = encodeURIComponent(search)
     return dispatch => {
+        dispatch(setRecommendationItemFetching(true))
         axiosTmdb.get(`/search/multi?language=en-US&query=${query}&page=1&include_adult=false`)
             .then(res => {
                 let tmdb = res.data.results
@@ -57,8 +58,12 @@ export const fetchRecommendationItemData = search => {
                     type: type.RECOMMENDATION_ITEM_FETCH_TMDB_DATA,
                     tmdb: tmdb
                 })
+                dispatch(setRecommendationItemFetching(false))
             })
-            .catch(() => dispatch(setRecommendationItemError('Something went wrong')))
+            .catch(() => {
+                dispatch(setRecommendationItemError('Something went wrong'))
+                dispatch(setRecommendationItemFetching(false))
+            })
     }
 }
 
@@ -105,16 +110,28 @@ export const createRecommendationItem = recommendation => {
     }
 }
 
+export const setRecommendationItemLoaded = value => {
+    return {
+        type: type.RECOMMENDATION_ITEM_LOADED,
+        loaded: value
+    }
+}
+
 export const setRecommendationItemCreate = value => {
     return {
         type: type.RECOMMENDATION_ITEM_CREATE, data: value
     }
 }
 
+export const setRecommendationItemFetching = value => {
+    return {
+        type: type.RECOMMENDATION_ITEM_FETCHING,
+        fetching: value
+    }
+}
+
 export const editRecommendationItem = (id, recommendation) => {
     return dispatch => {
-
-
         dispatch(setRecommendationItemError(''))
         axios.put(`/recommendation_item/${id}`, recommendation)
             .then(() => {
@@ -161,6 +178,20 @@ export const setRecommendationItemEditValues = recommendationItem => {
     }
 }
 
+export const recommedationItemFetch = payload => {
+    return {
+        type: type.RECOMMENDATION_ITEM_FETCH,
+        data: payload
+    }
+}
+
+export const recommedationItemSingleFetch = payload => {
+    return {
+        type: type.RECOMMENDATION_ITEM_SINGLE_FETCH,
+        data: payload
+    }
+}
+
 
 export const recommendationItemDataChange = value => {
     return {
@@ -171,16 +202,18 @@ export const recommendationItemDataChange = value => {
 export const recommedationItemSource = value => {
     let query = encodeURIComponent(value)
     return dispatch => {
-
-
+        dispatch(setRecommendationItemFetching(true))
         axios.get(`/search_source?q=${query}`)
             .then(res => {
                 dispatch({
                     type: type.RECOMMENDATION_ITEM_SOURCE_SEARCH,
                     sources: res.data
                 })
+                dispatch(setRecommendationItemFetching(false))
+
             })
             .catch(() => {
+                dispatch(setRecommendationItemFetching(false))
                 dispatch(setRecommendationItemError('Something went wrong'))
             })
     }

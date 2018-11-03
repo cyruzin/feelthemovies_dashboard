@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as actions from '../../store/actions/UsersActions'
 import NoResults from '../Layout/NoResults'
+import Spinner from '../Layout/Spinner'
 
 class UserSearch extends Component {
 
@@ -33,7 +34,15 @@ class UserSearch extends Component {
                         </li>
                     </ul>
                 </div>
-                {searchLoaded && search.length > 0 ?
+                {searchLoaded ? <Spinner /> : null}
+
+                {!searchLoaded && search.length === 0 ?
+                    <NoResults message="No Results" />
+                    :
+                    null
+                }
+
+                {!searchLoaded && search.length > 0 ?
                     <section className="no-padding-top">
                         <div className="container-fluid">
                             <div className="row">
@@ -91,7 +100,7 @@ class UserSearch extends Component {
                         </div>
                     </section>
                     :
-                    <NoResults message="No Results" />
+                    null
                 }
 
             </div>

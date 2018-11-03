@@ -6,6 +6,7 @@ import * as actions from '../../store/actions/KeywordsActions'
 import Alert from '../Layout/Alert'
 import debounce from 'lodash/debounce'
 import NoResults from '../Layout/NoResults'
+import Spinner from '../Layout/Spinner'
 
 class KeywordsList extends Component {
 
@@ -42,10 +43,12 @@ class KeywordsList extends Component {
 
 
     render() {
-        const { data, deleted } = this.props.keywords
+        const { data, deleted, loaded } = this.props.keywords
         return (
             <div>
-                {data.length > 0 ?
+                {loaded ? <Spinner /> : null}
+
+                {!loaded && data.length > 0 ?
                     <section className="no-padding-top">
                         <div className="container-fluid">
                             <div className="row">
@@ -123,7 +126,7 @@ class KeywordsList extends Component {
                     :
                     null
                 }
-                {data.length === 0 ?
+                {!loaded && data.length === 0 ?
                     <NoResults
                         message="No keywords were created yet"
                         withButton

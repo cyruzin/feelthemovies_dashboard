@@ -6,6 +6,7 @@ import * as actions from '../../store/actions/RecommendationItemsActions'
 import Alert from '../Layout/Alert'
 import debounce from 'lodash/debounce'
 import NoResults from '../Layout/NoResults';
+import Spinner from '../Layout/Spinner';
 import { getYear } from '../../util/helpers'
 
 class RecommendationItemsList extends Component {
@@ -48,7 +49,10 @@ class RecommendationItemsList extends Component {
                         <li className="breadcrumb-item active">Items</li>
                     </ul>
                 </div>
-                {loaded && items.length > 0 ?
+
+                {loaded ? <Spinner /> : null}
+
+                {!loaded && items.length > 0 ?
                     <section className="no-padding-top">
                         <div className="container-fluid">
                             <div className="row">
@@ -116,7 +120,7 @@ class RecommendationItemsList extends Component {
                     :
                     null
                 }
-                {loaded && items.length === 0 ?
+                {!loaded && items.length === 0 ?
                     <NoResults
                         message="No items were created yet"
                         withButton

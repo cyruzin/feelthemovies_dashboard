@@ -15,7 +15,6 @@ class Sources extends Component {
     }
 
     render() {
-        const { loaded } = this.props.sources
         return (
             <div>
                 <div className="page-header">
@@ -23,11 +22,7 @@ class Sources extends Component {
                         <h2 className="h5 no-margin-bottom">Sources</h2>
                     </div>
                 </div>
-                {loaded ?
-                    <SourcesList />
-                    :
-                    null
-                }
+                <SourcesList />
             </div >
         )
     }

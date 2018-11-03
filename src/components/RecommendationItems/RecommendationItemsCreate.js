@@ -4,6 +4,9 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import * as actions from '../../store/actions/RecommendationItemsActions'
 import Select from 'antd/lib/select'
+import Spin from 'antd/lib/spin'
+import 'antd/lib/select/style/css'
+import 'antd/lib/spin/style/css'
 import Alert from '../Layout/Alert'
 import { Editor } from '@tinymce/tinymce-react'
 import debounce from 'lodash/debounce'
@@ -109,7 +112,9 @@ class RecommendationItemsCreate extends Component {
     }
 
     searchSources = value => {
-        this.props.actions.recommedationItemSource(value)
+        if (value !== '') {
+            this.props.actions.recommedationItemSource(value)
+        }
     }
 
     sourcesChange = value => {
@@ -119,7 +124,7 @@ class RecommendationItemsCreate extends Component {
     render() {
         const {
             error, created, tmdb, tmdbValue,
-            sources, sourcesValue
+            sources, sourcesValue, fetching
         } = this.props.recommendationItems
         const { id } = this.props.match.params
 
@@ -172,7 +177,9 @@ class RecommendationItemsCreate extends Component {
                                                     <Select
                                                         placeholder="Movie/Serie"
                                                         showSearch
-                                                        notFoundContent={false}
+                                                        notFoundContent={
+                                                            fetching ? <Spin size="small" /> : null
+                                                        }
                                                         showArrow={false}
                                                         value={tmdbValue}
                                                         size="large"
@@ -232,7 +239,11 @@ class RecommendationItemsCreate extends Component {
                                                         labelInValue
                                                         value={sourcesValue}
                                                         size="large"
-                                                        notFoundContent={false}
+                                                        notFoundContent={
+                                                            fetching ?
+                                                                <Spin size="small" />
+                                                                : null
+                                                        }
                                                         filterOption={false}
                                                         onSearch={this.searchSources}
                                                         onChange={this.sourcesChange}

@@ -107,18 +107,30 @@ class RecommendationsCreate extends Component {
         this.props.actions.setRecommendationItemCommentary(e.target.getContent())
     }
 
-    searchKeywords = value => this.props.actions.searchKeywords(value)
+    searchKeywords = value => {
+        if (value !== '') {
+            this.props.actions.searchKeywords(value)
+        }
+    }
 
     keywordsChange = value => this.props.actions.keywordsChange(value)
 
-    searchGenres = value => this.props.actions.searchGenres(value)
+    searchGenres = value => {
+        if (value !== '') {
+            this.props.actions.searchGenres(value)
+        }
+    }
 
     genresChange = value => this.props.actions.genresChange(value)
 
-    fetchRecommendationImages = value => this.props.actions.fetchRecommendationImages(value)
+    fetchRecommendationImages = value => {
+        if (value !== '') {
+            this.props.actions.fetchRecommendationImages(value)
+        }
+    }
 
     render() {
-        const { created, error, images, imagesValue } = this.props.recommendations
+        const { created, error, images, imagesValue, fetching } = this.props.recommendations
         return (
             <div>
                 <div className="container-fluid">
@@ -217,11 +229,13 @@ class RecommendationsCreate extends Component {
                                                     value={imagesValue}
                                                     style={{ width: '100%' }}
                                                     defaultActiveFirstOption={false}
+                                                    notFoundContent={
+                                                        fetching ? <Spin size="small" /> : null
+                                                    }
                                                     showArrow={false}
                                                     filterOption={false}
                                                     onSearch={this.fetchRecommendationImages}
                                                     onChange={this.handleRecommendationImage}
-                                                    notFoundContent={null}
                                                 >
                                                     {images.map(v =>
                                                         <Option key={v.id} value={v.id}>
@@ -248,8 +262,11 @@ class RecommendationsCreate extends Component {
                                                     labelInValue
                                                     value={this.props.genres.genresValue}
                                                     size="large"
-                                                    notFoundContent={this.props.genres.loadingGenres ?
-                                                        <Spin size="small" /> : null}
+                                                    notFoundContent={
+                                                        this.props.genres.loadingSearch ?
+                                                            <Spin size="small" />
+                                                            : null
+                                                    }
                                                     filterOption={false}
                                                     onSearch={this.searchGenres}
                                                     onChange={this.genresChange}
@@ -276,8 +293,11 @@ class RecommendationsCreate extends Component {
                                                     labelInValue
                                                     value={this.props.keywords.keywordsValue}
                                                     size="large"
-                                                    notFoundContent={this.props.keywords.loadingKeywords
-                                                        ? <Spin size="small" /> : null}
+                                                    notFoundContent={
+                                                        this.props.keywords.loadingSearch
+                                                            ? <Spin size="small" />
+                                                            : null
+                                                    }
                                                     filterOption={false}
                                                     onSearch={this.searchKeywords}
                                                     onChange={this.keywordsChange}

@@ -2,6 +2,7 @@ import type from '../types/RecommendationsTypes'
 
 const initialState = {
     loaded: false,
+    fetching: false,
     editLoaded: false,
     created: false,
     edited: false,
@@ -28,6 +29,11 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 data: action.data
+            }
+        case type.RECOMMENDATIONS_FETCHING:
+            return {
+                ...state,
+                fetching: action.fetching
             }
         case type.RECOMMENDATIONS_FETCH_SINGLE:
             return {

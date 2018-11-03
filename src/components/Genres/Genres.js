@@ -15,7 +15,6 @@ class Genres extends Component {
     }
 
     render() {
-        const { loaded } = this.props.genres
         return (
             <div>
                 <div className="page-header">
@@ -23,11 +22,7 @@ class Genres extends Component {
                         <h2 className="h5 no-margin-bottom">Genres</h2>
                     </div>
                 </div>
-                {loaded ?
-                    <GenresList />
-                    :
-                    null
-                }
+                <GenresList />
             </div >
         )
     }

@@ -154,7 +154,7 @@ class RecommendationsEdit extends Component {
     render() {
         const {
             error, edited, editLoaded,
-            images, imagesValue
+            images, imagesValue, fetching
         }
             = this.props.recommendations
         const { title, body, type, status }
@@ -269,7 +269,9 @@ class RecommendationsEdit extends Component {
                                                         filterOption={false}
                                                         onSearch={this.fetchRecommendationImages}
                                                         onChange={this.handleRecommendationImage}
-                                                        notFoundContent={null}
+                                                        notFoundContent={
+                                                            fetching ? <Spin size="small" /> : null
+                                                        }
                                                     >
                                                         {images.map(v =>
 
@@ -295,7 +297,11 @@ class RecommendationsEdit extends Component {
                                                         labelInValue
                                                         value={this.props.genres.genresValue}
                                                         size="large"
-                                                        notFoundContent={this.props.genres.loadingGenres ? <Spin size="small" /> : null}
+                                                        notFoundContent={
+                                                            this.props.genres.loadingSearch ?
+                                                                <Spin size="small" />
+                                                                : null
+                                                        }
                                                         filterOption={false}
                                                         onSearch={this.searchGenres}
                                                         onChange={this.genresChange}
@@ -318,7 +324,11 @@ class RecommendationsEdit extends Component {
                                                         labelInValue
                                                         value={this.props.keywords.keywordsValue}
                                                         size="large"
-                                                        notFoundContent={this.props.keywords.loadingKeywords ? <Spin size="small" /> : null}
+                                                        notFoundContent={
+                                                            this.props.keywords.loadingSearch ?
+                                                                <Spin size="small" />
+                                                                : null
+                                                        }
                                                         filterOption={false}
                                                         onSearch={this.searchKeywords}
                                                         onChange={this.keywordsChange}

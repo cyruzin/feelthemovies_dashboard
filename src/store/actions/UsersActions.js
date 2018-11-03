@@ -11,19 +11,18 @@ axios.interceptors.request.use(req => {
     return req
 })
 
-export const fetchUsers = ({ listLoaded }) => {
+export const fetchUsers = () => {
     return dispatch => {
-
-        if (listLoaded) {
-            dispatch(setListLoaded(false))
-        }
-
+        dispatch(setListLoaded(true))
         axios.get(`/users`)
             .then(res => {
                 dispatch(setFetchUser(res.data.data))
-                dispatch(setListLoaded(true))
+                dispatch(setListLoaded(false))
             })
-            .catch(() => dispatch(setError('Something went wrong')))
+            .catch(() => {
+                dispatch(setListLoaded(false))
+                dispatch(setError('Something went wrong'))
+            })
     }
 }
 
@@ -85,13 +84,14 @@ export const deleteUser = id => {
 export const searchUsers = users => {
     let query = encodeURIComponent(users)
     return dispatch => {
-        dispatch(setUsersSearchLoaded(false))
+        dispatch(setUsersSearchLoaded(true))
         axios.get(`/search_user?q=${query}`)
             .then(res => {
                 dispatch(setUsersSearch(res.data))
-                dispatch(setUsersSearchLoaded(true))
+                dispatch(setUsersSearchLoaded(false))
             })
             .catch(() => {
+                dispatch(setUsersSearchLoaded(false))
                 dispatch(setError('Something went wrong'))
             })
     }

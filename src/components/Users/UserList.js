@@ -5,6 +5,8 @@ import * as actions from '../../store/actions/UsersActions'
 import { Link, withRouter } from 'react-router-dom'
 import Alert from '../Layout/Alert'
 import debounce from 'lodash/debounce'
+import NoResults from '../Layout/NoResults'
+import Spinner from '../Layout/Spinner'
 
 class UserList extends Component {
 
@@ -40,89 +42,103 @@ class UserList extends Component {
     }
 
     render() {
-        const { data } = this.props.users
-        const { userDeleted } = this.props.users
+        const { data, userDeleted, listLoaded } = this.props.users
 
         return (
             <div>
-                <section className="no-padding-top">
-                    <div className="container-fluid">
-                        <div className="row">
-                            <div className="col-lg-12">
-                                <div className="block">
-                                    {userDeleted !== '' ?
-                                        <Alert
-                                            type='success'
-                                            message={userDeleted} />
-                                        :
-                                        null
-                                    }
-                                    <div className="table-responsive">
-                                        <Link
-                                            className="btn btn btn-outline-success mb-3 float-right"
-                                            to='/dashboard/create_user'>
-                                            New
-                                         </Link>
-                                        <div className="form-group row">
-                                            <div className="col-lg-6">
-                                                <input
-                                                    ref={this.searchUserRef}
-                                                    type="text"
-                                                    placeholder="Search"
-                                                    className="form-control" />
-                                            </div>
-                                        </div>
-                                        <div className="line"></div>
-                                        <table className="table table-striped table-sm">
-                                            <thead>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Name</th>
-                                                    <th>E-mail</th>
-                                                    <th>Created at</th>
-                                                    <th>Updated at</th>
-                                                    <th>Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {data.map(user => (
-                                                    <tr key={user.id}>
-                                                        <th scope="row">{user.id}</th>
-                                                        <td>{user.name}</td>
-                                                        <td>{user.email}</td>
-                                                        <td className="small">
-                                                            {user.created_at}
-                                                        </td>
-                                                        <td className="small">
-                                                            {user.updated_at}
-                                                        </td>
-                                                        <td>
-                                                            <Link
-                                                                className="btn btn-sm btn-outline-secondary mr-2"
-                                                                to={`/dashboard/edit_user/${user.id}`}
-                                                            >
-                                                                <i className="fa fa-edit"></i>
-                                                            </Link>
+                {listLoaded ? <Spinner /> : null}
 
-                                                            <Link
-                                                                className="btn btn-sm btn-outline-danger"
-                                                                to={`/dashboard/delete_user/${user.id}`}
-                                                                onClick={() => this.props.actions.setDeleted('')}
-                                                            >
-                                                                <i className="fa fa-trash"></i>
-                                                            </Link>
-                                                        </td>
+                {!listLoaded && data.length > 0 ?
+                    <section className="no-padding-top">
+                        <div className="container-fluid">
+                            <div className="row">
+                                <div className="col-lg-12">
+                                    <div className="block">
+                                        {userDeleted !== '' ?
+                                            <Alert
+                                                type='success'
+                                                message={userDeleted} />
+                                            :
+                                            null
+                                        }
+                                        <div className="table-responsive">
+                                            <Link
+                                                className="btn btn btn-outline-success mb-3 float-right"
+                                                to='/dashboard/create_user'>
+                                                New
+                                         </Link>
+                                            <div className="form-group row">
+                                                <div className="col-lg-6">
+                                                    <input
+                                                        ref={this.searchUserRef}
+                                                        type="text"
+                                                        placeholder="Search"
+                                                        className="form-control" />
+                                                </div>
+                                            </div>
+                                            <div className="line"></div>
+                                            <table className="table table-striped table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Name</th>
+                                                        <th>E-mail</th>
+                                                        <th>Created at</th>
+                                                        <th>Updated at</th>
+                                                        <th>Actions</th>
                                                     </tr>
-                                                ))
-                                                }
-                                            </tbody>
-                                        </table>
+                                                </thead>
+                                                <tbody>
+                                                    {data.map(user => (
+                                                        <tr key={user.id}>
+                                                            <th scope="row">{user.id}</th>
+                                                            <td>{user.name}</td>
+                                                            <td>{user.email}</td>
+                                                            <td className="small">
+                                                                {user.created_at}
+                                                            </td>
+                                                            <td className="small">
+                                                                {user.updated_at}
+                                                            </td>
+                                                            <td>
+                                                                <Link
+                                                                    className="btn btn-sm btn-outline-secondary mr-2"
+                                                                    to={`/dashboard/edit_user/${user.id}`}
+                                                                >
+                                                                    <i className="fa fa-edit"></i>
+                                                                </Link>
+
+                                                                <Link
+                                                                    className="btn btn-sm btn-outline-danger"
+                                                                    to={`/dashboard/delete_user/${user.id}`}
+                                                                    onClick={() => this.props.actions.setDeleted('')}
+                                                                >
+                                                                    <i className="fa fa-trash"></i>
+                                                                </Link>
+                                                            </td>
+                                                        </tr>
+                                                    ))
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
+                    :
+                    null
+                }
+
+                {!listLoaded && data.length === 0 ?
+                    <NoResults
+                        message="No users were created yet"
+                        withButton
+                        path='/dashboard/create_user' />
+                    :
+                    null
+                }
             </div>
         )
     }

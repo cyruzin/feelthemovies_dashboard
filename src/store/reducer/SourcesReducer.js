@@ -8,6 +8,7 @@ const initialState = {
     deleted: false,
     data: [],
     search: [],
+    loadingSearch: false,
     searchLoaded: false,
     sourceData: '',
     error: ''
@@ -29,6 +30,11 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 loaded: action.loaded
+            }
+        case type.SOURCES_SEARCH_LOADING:
+            return {
+                ...state,
+                loadingSearch: action.loadingSearch
             }
         case type.SOURCES_CREATE:
             return {

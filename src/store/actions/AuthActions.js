@@ -47,6 +47,6 @@ export const checkAuthTimeout = () => {
     return dispatch => {
         setTimeout(() => {
             dispatch({ type: type.AUTH_LOGOUT })
-        }, 3600000)
+        }, 1000 * 60 * 60)
     }
 }

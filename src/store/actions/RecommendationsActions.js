@@ -3,14 +3,14 @@ import axios, { axiosTmdb } from '../../util/constants/axios'
 
 export const fetchRecommendations = () => {
     return dispatch => {
-        dispatch(setRecommendationLoaded(false))
+        dispatch(setRecommendationLoaded(true))
         axios.get(`/recommendations?nofilter=true`)
             .then(res => {
                 dispatch(setRecommendations(res.data.data))
-                dispatch(setRecommendationLoaded(true))
+                dispatch(setRecommendationLoaded(false))
             })
             .catch(err => {
-                dispatch(setRecommendationLoaded(true))
+                dispatch(setRecommendationLoaded(false))
                 const { status, statusText } = err.response
                 dispatch(setRecommendationError(`
                 ERROR!
@@ -102,14 +102,16 @@ export const fetchRecommendationImages = search => {
     let query = encodeURIComponent(search)
 
     return dispatch => {
-
+        dispatch(setRecommendationFetching(true))
         axiosTmdb.get(`/search/multi?language=en-US&query=${query}&page=1&include_adult=false`)
             .then(res => {
                 let images = res.data.results
                     .filter(v => v.media_type !== 'person' && v.backdrop_path !== null)
                 dispatch(setRecommendationFetchImage(images))
+                dispatch(setRecommendationFetching(false))
             })
             .catch(err => {
+                dispatch(setRecommendationFetching(false))
                 const { status, statusText } = err.response
                 dispatch(setRecommendationError(`
                 ERROR!
@@ -123,14 +125,15 @@ export const fetchRecommendationImages = search => {
 export const searchRecommendation = rec => {
     let query = encodeURIComponent(rec)
     return dispatch => {
-        dispatch(setRecommendationsSearchLoaded(false))
+        dispatch(setRecommendationsSearchLoaded(true))
         axios.get(`/search_recommendation?q=${query}`)
             .then(res => {
                 dispatch(setRecommendationsSearch(res.data))
-                dispatch(setRecommendationsSearchLoaded(true))
+                dispatch(setRecommendationsSearchLoaded(false))
             })
             .catch(err => {
                 const { status, statusText, message } = err.response
+                dispatch(setRecommendationsSearchLoaded(false))
                 dispatch(setRecommendationError(`
                 ERROR!
                 Status: ${status} - ${statusText}
@@ -144,6 +147,13 @@ export const setRecommendations = value => {
     return {
         type: type.RECOMMENDATIONS_FETCH,
         data: value
+    }
+}
+
+export const setRecommendationFetching = value => {
+    return {
+        type: type.RECOMMENDATIONS_FETCHING,
+        fetching: value
     }
 }
 
