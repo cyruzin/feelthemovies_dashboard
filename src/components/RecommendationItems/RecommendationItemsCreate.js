@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -15,7 +15,7 @@ import { tinyMCEKey } from '../../util/constants'
 
 const Option = Select.Option;
 
-class RecommendationItemsCreate extends Component {
+class RecommendationItemsCreate extends PureComponent {
 
     constructor(props) {
         super(props)

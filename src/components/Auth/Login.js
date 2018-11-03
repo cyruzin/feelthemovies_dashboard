@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { PureComponent, Fragment } from 'react'
 import { Redirect } from 'react-router-dom'
 import LoginInfo from './LoginInfo'
 import { connect } from 'react-redux'
@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux'
 import { loadJs } from '../../util/helpers'
 import * as actions from '../../store/actions/AuthActions'
 
-class Auth extends Component {
+class Auth extends PureComponent {
 
     constructor(props) {
         super(props)

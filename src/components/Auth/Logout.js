@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import * as actions from '../../store/actions/AuthActions'
 
-class Logout extends Component {
+class Logout extends PureComponent {
 
     componentDidMount() {
         this.props.actions.logout()

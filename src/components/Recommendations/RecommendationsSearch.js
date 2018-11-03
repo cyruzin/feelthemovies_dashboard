@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { Link } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -6,7 +6,7 @@ import * as actions from '../../store/actions/RecommendationsActions'
 import NoResults from '../Layout/NoResults';
 import Spinner from '../Layout/Spinner'
 
-class RecommendationsSearch extends Component {
+class RecommendationsSearch extends PureComponent {
 
     componentDidMount() {
         this.searchRecommendation()

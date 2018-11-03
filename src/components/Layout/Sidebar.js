@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { Link, withRouter } from 'react-router-dom'
 
-class Siderbar extends Component {
+class Siderbar extends PureComponent {
 
     activeCheck = pathname => {
         if (pathname === this.props.location.pathname) {

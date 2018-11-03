@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as actions from '../../store/actions/UsersActions'
 import UserList from './UserList'
 
-class Users extends Component {
+class Users extends PureComponent {
 
     componentDidMount() {
         this.fetchUsers()

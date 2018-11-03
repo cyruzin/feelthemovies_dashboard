@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as actions from '../../store/actions/SourcesActions'
 import SourcesList from './SourcesList'
 
-class Sources extends Component {
+class Sources extends PureComponent {
 
     componentDidMount() {
         this.fetchSources()

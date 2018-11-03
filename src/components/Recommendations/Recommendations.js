@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as actions from '../../store/actions/RecommendationsActions'
 import RecommendationsList from './RecommendationsList'
 
-class Recommendations extends Component {
+class Recommendations extends PureComponent {
 
     componentDidMount() {
         this.fetchRecommendations()

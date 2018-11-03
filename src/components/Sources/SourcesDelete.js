@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
@@ -6,7 +6,7 @@ import * as actions from '../../store/actions/SourcesActions'
 import Modal from '../Layout/Modal'
 
 
-class SourcesDelete extends Component {
+class SourcesDelete extends PureComponent {
 
 
     deleteSource = () => {
