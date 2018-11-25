@@ -14,6 +14,7 @@ import * as keywordsActions from '../../store/actions/KeywordsActions'
 import * as genresActions from '../../store/actions/GenresActions'
 import { getYear } from '../../util/helpers'
 import { tinyMCEKey } from '../../util/constants'
+import Spinner from '../Layout/Spinner'
 
 const Option = Select.Option;
 
@@ -171,6 +172,8 @@ class RecommendationsEdit extends PureComponent {
                         <li className="breadcrumb-item active">Edit</li>
                     </ul>
                 </div>
+                {!editLoaded ? <Spinner /> : null}
+
                 {editLoaded ?
                     <section className="no-padding-top">
                         <div className="container-fluid">
@@ -192,6 +195,7 @@ class RecommendationsEdit extends PureComponent {
                                                     type='success' />
                                                 : null
                                             }
+
                                             <div className="form-group row">
                                                 <label className="col-lg-3 form-control-label">
                                                     Title

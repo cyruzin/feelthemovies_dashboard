@@ -12,6 +12,7 @@ import { Editor } from '@tinymce/tinymce-react'
 import debounce from 'lodash/debounce'
 import { getYear } from '../../util/helpers'
 import { tinyMCEKey } from '../../util/constants'
+import Spinner from '../Layout/Spinner'
 
 const Option = Select.Option;
 
@@ -23,7 +24,7 @@ class RecommendationItemsEdit extends PureComponent {
         this.setFields = debounce(this.setFields, 800)
         this.searchItemData = debounce(this.searchItemData, 800)
         this.searchSources = debounce(this.searchSources, 800)
-        this.setFields = debounce(this.setFields, 1500)
+        this.setFields = debounce(this.setFields, 800)
 
         this.editorRef = React.createRef()
     }
@@ -175,6 +176,7 @@ class RecommendationItemsEdit extends PureComponent {
                         <li className="breadcrumb-item active">Edit</li>
                     </ul>
                 </div>
+                {!editLoaded ? <Spinner /> : null}
                 {editLoaded ?
                     <section className="no-padding-top">
                         <div className="container-fluid">
