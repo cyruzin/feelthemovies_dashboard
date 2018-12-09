@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom'
 import LoginInfo from './LoginInfo'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import debounce from 'lodash/debounce'
 import { loadJs } from '../../util/helpers'
 import * as actions from '../../store/actions/AuthActions'
 
@@ -24,9 +25,15 @@ class Auth extends PureComponent {
         window.removeEventListener('keypress', this.isEnterPressed);
     }
 
-    setEmail = () => this.props.actions.setEmail(this.emailRef.current.value)
+    setEmail = debounce(() => {
+        const { setEmail } = this.props.actions
+        setEmail(this.emailRef.current.value)
+    }, 800)
 
-    setPassword = () => this.props.actions.setPassword(this.passwordRef.current.value)
+    setPassword = debounce(() => {
+        const { setPassword } = this.props.actions
+        setPassword(this.passwordRef.current.value)
+    }, 800)
 
     fetchAuth = () => {
         const { value: email } = this.emailRef.current
@@ -42,6 +49,8 @@ class Auth extends PureComponent {
 
     isEnterPressed = e => {
         if (e.keyCode === 13) {
+            this.setEmail.flush()
+            this.setPassword.flush()
             this.fetchAuth()
         }
     }
