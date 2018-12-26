@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
@@ -6,7 +6,7 @@ import * as actions from '../../store/actions/UsersActions'
 import Modal from '../Layout/Modal'
 
 
-class UserDelete extends PureComponent {
+class UserDelete extends Component {
 
 
     deleteUser = () => {

@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import { bindActionCreators, compose } from 'redux'
 import { connect } from 'react-redux'
 import * as actions from '../../store/actions/UsersActions'
@@ -8,7 +8,7 @@ import debounce from 'lodash/debounce'
 import NoResults from '../Layout/NoResults'
 import Spinner from '../Layout/Spinner'
 
-class UserList extends PureComponent {
+class UserList extends Component {
 
     constructor(props) {
         super(props)

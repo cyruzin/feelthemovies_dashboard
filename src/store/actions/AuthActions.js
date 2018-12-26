@@ -35,6 +35,7 @@ export const setEmail = email => {
 export const setPassword = password => {
     return { type: type.AUTH_PASSWORD, password: password }
 }
+
 export const setError = value => {
     return { type: type.AUTH_ERROR, error: value }
 }
@@ -50,3 +51,8 @@ export const checkAuthTimeout = () => {
         }, 1000 * 60 * 60)
     }
 }
+
+export const sessionTimeOut = date => ({
+    type: type.AUTH_SESSION,
+    session: date
+})

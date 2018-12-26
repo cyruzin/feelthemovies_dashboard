@@ -1,10 +1,10 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as actions from '../../store/actions/KeywordsActions'
 import KeywordsList from './KeywordsList'
 
-class Keywords extends PureComponent {
+class Keywords extends Component {
 
     componentDidMount() {
         this.fetchKeywords()

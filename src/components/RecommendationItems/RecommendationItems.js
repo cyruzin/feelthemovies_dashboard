@@ -1,10 +1,10 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as actions from '../../store/actions/RecommendationItemsActions'
 import RecommendationItemsList from './RecommendationItemsList'
 
-class RecommendationItemsActions extends PureComponent {
+class RecommendationItemsActions extends Component {
 
     render() {
         const { id } = this.props.match.params

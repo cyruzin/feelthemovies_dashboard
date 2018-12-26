@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -6,7 +6,7 @@ import * as actions from '../../store/actions/GenresActions'
 import NoResults from '../Layout/NoResults';
 import Spinner from '../Layout/Spinner';
 
-class GenresSearch extends PureComponent {
+class GenresSearch extends Component {
 
     componentDidMount() {
         this.searchGenres()

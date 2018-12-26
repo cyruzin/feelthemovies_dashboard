@@ -33,7 +33,8 @@ class Recommendations extends PureComponent {
 
 const mapStateToProps = state => {
     return {
-        recommendations: state.recommendations
+        recommendations: state.recommendations,
+        auth: state.auth
     }
 }
 

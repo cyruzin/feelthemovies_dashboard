@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -17,7 +17,7 @@ import { tinyMCEKey } from '../../util/constants'
 
 const Option = Select.Option;
 
-class RecommendationsCreate extends PureComponent {
+class RecommendationsCreate extends Component {
 
     constructor(props) {
         super(props)
@@ -99,8 +99,10 @@ class RecommendationsCreate extends PureComponent {
         this.props.actions.setGenresReset()
         this.props.actions.setKeywordsReset()
         this.titleRef.current.value = ''
-        this.editorRef.current.editor.setContent('')
         this.typeRef.current.value = 0
+        if (this.editorRef.current.editor !== undefined) {
+            this.editorRef.current.editor.setContent('')
+        }
     }
 
     handleEditorChange = (e) => {

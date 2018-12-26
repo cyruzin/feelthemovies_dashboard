@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import { bindActionCreators, compose } from 'redux'
 import { connect } from 'react-redux'
 import { withRouter, Link } from 'react-router-dom'
@@ -9,7 +9,7 @@ import NoResults from '../Layout/NoResults';
 import Spinner from '../Layout/Spinner';
 import { getYear } from '../../util/helpers'
 
-class RecommendationItemsList extends PureComponent {
+class RecommendationItemsList extends Component {
 
     constructor(props) {
         super(props)

@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import { bindActionCreators, compose } from 'redux'
 import { connect } from 'react-redux'
 import { Link, withRouter } from 'react-router-dom'
@@ -8,7 +8,7 @@ import debounce from 'lodash/debounce'
 import NoResults from '../Layout/NoResults'
 import Spinner from '../Layout/Spinner'
 
-class RecommendationsList extends PureComponent {
+class RecommendationsList extends Component {
 
     constructor(props) {
         super(props)

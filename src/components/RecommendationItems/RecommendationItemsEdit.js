@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -16,7 +16,7 @@ import Spinner from '../Layout/Spinner'
 
 const Option = Select.Option;
 
-class RecommendationItemsEdit extends PureComponent {
+class RecommendationItemsEdit extends Component {
 
     constructor(props) {
         super(props)

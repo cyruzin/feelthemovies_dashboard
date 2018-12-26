@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import { Redirect, Route, Switch } from 'react-router-dom'
 import Header from './Header'
 import Content from './Content'
@@ -34,17 +35,34 @@ import RecommendationItemsCreate from '../RecommendationItems/RecommendationItem
 import RecommendationItemsEdit from '../RecommendationItems/RecommendationItemsEdit';
 import RecommendationItemsDelete from '../RecommendationItems/RecommendationItemsDelete';
 import RecommendationsSearch from '../Recommendations/RecommendationsSearch'
+import { sessionTimeOut, logout } from '../../store/actions/AuthActions'
+import moment from 'moment'
 
 class Dashboard extends Component {
 
     componentDidMount() {
+        this.sessionTimeOut()
         loadJs()
+    }
+
+    sessionTimeOut = () => {
+        const { authorized, session } = this.props.auth
+        const { sessionTimeOut, logout } = this.props.actions
+
+        if (authorized && session === '') {
+            sessionTimeOut(new Date().getTime())
+        } else if (authorized && session !== '') {
+            let duration = moment.duration(moment().diff(session)).asMinutes().toFixed(2)
+            if (duration >= 60.00) {
+                logout()
+            }
+        }
     }
 
     render() {
         let authRedirect = null
 
-        if (this.props.auth.authorized === false) {
+        if (!this.props.auth.authorized) {
             authRedirect = <Redirect to='/' />
         }
 
@@ -103,4 +121,9 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps)(Dashboard)
+const mapDispatchToProps = dispatch => ({
+    actions: bindActionCreators({ sessionTimeOut, logout }, dispatch)
+})
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

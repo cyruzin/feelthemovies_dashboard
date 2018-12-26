@@ -1,10 +1,10 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as actions from '../../store/actions/GenresActions'
 import GenresList from './GenresList'
 
-class Genres extends PureComponent {
+class Genres extends Component {
 
     componentDidMount() {
         this.fetchGenres()

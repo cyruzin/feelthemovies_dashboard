@@ -1,11 +1,11 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
 import * as actions from '../../store/actions/RecommendationsActions'
 import Modal from '../Layout/Modal'
 
-class RecommendationsDelete extends PureComponent {
+class RecommendationsDelete extends Component {
 
     deleteRecommendation = () => {
         const { id } = this.props.match.params

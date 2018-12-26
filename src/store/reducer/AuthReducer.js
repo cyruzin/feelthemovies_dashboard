@@ -6,6 +6,7 @@ const initialState = {
     apiToken: '',
     id: '',
     authorized: false,
+    session: '',
     error: ''
 }
 
@@ -36,6 +37,11 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 error: action.error
+            }
+        case type.AUTH_SESSION:
+            return {
+                ...state,
+                session: action.session
             }
         default:
             return state

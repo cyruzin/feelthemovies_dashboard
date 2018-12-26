@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -6,7 +6,7 @@ import * as actions from '../../store/actions/KeywordsActions'
 import NoResults from '../Layout/NoResults';
 import Spinner from '../Layout/Spinner';
 
-class KeywordsSearch extends PureComponent {
+class KeywordsSearch extends Component {
 
     componentDidMount() {
         this.searchKeywords()

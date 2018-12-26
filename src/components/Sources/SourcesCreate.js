@@ -1,11 +1,11 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import Alert from '../Layout/Alert'
 import * as actions from '../../store/actions/SourcesActions'
 
-class SourcesCreate extends PureComponent {
+class SourcesCreate extends Component {
 
     constructor(props) {
         super(props)

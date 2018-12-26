@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment } from 'react'
+import React, { Component, Fragment } from 'react'
 import { Redirect } from 'react-router-dom'
 import LoginInfo from './LoginInfo'
 import { connect } from 'react-redux'
@@ -7,7 +7,7 @@ import debounce from 'lodash/debounce'
 import { loadJs } from '../../util/helpers'
 import * as actions from '../../store/actions/AuthActions'
 
-class Auth extends PureComponent {
+class Auth extends Component {
 
     constructor(props) {
         super(props)
@@ -32,10 +32,15 @@ class Auth extends PureComponent {
 
     setPassword = debounce(() => {
         const { setPassword } = this.props.actions
-        setPassword(this.passwordRef.current.value)
+        const { authorized } = this.props.auth
+        if (!authorized) {
+            setPassword(this.passwordRef.current.value)
+        }
     }, 800)
 
     fetchAuth = () => {
+        this.setEmail.flush()
+        this.setPassword.flush()
         const { value: email } = this.emailRef.current
         const { value: password } = this.passwordRef.current
 
