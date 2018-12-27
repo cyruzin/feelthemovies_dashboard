@@ -5,6 +5,7 @@ import { Link, withRouter } from 'react-router-dom'
 import * as actions from '../../store/actions/KeywordsActions'
 import Alert from '../Layout/Alert'
 import debounce from 'lodash/debounce'
+import moment from 'moment'
 import NoResults from '../Layout/NoResults'
 import Spinner from '../Layout/Spinner'
 
@@ -90,11 +91,11 @@ class KeywordsList extends Component {
                                                         <tr key={keyword.id}>
                                                             <th scope="row">{keyword.id}</th>
                                                             <td>{keyword.name}</td>
-                                                            <td className="small">
-                                                                {keyword.created_at}
+                                                            <td>
+                                                                {moment(keyword.created_at).fromNow()}
                                                             </td>
-                                                            <td className="small">
-                                                                {keyword.updated_at}
+                                                            <td>
+                                                                {moment(keyword.updated_at).fromNow()}
                                                             </td>
                                                             <td>
                                                                 <Link

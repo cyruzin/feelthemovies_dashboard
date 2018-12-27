@@ -5,9 +5,9 @@ import * as actions from '../../store/actions/UsersActions'
 import { Link, withRouter } from 'react-router-dom'
 import Alert from '../Layout/Alert'
 import debounce from 'lodash/debounce'
+import moment from 'moment'
 import NoResults from '../Layout/NoResults'
 import Spinner from '../Layout/Spinner'
-
 class UserList extends Component {
 
     constructor(props) {
@@ -94,11 +94,11 @@ class UserList extends Component {
                                                             <th scope="row">{user.id}</th>
                                                             <td>{user.name}</td>
                                                             <td>{user.email}</td>
-                                                            <td className="small">
-                                                                {user.created_at}
+                                                            <td>
+                                                                {moment(user.created_at).fromNow()}
                                                             </td>
-                                                            <td className="small">
-                                                                {user.updated_at}
+                                                            <td>
+                                                                {moment(user.updated_at).fromNow()}
                                                             </td>
                                                             <td>
                                                                 <Link

@@ -5,6 +5,7 @@ import { withRouter, Link } from 'react-router-dom'
 import * as actions from '../../store/actions/RecommendationItemsActions'
 import Alert from '../Layout/Alert'
 import debounce from 'lodash/debounce'
+import moment from 'moment'
 import NoResults from '../Layout/NoResults';
 import Spinner from '../Layout/Spinner';
 import { getYear } from '../../util/helpers'
@@ -89,8 +90,8 @@ class RecommendationItemsList extends Component {
                                                             <th scope="row">{v.id}</th>
                                                             <td>{v.name}</td>
                                                             <td>{getYear(v.year, false)}</td>
-                                                            <td className="small">{v.created_at}</td>
-                                                            <td className="small">{v.updated_at}</td>
+                                                            <td>{moment(v.created_at).fromNow()}</td>
+                                                            <td>{moment(v.updated_at).fromNow()}</td>
                                                             <td>
                                                                 <Link
                                                                     className="btn btn-sm btn-outline-secondary mr-2"

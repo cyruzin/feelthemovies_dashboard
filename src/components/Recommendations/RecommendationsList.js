@@ -5,6 +5,7 @@ import { Link, withRouter } from 'react-router-dom'
 import * as actions from '../../store/actions/RecommendationsActions'
 import Alert from '../Layout/Alert'
 import debounce from 'lodash/debounce'
+import moment from 'moment'
 import NoResults from '../Layout/NoResults'
 import Spinner from '../Layout/Spinner'
 
@@ -104,12 +105,14 @@ class RecommendationsList extends Component {
                                                             <th scope="row">{r.id}</th>
                                                             <td>{r.title}</td>
                                                             <td>{r.type}</td>
-                                                            <td>{r.status}</td>
-                                                            <td className="small">
-                                                                {r.created_at}
+                                                            <td>
+                                                                {r.status === 0 ? 'Inactive' : 'Active'}
                                                             </td>
-                                                            <td className="small">
-                                                                {r.updated_at}
+                                                            <td>
+                                                                {moment(r.created_at).fromNow()}
+                                                            </td>
+                                                            <td>
+                                                                {moment(r.updated_at).fromNow()}
                                                             </td>
                                                             <td>
                                                                 <Link

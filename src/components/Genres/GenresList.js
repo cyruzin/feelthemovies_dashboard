@@ -5,6 +5,7 @@ import { Link, withRouter } from 'react-router-dom'
 import * as actions from '../../store/actions/GenresActions'
 import Alert from '../Layout/Alert'
 import debounce from 'lodash/debounce'
+import moment from 'moment'
 import NoResults from '../Layout/NoResults'
 import Spinner from '../Layout/Spinner'
 
@@ -90,11 +91,11 @@ class GenresList extends Component {
                                                         <tr key={genre.id}>
                                                             <th scope="row">{genre.id}</th>
                                                             <td>{genre.name}</td>
-                                                            <td className="small">
-                                                                {genre.created_at}
+                                                            <td>
+                                                                {moment(genre.created_at).fromNow()}
                                                             </td>
-                                                            <td className="small">
-                                                                {genre.updated_at}
+                                                            <td>
+                                                                {moment(genre.updated_at).fromNow()}
                                                             </td>
                                                             <td>
                                                                 <Link

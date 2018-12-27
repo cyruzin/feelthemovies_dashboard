@@ -5,6 +5,7 @@ import { Link, withRouter } from 'react-router-dom'
 import * as actions from '../../store/actions/SourcesActions'
 import Alert from '../Layout/Alert'
 import debounce from 'lodash/debounce'
+import moment from 'moment'
 import NoResults from '../Layout/NoResults'
 import Spinner from '../Layout/Spinner'
 
@@ -90,11 +91,11 @@ class SourcesList extends Component {
                                                         <tr key={source.id}>
                                                             <th scope="row">{source.id}</th>
                                                             <td>{source.name}</td>
-                                                            <td className="small">
-                                                                {source.created_at}
+                                                            <td>
+                                                                {moment(source.created_at).fromNow()}
                                                             </td>
-                                                            <td className="small">
-                                                                {source.updated_at}
+                                                            <td>
+                                                                {moment(source.updated_at).fromNow()}
                                                             </td>
                                                             <td>
                                                                 <Link
