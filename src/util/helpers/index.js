@@ -136,3 +136,16 @@ export const getYear = (date, parentheses = true) => {
     }
     return ''
 }
+
+export const checkType = type => {
+    switch (type) {
+        case 0:
+            return 'Movie'
+        case 1:
+            return 'TV'
+        case 2:
+            return 'Mixed'
+        default:
+            break
+    }
+}

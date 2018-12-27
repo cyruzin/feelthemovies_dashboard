@@ -8,6 +8,7 @@ import debounce from 'lodash/debounce'
 import moment from 'moment'
 import NoResults from '../Layout/NoResults'
 import Spinner from '../Layout/Spinner'
+import { checkType } from '../../util/helpers'
 
 class RecommendationsList extends Component {
 
@@ -104,7 +105,7 @@ class RecommendationsList extends Component {
                                                         <tr key={r.id}>
                                                             <th scope="row">{r.id}</th>
                                                             <td>{r.title}</td>
-                                                            <td>{r.type}</td>
+                                                            <td>{checkType(r.type)}</td>
                                                             <td>
                                                                 {r.status === 0 ? 'Inactive' : 'Active'}
                                                             </td>
