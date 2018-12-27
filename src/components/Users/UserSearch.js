@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import * as actions from '../../store/actions/UsersActions'
 import NoResults from '../Layout/NoResults'
 import Spinner from '../Layout/Spinner'
+import moment from 'moment'
 
 class UserSearch extends Component {
 
@@ -66,11 +67,11 @@ class UserSearch extends Component {
                                                             <th scope="row">{u.id}</th>
                                                             <td>{u.name}</td>
                                                             <td>{u.email}</td>
-                                                            <td className="small">
-                                                                {u.created_at}
+                                                            <td>
+                                                                {moment(u.created_at).fromNow()}
                                                             </td>
-                                                            <td className="small">
-                                                                {u.updated_at}
+                                                            <td>
+                                                                {moment(u.updated_at).fromNow()}
                                                             </td>
                                                             <td>
                                                                 <Link

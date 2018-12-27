@@ -5,6 +5,8 @@ import { connect } from 'react-redux'
 import * as actions from '../../store/actions/RecommendationsActions'
 import NoResults from '../Layout/NoResults';
 import Spinner from '../Layout/Spinner'
+import moment from 'moment'
+import { checkType, checkStatus } from '../../util/helpers'
 
 class RecommendationsSearch extends Component {
 
@@ -20,6 +22,7 @@ class RecommendationsSearch extends Component {
 
     render() {
         const { search, searchLoaded } = this.props.recommendations
+
         return (
             <div>
                 <div className="container-fluid">
@@ -34,13 +37,13 @@ class RecommendationsSearch extends Component {
                 </div>
                 {searchLoaded ? <Spinner /> : null}
 
-                {!searchLoaded && search.length === 0 ?
+                {!searchLoaded && search.total === 0 ?
                     <NoResults message="No Results" />
                     :
                     null
                 }
 
-                {!searchLoaded && search.length > 0 ?
+                {!searchLoaded && search.total > 0 ?
                     <section className="no-padding-top">
                         <div className="container-fluid">
                             <div className="row">
@@ -52,6 +55,7 @@ class RecommendationsSearch extends Component {
                                                     <tr>
                                                         <th>#</th>
                                                         <th>Title</th>
+                                                        <th>Type</th>
                                                         <th>Status</th>
                                                         <th>Created at</th>
                                                         <th>Updated at</th>
@@ -59,16 +63,19 @@ class RecommendationsSearch extends Component {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {search.map(r => (
+                                                    {search.data.map(r => (
                                                         <tr key={r.id}>
                                                             <th scope="row">{r.id}</th>
                                                             <td>{r.title}</td>
-                                                            <td>{r.status}</td>
-                                                            <td className="small">
-                                                                {r.created_at}
+                                                            <td>{checkType(r.type)}</td>
+                                                            <td>
+                                                                {checkStatus(r.status)}
                                                             </td>
-                                                            <td className="small">
-                                                                {r.updated_at}
+                                                            <td>
+                                                                {moment(r.created_at).fromNow()}
+                                                            </td>
+                                                            <td>
+                                                                {moment(r.updated_at).fromNow()}
                                                             </td>
                                                             <td>
                                                                 <Link

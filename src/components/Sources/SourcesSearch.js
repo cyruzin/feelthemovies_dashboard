@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import * as actions from '../../store/actions/SourcesActions'
 import NoResults from '../Layout/NoResults'
 import Spinner from '../Layout/Spinner'
+import moment from 'moment'
 
 class SourcesSearch extends Component {
 
@@ -62,11 +63,11 @@ class SourcesSearch extends Component {
                                                         <tr key={s.id}>
                                                             <th scope="row">{s.id}</th>
                                                             <td>{s.name}</td>
-                                                            <td className="small">
-                                                                {s.created_at}
+                                                            <td>
+                                                                {moment(s.created_at).fromNow()}
                                                             </td>
-                                                            <td className="small">
-                                                                {s.updated_at}
+                                                            <td>
+                                                                {moment(s.updated_at).fromNow()}
                                                             </td>
                                                             <td>
                                                                 <Link

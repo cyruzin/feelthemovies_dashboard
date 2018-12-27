@@ -138,13 +138,24 @@ export const getYear = (date, parentheses = true) => {
 }
 
 export const checkType = type => {
-    switch (type) {
+    switch (parseInt(type)) {
         case 0:
             return 'Movie'
         case 1:
             return 'TV'
         case 2:
             return 'Mixed'
+        default:
+            break
+    }
+}
+
+export const checkStatus = status => {
+    switch (parseInt(status)) {
+        case 0:
+            return 'Inactive'
+        case 1:
+            return 'Active'
         default:
             break
     }

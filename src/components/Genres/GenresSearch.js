@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as actions from '../../store/actions/GenresActions'
-import NoResults from '../Layout/NoResults';
-import Spinner from '../Layout/Spinner';
+import NoResults from '../Layout/NoResults'
+import Spinner from '../Layout/Spinner'
+import moment from 'moment'
 
 class GenresSearch extends Component {
 
@@ -62,11 +63,11 @@ class GenresSearch extends Component {
                                                         <tr key={g.id}>
                                                             <th scope="row">{g.id}</th>
                                                             <td>{g.name}</td>
-                                                            <td className="small">
-                                                                {g.created_at}
+                                                            <td>
+                                                                {moment(g.created_at).fromNow()}
                                                             </td>
-                                                            <td className="small">
-                                                                {g.updated_at}
+                                                            <td>
+                                                                {moment(g.updated_at).fromNow()}
                                                             </td>
                                                             <td>
                                                                 <Link

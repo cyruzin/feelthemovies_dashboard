@@ -8,7 +8,7 @@ import debounce from 'lodash/debounce'
 import moment from 'moment'
 import NoResults from '../Layout/NoResults'
 import Spinner from '../Layout/Spinner'
-import { checkType } from '../../util/helpers'
+import { checkType, checkStatus } from '../../util/helpers'
 
 class RecommendationsList extends Component {
 
@@ -107,7 +107,7 @@ class RecommendationsList extends Component {
                                                             <td>{r.title}</td>
                                                             <td>{checkType(r.type)}</td>
                                                             <td>
-                                                                {r.status === 0 ? 'Inactive' : 'Active'}
+                                                                {checkStatus(r.status)}
                                                             </td>
                                                             <td>
                                                                 {moment(r.created_at).fromNow()}

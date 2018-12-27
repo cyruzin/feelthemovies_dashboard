@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as actions from '../../store/actions/KeywordsActions'
-import NoResults from '../Layout/NoResults';
-import Spinner from '../Layout/Spinner';
+import NoResults from '../Layout/NoResults'
+import Spinner from '../Layout/Spinner'
+import moment from 'moment'
 
 class KeywordsSearch extends Component {
 
@@ -62,11 +63,11 @@ class KeywordsSearch extends Component {
                                                         <tr key={k.id}>
                                                             <th scope="row">{k.id}</th>
                                                             <td>{k.name}</td>
-                                                            <td className="small">
-                                                                {k.created_at}
+                                                            <td>
+                                                                {moment(k.created_at).fromNow()}
                                                             </td>
-                                                            <td className="small">
-                                                                {k.updated_at}
+                                                            <td>
+                                                                {moment(k.updated_at).fromNow()}
                                                             </td>
                                                             <td>
                                                                 <Link
