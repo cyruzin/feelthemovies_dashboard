@@ -79,21 +79,21 @@ class RecommendationsEdit extends Component {
     editRecommendation = () => {
 
         let title = this.titleRef.current.value
-        let genres = this.props.genres.genresValue.map(v => v.key)
-        let keywords = this.props.keywords.keywordsValue.map(v => v.key)
+        let genres = this.props.genres.genresValue.map(v => parseInt(v.key))
+        let keywords = this.props.keywords.keywordsValue.map(v => parseInt(v.key))
 
         this.props.actions.setEditRecommendation(false)
 
         let recommendation = {
             title: title,
             body: this.editorRef.current.editor.getContent(),
-            type: this.typeRef.current.value,
-            status: this.statusRef.current.value,
+            type: parseInt(this.typeRef.current.value),
+            status: parseInt(this.statusRef.current.value),
             genres: genres,
             poster: this.props.recommendations.poster,
             backdrop: this.props.recommendations.backdrop,
             keywords: keywords,
-            user_id: this.props.auth.id
+            user_id: parseInt(this.props.auth.id)
         }
 
         if (

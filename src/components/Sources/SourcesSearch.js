@@ -15,7 +15,7 @@ class SourcesSearch extends Component {
 
     searchSources = () => {
         const params = new URLSearchParams(this.props.location.search);
-        const query = params.get('q')
+        const query = params.get('query')
         this.props.actions.searchSources(query)
     }
 

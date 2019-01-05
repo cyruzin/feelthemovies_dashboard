@@ -117,11 +117,11 @@ class RecommendationItemsEdit extends Component {
             editRecommendationItem
         } = this.props.actions
 
-        let sources = sourcesValue.map(v => v.key)
+        let sources = sourcesValue.map(v => parseInt(v.key))
 
         let recommendationItem = {
             name: name,
-            tmdb_id: tmdb_id,
+            tmdb_id: parseInt(tmdb_id),
             year: year,
             overview: overview,
             poster: poster,
@@ -130,7 +130,7 @@ class RecommendationItemsEdit extends Component {
             trailer: trailer,
             commentary: commentary,
             sources: sources,
-            recommendation_id: recommendation_id,
+            recommendation_id: parseInt(recommendation_id),
         }
 
         if (name === '') {
@@ -159,6 +159,7 @@ class RecommendationItemsEdit extends Component {
             sources, sourcesValue, fetching
         }
             = this.props.recommendationItems
+
         return (
             <div>
                 <div className="container-fluid">

@@ -36,7 +36,7 @@ class UserList extends Component {
         const { current } = this.searchUserRef
         if (e.keyCode === 13) {
             if (document.activeElement === current && current.value !== '') {
-                this.props.history.push(`/dashboard/search_user?q=${current.value}`)
+                this.props.history.push(`/dashboard/search_user?query=${current.value}`)
             }
         }
     }

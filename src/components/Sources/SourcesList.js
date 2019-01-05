@@ -37,7 +37,7 @@ class SourcesList extends Component {
         const { current } = this.searchSourceRef
         if (e.keyCode === 13) {
             if (document.activeElement === current && current.value !== '') {
-                this.props.history.push(`/dashboard/search_source?q=${current.value}`)
+                this.props.history.push(`/dashboard/search_source?query=${current.value}`)
             }
         }
     }

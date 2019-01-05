@@ -4,7 +4,7 @@ import axios, { axiosTmdb } from '../../util/constants/axios'
 export const fetchRecommendations = () => {
     return dispatch => {
         dispatch(setRecommendationLoaded(true))
-        axios.get(`/recommendations?nofilter=true`)
+        axios.get(`/recommendations`)
             .then(res => {
                 dispatch(setRecommendations(res.data.data))
                 dispatch(setRecommendationLoaded(false))
@@ -126,7 +126,7 @@ export const searchRecommendation = rec => {
     let query = encodeURIComponent(rec)
     return dispatch => {
         dispatch(setRecommendationsSearchLoaded(true))
-        axios.get(`/search_recommendation?q=${query}`)
+        axios.get(`/search_recommendation?query=${query}`)
             .then(res => {
                 dispatch(setRecommendationsSearch(res.data))
                 dispatch(setRecommendationsSearchLoaded(false))

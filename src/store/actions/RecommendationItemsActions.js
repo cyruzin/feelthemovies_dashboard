@@ -203,11 +203,11 @@ export const recommedationItemSource = value => {
     let query = encodeURIComponent(value)
     return dispatch => {
         dispatch(setRecommendationItemFetching(true))
-        axios.get(`/search_source?q=${query}`)
+        axios.get(`/search_source?query=${query}`)
             .then(res => {
                 dispatch({
                     type: type.RECOMMENDATION_ITEM_SOURCE_SEARCH,
-                    sources: res.data
+                    sources: res.data.data
                 })
                 dispatch(setRecommendationItemFetching(false))
 

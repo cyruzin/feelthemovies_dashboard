@@ -75,9 +75,9 @@ export const searchSources = sources => {
     let query = encodeURIComponent(sources)
     return dispatch => {
         dispatch(setSourcesSearchLoaded(true))
-        axios.get(`/search_source?q=${query}`)
+        axios.get(`/search_source?query=${query}`)
             .then(res => {
-                dispatch(setSourcesSearch(res.data))
+                dispatch(setSourcesSearch(res.data.data))
                 dispatch(setSourcesSearchLoaded(false))
             })
             .catch(() => {

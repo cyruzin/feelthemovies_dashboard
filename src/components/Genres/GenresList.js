@@ -36,7 +36,7 @@ class GenresList extends Component {
         const { current } = this.searchGenresRef
         if (e.keyCode === 13) {
             if (document.activeElement === current && current.value !== '') {
-                this.props.history.push(`/dashboard/search_genre?q=${current.value}`)
+                this.props.history.push(`/dashboard/search_genre?query=${current.value}`)
             }
         }
     }

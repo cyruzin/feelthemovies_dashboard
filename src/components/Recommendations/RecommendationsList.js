@@ -38,7 +38,7 @@ class RecommendationsList extends Component {
         const { current } = this.searchRef
         if (e.keyCode === 13) {
             if (document.activeElement === current && current.value !== '') {
-                this.props.history.push(`/dashboard/search_recommendation?q=${current.value}`)
+                this.props.history.push(`/dashboard/search_recommendation?query=${current.value}`)
             }
         }
     }

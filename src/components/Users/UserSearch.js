@@ -15,7 +15,7 @@ class UserSearch extends Component {
 
     searchUsers = () => {
         const params = new URLSearchParams(this.props.location.search);
-        const query = params.get('q')
+        const query = params.get('query')
         this.props.actions.searchUsers(query)
     }
 

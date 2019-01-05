@@ -37,7 +37,7 @@ class KeywordsList extends Component {
         const { current } = this.searchKeywordRef
         if (e.keyCode === 13) {
             if (document.activeElement === current && current.value !== '') {
-                this.props.history.push(`/dashboard/search_keyword?q=${current.value}`)
+                this.props.history.push(`/dashboard/search_keyword?query=${current.value}`)
             }
         }
     }

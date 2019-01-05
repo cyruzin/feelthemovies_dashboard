@@ -70,7 +70,7 @@ class RecommendationItemsCreate extends Component {
 
         let recommendationItem = {
             name: name,
-            tmdb_id: tmdb_id,
+            tmdb_id: parseInt(tmdb_id),
             year: year,
             overview: overview,
             poster: poster,
@@ -79,7 +79,7 @@ class RecommendationItemsCreate extends Component {
             trailer: trailer,
             commentary: commentary,
             sources: sources,
-            recommendation_id: id,
+            recommendation_id: parseInt(id),
         }
 
         if (name === '') {

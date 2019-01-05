@@ -85,9 +85,9 @@ export const searchUsers = users => {
     let query = encodeURIComponent(users)
     return dispatch => {
         dispatch(setUsersSearchLoaded(true))
-        axios.get(`/search_user?q=${query}`)
+        axios.get(`/search_user?query=${query}`)
             .then(res => {
-                dispatch(setUsersSearch(res.data))
+                dispatch(setUsersSearch(res.data.data))
                 dispatch(setUsersSearchLoaded(false))
             })
             .catch(() => {
