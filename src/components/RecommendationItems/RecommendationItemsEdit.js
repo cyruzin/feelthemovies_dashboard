@@ -13,6 +13,7 @@ import debounce from 'lodash/debounce'
 import { getYear } from '../../util/helpers'
 import { tinyMCEKey } from '../../util/constants'
 import Spinner from '../Layout/Spinner'
+import moment from 'moment';
 
 const Option = Select.Option;
 
@@ -118,11 +119,10 @@ class RecommendationItemsEdit extends Component {
         } = this.props.actions
 
         let sources = sourcesValue.map(v => parseInt(v.key))
-
         let recommendationItem = {
             name: name,
             tmdb_id: parseInt(tmdb_id),
-            year: year,
+            year: moment(year).format('YYYY-MM-DD'),
             overview: overview,
             poster: poster,
             backdrop: backdrop,
@@ -132,7 +132,6 @@ class RecommendationItemsEdit extends Component {
             sources: sources,
             recommendation_id: parseInt(recommendation_id),
         }
-
         if (name === '') {
             setRecommendationItemError('Please, search field')
             return false
