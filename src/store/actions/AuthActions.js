@@ -20,8 +20,8 @@ export const fetchAuth = ({ email, password }) => {
                 dispatch(checkAuthTimeout())
             })
             .catch(err => {
-                const { message } = err.response.data
-                dispatch({ type: type.AUTH_ERROR, error: message })
+                const { data } = err.response
+                dispatch({ type: type.AUTH_ERROR, error: data })
             })
     }
 }
