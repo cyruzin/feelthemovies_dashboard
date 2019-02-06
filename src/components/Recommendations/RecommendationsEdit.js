@@ -29,14 +29,13 @@ class RecommendationsEdit extends Component {
         this.searchKeywords = debounce(this.searchKeywords, 800)
         this.searchGenres = debounce(this.searchGenres, 800)
         this.fetchRecommendationImages = debounce(this.fetchRecommendationImages, 800)
-        this.setFields = debounce(this.setFields, 800)
+        this.setFields = debounce(this.setFields, 1000)
     }
 
     componentDidMount() {
         this.props.actions.setEditRecommendation(false)
         this.fetchRecommendation()
         this.setFields()
-
     }
 
     componentWillUnmount() {

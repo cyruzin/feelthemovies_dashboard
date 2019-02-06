@@ -20,10 +20,10 @@ class RecommendationItemsEdit extends Component {
     constructor(props) {
         super(props)
 
-        this.setFields = debounce(this.setFields, 400)
-        this.searchItemData = debounce(this.searchItemData, 400)
-        this.searchSources = debounce(this.searchSources, 400)
-        this.setFields = debounce(this.setFields, 400)
+        this.setFields = debounce(this.setFields, 800)
+        this.searchItemData = debounce(this.searchItemData, 800)
+        this.searchSources = debounce(this.searchSources, 800)
+        this.setFields = debounce(this.setFields, 800)
 
         this.editorRef = React.createRef()
     }
