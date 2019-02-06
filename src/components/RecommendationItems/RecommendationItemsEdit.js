@@ -204,7 +204,7 @@ class RecommendationItemsEdit extends Component {
                                                 </label>
                                                 <div className="col-lg-9">
                                                     <Select
-                                                        placeholder="Movie/Serie"
+                                                        placeholder="Search for a Movie or TV Show"
                                                         showSearch
                                                         notFoundContent={
                                                             fetching ?
@@ -287,7 +287,7 @@ class RecommendationItemsEdit extends Component {
                                                 <div className="col-sm-9 ml-auto">
                                                     <button
                                                         onClick={this.editRecommendationItem}
-                                                        className="btn btn-primary">
+                                                        className="btn btn-outline-success">
                                                         Save
                                                 </button>
                                                 </div>

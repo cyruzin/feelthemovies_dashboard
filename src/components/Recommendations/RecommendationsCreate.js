@@ -202,7 +202,7 @@ class RecommendationsCreate extends Component {
                                                     <option value="0" defaultValue>
                                                         Movie
                                                     </option>
-                                                    <option value="1">Serie</option>
+                                                    <option value="1">TV Show</option>
                                                     <option value="2">Mixed</option>
                                                 </select>
                                             </div>
@@ -307,7 +307,7 @@ class RecommendationsCreate extends Component {
                                             <div className="col-sm-9 ml-auto">
                                                 <button
                                                     onClick={this.createRecommendation}
-                                                    className="btn btn-primary">
+                                                    className="btn btn-outline-success">
                                                     Save
                                                 </button>
                                             </div>

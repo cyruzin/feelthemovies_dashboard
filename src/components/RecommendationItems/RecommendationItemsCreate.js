@@ -173,7 +173,7 @@ class RecommendationItemsCreate extends Component {
                                                 </label>
                                                 <div className="col-lg-9">
                                                     <Select
-                                                        placeholder="Movie/Serie"
+                                                        placeholder="Search for a Movie or TV Show"
                                                         showSearch
                                                         notFoundContent={
                                                             fetching ? <Spin size="small" /> : null
@@ -253,7 +253,7 @@ class RecommendationItemsCreate extends Component {
                                                 <div className="col-sm-9 ml-auto">
                                                     <button
                                                         onClick={this.createRecommendationItem}
-                                                        className="btn btn-primary">
+                                                        className="btn btn-outline-success">
                                                         Save
                                                 </button>
                                                 </div>

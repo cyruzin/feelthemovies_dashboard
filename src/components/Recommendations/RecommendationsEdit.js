@@ -229,7 +229,7 @@ class RecommendationsEdit extends Component {
                                                         ref={this.typeRef}
                                                         className="form-control mb-3">
                                                         <option value="0">Movie</option>
-                                                        <option value="1">Serie</option>
+                                                        <option value="1">TV Show</option>
                                                         <option value="2">Mixed</option>
                                                     </select>
                                                 </div>
@@ -340,7 +340,7 @@ class RecommendationsEdit extends Component {
                                                 <div className="col-sm-9 ml-auto">
                                                     <button
                                                         onClick={this.editRecommendation}
-                                                        className="btn btn-primary">
+                                                        className="btn btn-outline-success">
                                                         Save
                                                 </button>
                                                 </div>
