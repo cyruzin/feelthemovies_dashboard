@@ -8,12 +8,10 @@ import Select from 'antd/lib/select'
 import Spin from 'antd/lib/spin'
 import 'antd/lib/select/style/css'
 import 'antd/lib/spin/style/css'
-import { Editor } from '@tinymce/tinymce-react'
 import * as actions from '../../store/actions/RecommendationsActions'
 import * as keywordsActions from '../../store/actions/KeywordsActions'
 import * as genresActions from '../../store/actions/GenresActions'
 import { getYear } from '../../util/helpers'
-import { tinyMCEKey } from '../../util/constants'
 import Spinner from '../Layout/Spinner'
 
 const Option = Select.Option;
@@ -31,7 +29,7 @@ class RecommendationsEdit extends Component {
         this.searchKeywords = debounce(this.searchKeywords, 800)
         this.searchGenres = debounce(this.searchGenres, 800)
         this.fetchRecommendationImages = debounce(this.fetchRecommendationImages, 800)
-        this.setFields = debounce(this.setFields, 1500)
+        this.setFields = debounce(this.setFields, 800)
     }
 
     componentDidMount() {
@@ -109,10 +107,6 @@ class RecommendationsEdit extends Component {
             this.props.actions.setRecommendationError('Fill all fields')
             return false
         }
-
-        console.log(recommendation)
-        return
-
         this.props.actions.editRecommendation(this.props.match.params.id, recommendation)
         this.props.actions.setEditRecommendation(true)
     }
@@ -217,19 +211,6 @@ class RecommendationsEdit extends Component {
                                                     Body
                                                 </label>
                                                 <div className="col-lg-9">
-                                                    {/* <Editor
-                                                        init={{
-                                                            toolbar: `undo redo | 
-                                                            bold italic | 
-                                                            alignleft 
-                                                            aligncenter 
-                                                            alignright | 
-                                                            code`
-                                                        }}
-                                                        initialValue={body}
-                                                        apiKey={tinyMCEKey}
-                                                        ref={this.editorRef}
-                                                    /> */}
                                                     <textarea
                                                         className="form-control"
                                                         rows="4"

@@ -6,7 +6,7 @@ const Footer = () => (
             <div className="footer__block block no-margin-bottom">
                 <div className="container-fluid text-center">
                     <p className="no-margin-bottom">
-                        2018 &copy; Feel the Movies.
+                        {(new Date()).getFullYear()} &copy; Feel the Movies.
                     </p>
                 </div>
             </div>

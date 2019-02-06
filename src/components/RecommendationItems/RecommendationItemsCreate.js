@@ -8,10 +8,8 @@ import Spin from 'antd/lib/spin'
 import 'antd/lib/select/style/css'
 import 'antd/lib/spin/style/css'
 import Alert from '../Layout/Alert'
-import { Editor } from '@tinymce/tinymce-react'
 import debounce from 'lodash/debounce'
 import { getYear } from '../../util/helpers'
-import { tinyMCEKey } from '../../util/constants'
 
 const Option = Select.Option;
 
@@ -209,21 +207,6 @@ class RecommendationItemsCreate extends Component {
                                                     Commentary
                                                 </label>
                                                 <div className="col-lg-9">
-                                                    {/* <Editor
-                                                        init={{
-                                                            toolbar: `
-                                                            undo redo | 
-                                                            bold italic | 
-                                                            alignleft 
-                                                            aligncenter 
-                                                            alignright | 
-                                                            code`
-                                                        }}
-                                                        apiKey={tinyMCEKey}
-                                                        ref={this.editorRef}
-                                                        onBlur={this.handleEditorChange}
-                                                        onChange={this.handleEditorChange}
-                                                    /> */}
                                                     <textarea
                                                         className="form-control"
                                                         rows="4"

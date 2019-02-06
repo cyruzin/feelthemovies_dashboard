@@ -8,10 +8,8 @@ import Spin from 'antd/lib/spin'
 import 'antd/lib/select/style/css'
 import 'antd/lib/spin/style/css'
 import Alert from '../Layout/Alert'
-import { Editor } from '@tinymce/tinymce-react'
 import debounce from 'lodash/debounce'
 import { getYear } from '../../util/helpers'
-import { tinyMCEKey } from '../../util/constants'
 import Spinner from '../Layout/Spinner'
 import moment from 'moment';
 
@@ -22,10 +20,10 @@ class RecommendationItemsEdit extends Component {
     constructor(props) {
         super(props)
 
-        this.setFields = debounce(this.setFields, 800)
-        this.searchItemData = debounce(this.searchItemData, 800)
-        this.searchSources = debounce(this.searchSources, 800)
-        this.setFields = debounce(this.setFields, 800)
+        this.setFields = debounce(this.setFields, 400)
+        this.searchItemData = debounce(this.searchItemData, 400)
+        this.searchSources = debounce(this.searchSources, 400)
+        this.setFields = debounce(this.setFields, 400)
 
         this.editorRef = React.createRef()
     }
@@ -242,22 +240,6 @@ class RecommendationItemsEdit extends Component {
                                                     Commentary
                                                 </label>
                                                 <div className="col-lg-9">
-                                                    {/* <Editor
-                                                        init={{
-                                                            toolbar: `
-                                                            undo redo | 
-                                                            bold italic | 
-                                                            alignleft 
-                                                            aligncenter 
-                                                            alignright | 
-                                                            code`
-                                                        }}
-                                                        initialValue={commentary}
-                                                        apiKey={tinyMCEKey}
-                                                        ref={this.editorRef}
-                                                        onBlur={this.handleEditorChange}
-                                                        onChange={this.handleEditorChange}
-                                                    /> */}
                                                     <textarea
                                                         className="form-control"
                                                         rows="4"
