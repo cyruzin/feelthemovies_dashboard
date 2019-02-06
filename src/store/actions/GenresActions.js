@@ -79,7 +79,8 @@ export const searchGenres = genres => {
         dispatch(setGenresSearchLoaded(true))
         axios.get(`/search_genre?query=${query}`)
             .then(res => {
-                dispatch(setGenresSearch(res.data.data))
+                const data = res.data.data === null ? [] : res.data.data
+                dispatch(setGenresSearch(data))
                 dispatch(loadingGenresSearch(false))
                 dispatch(setGenresSearchLoaded(false))
             })

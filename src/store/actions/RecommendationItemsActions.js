@@ -205,9 +205,10 @@ export const recommedationItemSource = value => {
         dispatch(setRecommendationItemFetching(true))
         axios.get(`/search_source?query=${query}`)
             .then(res => {
+                const data = res.data.data === null ? [] : res.data.data
                 dispatch({
                     type: type.RECOMMENDATION_ITEM_SOURCE_SEARCH,
-                    sources: res.data.data
+                    sources: data
                 })
                 dispatch(setRecommendationItemFetching(false))
 

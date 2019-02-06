@@ -94,7 +94,7 @@ class RecommendationItemsCreate extends Component {
 
     reset = () => {
         this.props.actions.recommedationItemReset()
-        this.editorRef.current.editor.setContent('')
+        this.editorRef.current.value = ''
     }
 
     searchItemData = value => {
@@ -108,7 +108,7 @@ class RecommendationItemsCreate extends Component {
     }
 
     handleEditorChange = e => {
-        this.props.actions.setRecommendationItemCommentary(e.target.getContent())
+        this.props.actions.setRecommendationItemCommentary(e.target.value)
     }
 
     searchSources = value => {
@@ -209,7 +209,7 @@ class RecommendationItemsCreate extends Component {
                                                     Commentary
                                                 </label>
                                                 <div className="col-lg-9">
-                                                    <Editor
+                                                    {/* <Editor
                                                         init={{
                                                             toolbar: `
                                                             undo redo | 
@@ -223,7 +223,14 @@ class RecommendationItemsCreate extends Component {
                                                         ref={this.editorRef}
                                                         onBlur={this.handleEditorChange}
                                                         onChange={this.handleEditorChange}
-                                                    />
+                                                    /> */}
+                                                    <textarea
+                                                        className="form-control"
+                                                        rows="4"
+                                                        onBlur={this.handleEditorChange}
+                                                        onChange={this.handleEditorChange}
+                                                        ref={this.editorRef}>
+                                                    </textarea>
                                                 </div>
                                             </div>
                                             <div className="line"></div>
@@ -234,7 +241,7 @@ class RecommendationItemsCreate extends Component {
                                                 </label>
                                                 <div className="col-lg-9">
                                                     <Select
-                                                        allowClear
+
                                                         mode="multiple"
                                                         labelInValue
                                                         value={sourcesValue}

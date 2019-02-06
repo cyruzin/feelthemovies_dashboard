@@ -78,7 +78,8 @@ export const searchKeywords = keyword => {
         dispatch(setKeywordsSearchLoaded(true))
         axios.get(`/search_keyword?query=${query}`)
             .then(res => {
-                dispatch(setKeywordsSearch(res.data.data))
+                const data = res.data.data === null ? [] : res.data.data
+                dispatch(setKeywordsSearch(data))
                 dispatch(loadingKeywordsSearch(false))
                 dispatch(setKeywordsSearchLoaded(false))
 

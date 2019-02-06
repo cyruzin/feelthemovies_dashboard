@@ -86,7 +86,7 @@ class RecommendationsEdit extends Component {
 
         let recommendation = {
             title: title,
-            body: this.editorRef.current.editor.getContent(),
+            body: this.editorRef.current.value,
             type: parseInt(this.typeRef.current.value),
             status: parseInt(this.statusRef.current.value),
             genres: genres,
@@ -100,7 +100,7 @@ class RecommendationsEdit extends Component {
             title === ''
             || genres.length === 0
             || keywords.length === 0
-            || this.editorRef.current.editor.getContent() === ''
+            || this.editorRef.current.value === ''
             || this.typeRef.current.value === ''
             || this.statusRef.current.value === ''
             || this.props.recommendations.poster === ''
@@ -109,6 +109,9 @@ class RecommendationsEdit extends Component {
             this.props.actions.setRecommendationError('Fill all fields')
             return false
         }
+
+        console.log(recommendation)
+        return
 
         this.props.actions.editRecommendation(this.props.match.params.id, recommendation)
         this.props.actions.setEditRecommendation(true)
@@ -136,7 +139,7 @@ class RecommendationsEdit extends Component {
         this.props.actions.setGenresReset()
         this.props.actions.setKeywordsReset()
         this.titleRef.current.value = ''
-        this.editorRef.current.editor.setContent('')
+        this.editorRef.current.value = ''
         this.typeRef.current.value = 0
     }
 
@@ -214,7 +217,7 @@ class RecommendationsEdit extends Component {
                                                     Body
                                                 </label>
                                                 <div className="col-lg-9">
-                                                    <Editor
+                                                    {/* <Editor
                                                         init={{
                                                             toolbar: `undo redo | 
                                                             bold italic | 
@@ -226,7 +229,13 @@ class RecommendationsEdit extends Component {
                                                         initialValue={body}
                                                         apiKey={tinyMCEKey}
                                                         ref={this.editorRef}
-                                                    />
+                                                    /> */}
+                                                    <textarea
+                                                        className="form-control"
+                                                        rows="4"
+                                                        defaultValue={body}
+                                                        ref={this.editorRef}>
+                                                    </textarea>
                                                 </div>
                                             </div>
                                             <div className="line"></div>
@@ -296,7 +305,7 @@ class RecommendationsEdit extends Component {
                                                 <label className="col-lg-3 form-control-label">Genres</label>
                                                 <div className="col-lg-9">
                                                     <Select
-                                                        allowClear
+
                                                         mode="multiple"
                                                         labelInValue
                                                         value={this.props.genres.genresValue}
@@ -323,7 +332,7 @@ class RecommendationsEdit extends Component {
                                                 <label className="col-lg-3 form-control-label">Keywords</label>
                                                 <div className="col-lg-9">
                                                     <Select
-                                                        allowClear
+
                                                         mode="multiple"
                                                         labelInValue
                                                         value={this.props.keywords.keywordsValue}

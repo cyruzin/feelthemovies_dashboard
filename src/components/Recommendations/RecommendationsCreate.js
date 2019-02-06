@@ -50,7 +50,8 @@ class RecommendationsCreate extends Component {
 
         let recommendation = {
             title: title,
-            body: this.editorRef.current.editor.getContent(),
+            // body: this.editorRef.current.editor.getContent(),
+            body: this.editorRef.current.value,
             type: parseFloat(this.typeRef.current.value),
             genres: genres,
             poster: this.props.recommendations.poster,
@@ -63,7 +64,8 @@ class RecommendationsCreate extends Component {
             title === ''
             || genres.length === 0
             || keywords.length === 0
-            || this.editorRef.current.editor.getContent() === ''
+            //|| this.editorRef.current.editor.getContent() === ''
+            || this.editorRef.current.value === ''
             || this.typeRef.current.value === ''
             || this.props.recommendations.poster === ''
             || this.props.recommendations.backdrop === ''
@@ -71,7 +73,6 @@ class RecommendationsCreate extends Component {
             this.props.actions.setRecommendationError('Fill all fields')
             return false
         }
-
         this.props.actions.createRecommendation(recommendation)
         this.reset()
     }
@@ -100,8 +101,8 @@ class RecommendationsCreate extends Component {
         this.props.actions.setKeywordsReset()
         this.titleRef.current.value = ''
         this.typeRef.current.value = 0
-        if (this.editorRef.current.editor !== undefined) {
-            this.editorRef.current.editor.setContent('')
+        if (this.editorRef.current.value !== undefined) {
+            this.editorRef.current.value = ''
         }
     }
 
@@ -184,7 +185,7 @@ class RecommendationsCreate extends Component {
                                                 Body
                                             </label>
                                             <div className="col-lg-9">
-                                                <Editor
+                                                {/* <Editor
                                                     init={{
                                                         toolbar: `
                                                         undo redo | 
@@ -196,7 +197,12 @@ class RecommendationsCreate extends Component {
                                                     }}
                                                     apiKey={tinyMCEKey}
                                                     ref={this.editorRef}
-                                                />
+                                                /> */}
+                                                <textarea
+                                                    className="form-control"
+                                                    rows="4"
+                                                    ref={this.editorRef}>
+                                                </textarea>
                                             </div>
                                         </div>
                                         <div className="line"></div>
@@ -259,7 +265,6 @@ class RecommendationsCreate extends Component {
                                             </label>
                                             <div className="col-lg-9">
                                                 <Select
-                                                    allowClear
                                                     mode="multiple"
                                                     labelInValue
                                                     value={this.props.genres.genresValue}
@@ -290,7 +295,6 @@ class RecommendationsCreate extends Component {
                                             </label>
                                             <div className="col-lg-9">
                                                 <Select
-                                                    allowClear
                                                     mode="multiple"
                                                     labelInValue
                                                     value={this.props.keywords.keywordsValue}
