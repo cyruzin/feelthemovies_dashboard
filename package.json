@@ -1,8 +1,8 @@
 {
   "name": "feelthemovies_dashboard",
-  "version": "0.1.0",
+  "version": "1.1.0",
   "private": true,
-  "homepage": "https://dashboard.feelthemovies.com.br/",
+  "homepage": "http://157.230.141.254:8000/",
   "dependencies": {
     "antd": "^3.13.2",
     "bootstrap": "^4.2.1",
