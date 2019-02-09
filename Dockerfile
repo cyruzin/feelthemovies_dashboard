@@ -2,8 +2,8 @@
 FROM node:10.15.1-alpine
 WORKDIR /app
 COPY . ./
-RUN npm install
-RUN npm run build
+RUN yarn
+RUN yarn build
 
 # NGINX
 FROM nginx:1.15.8-alpine
