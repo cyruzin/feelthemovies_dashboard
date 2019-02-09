@@ -47,7 +47,7 @@
 }
 
 .ant-select-lg .ant-select-selection--single:hover{
-  border-color: #DB6574;
+  border-color: #3d4148;
   outline: none;
 }
 
@@ -68,7 +68,7 @@
 }
 
 .ant-select-lg .ant-select-selection--multiple:hover{
-  border-color: #DB6574;
+  border-color: #3d4148;
   outline: none;
 }
 
