@@ -8,7 +8,7 @@ FROM nginx:latest
 
 ENV HOME=/usr/share/nginx/html/feelthemovies
 
-COPY --from=build-stage /etc/app/dist $HOME
+COPY --from=build-stage /etc/app/build $HOME
 COPY nginx.conf /etc/nginx/nginx.conf
 
 VOLUME ["/etc/uploads"]

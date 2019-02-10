@@ -2,7 +2,7 @@
   "name": "feelthemovies_dashboard",
   "version": "1.1.0",
   "private": true,
-  "homepage": "http://157.230.141.254:8000/",
+  "homepage": "http://157.230.141.254/",
   "dependencies": {
     "antd": "^3.13.2",
     "bootstrap": "^4.2.1",
