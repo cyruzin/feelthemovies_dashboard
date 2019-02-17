@@ -2,7 +2,7 @@
 
 This is the dashboard of Feel the Movies project.
 
-### Install:
+### Install
 
 The dashboard depends on back-end project. This project uses Create React App, so inside the folder just run:
 
@@ -10,7 +10,7 @@ The dashboard depends on back-end project. This project uses Create React App, s
 yarn install
 ```
 
-### Run:
+### Run
 
 ```sh
 yarn run start
@@ -19,4 +19,5 @@ yarn run start
 ### Other Repositories
 
 [Mobile](https://github.com/cyruzin/feelthemovies_mobile)
+
 [Back-end](https://github.com/cyruzin/feelthemovies)
