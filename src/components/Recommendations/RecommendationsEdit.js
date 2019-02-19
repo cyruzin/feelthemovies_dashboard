@@ -26,8 +26,7 @@ class RecommendationsEdit extends Component {
         this.typeRef = React.createRef()
         this.statusRef = React.createRef()
 
-        //this.setFields = debounce(this.setFields, 1000)
-        this.setRemainingFields = debounce(this.setRemainingFields, 100)
+        this.setRemainingFields = debounce(this.setRemainingFields, 1200)
         this.searchKeywords = debounce(this.searchKeywords, 800)
         this.searchGenres = debounce(this.searchGenres, 800)
         this.fetchRecommendationImages = debounce(this.fetchRecommendationImages, 800)
@@ -177,7 +176,7 @@ class RecommendationsEdit extends Component {
                         <li className="breadcrumb-item active">Edit</li>
                     </ul>
                 </div>
-                {!editLoaded ? <Spinner /> : null}
+                {!genresValue.length && !keywordsValue.length && <Spinner />}
 
                 {editLoaded && genresValue.length && keywordsValue.length ?
                     <section className="no-padding-top">

@@ -19,7 +19,7 @@ class RecommendationItemsEdit extends Component {
 
     constructor(props) {
         super(props)
-        this.setSources = debounce(this.setSources, 100)
+        this.setSources = debounce(this.setSources, 1200)
         this.searchItemData = debounce(this.searchItemData, 800)
         this.searchSources = debounce(this.searchSources, 800)
         this.editorRef = React.createRef()
@@ -145,13 +145,18 @@ class RecommendationItemsEdit extends Component {
     }
 
     render() {
-        const { recommendation_id, commentary }
-            = this.props.recommendationItems.item
+        const { recommendation_id, commentary } = this.props.recommendationItems.item
+
         const {
-            editLoaded, error, edited, tmdb, tmdbValue,
-            sources, sourcesValue, fetching
-        }
-            = this.props.recommendationItems
+            editLoaded,
+            error,
+            edited,
+            tmdb,
+            tmdbValue,
+            sources,
+            sourcesValue,
+            fetching
+        } = this.props.recommendationItems
 
         return (
             <div>
@@ -170,8 +175,8 @@ class RecommendationItemsEdit extends Component {
                         <li className="breadcrumb-item active">Edit</li>
                     </ul>
                 </div>
-                {!editLoaded ? <Spinner /> : null}
-                {editLoaded && !sources.length ?
+                {!sourcesValue.length && <Spinner />}
+                {editLoaded && sourcesValue.length ?
                     <section className="no-padding-top">
                         <div className="container-fluid">
                             <div className="row">
