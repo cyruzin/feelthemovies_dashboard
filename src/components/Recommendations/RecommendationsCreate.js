@@ -91,7 +91,6 @@ class RecommendationsCreate extends Component {
     }
 
     reset = () => {
-        this.props.actions.setRecommendationReset()
         this.props.actions.setRecommendationError('')
         this.props.actions.setGenresReset()
         this.props.actions.setKeywordsReset()

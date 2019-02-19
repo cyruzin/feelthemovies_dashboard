@@ -9,9 +9,10 @@ export const fetchKeywords = () => {
                 dispatch(setKeywords(res.data.data))
                 dispatch(setLoaded(false))
             })
-            .catch(() => {
+            .catch(err => {
+                const { message } = err.response.data
                 dispatch(setLoaded(false))
-                dispatch(setError('Something went wrong'))
+                dispatch(setError(message))
             })
     }
 }
@@ -24,8 +25,9 @@ export const fetchSingleKeyword = id => {
                 dispatch({ type: type.KEYWORDS_FETCH_SINGLE, keywordData: res.data })
                 dispatch(setEditLoaded(true))
             })
-            .catch(() => {
-                dispatch(setError('Something went wrong'))
+            .catch(err => {
+                const { message } = err.response.data
+                dispatch(setError(message))
             })
     }
 }
@@ -36,10 +38,12 @@ export const createKeyword = keyword => {
         axios.post(`/keyword`, keyword)
             .then(() => {
                 dispatch(setCreateKeyword('Keyword created successfully'))
+                dispatch(fetchKeywords())
             })
-            .catch(() => {
+            .catch(err => {
+                const { errors } = err.response.data
+                dispatch(setError(errors[0].message))
                 dispatch(setCreateKeyword(''))
-                dispatch(setError('Something went wrong'))
             })
     }
 }
@@ -50,10 +54,12 @@ export const editKeyword = (id, keyword) => {
         axios.put(`/keyword/${id}`, keyword)
             .then(() => {
                 dispatch(setEdited('Keyword edited successfully'))
+                dispatch(fetchKeywords())
             })
-            .catch(() => {
+            .catch(err => {
+                const { errors } = err.response.data
+                dispatch(setError(errors[0].message))
                 dispatch(setEdited(''))
-                dispatch(setError('Something went wrong'))
             })
     }
 }
@@ -63,10 +69,12 @@ export const deleteKeyword = id => {
         axios.delete(`/keyword/${id}`)
             .then(() => {
                 dispatch(setDeleted('Keyword removed successfully'))
+                dispatch(fetchKeywords())
             })
-            .catch(() => {
+            .catch(err => {
+                const { message } = err.response.data
                 dispatch(setDeleted(''))
-                dispatch(setError('Something went wrong'))
+                dispatch(setError(message))
             })
     }
 }
@@ -84,10 +92,11 @@ export const searchKeywords = keyword => {
                 dispatch(setKeywordsSearchLoaded(false))
 
             })
-            .catch(() => {
+            .catch(err => {
+                const { message } = err.response.data
                 dispatch(loadingKeywordsSearch(false))
                 dispatch(setKeywordsSearchLoaded(false))
-                dispatch(setError('Something went wrong'))
+                dispatch(setError(message))
             })
     }
 }

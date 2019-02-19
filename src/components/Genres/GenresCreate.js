@@ -20,8 +20,8 @@ class GenresCreate extends Component {
         const { error, created } = this.props.genres
         const { setError, setCreateGenre } = this.props.actions
 
-        if (created) {
-            setCreateGenre(false)
+        if (created !== '') {
+            setCreateGenre('')
         }
 
         if (error !== '') {

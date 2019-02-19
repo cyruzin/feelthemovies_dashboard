@@ -19,9 +19,10 @@ export const fetchUsers = () => {
                 dispatch(setFetchUser(res.data.data))
                 dispatch(setListLoaded(false))
             })
-            .catch(() => {
+            .catch(err => {
+                const { message } = err.response.data
                 dispatch(setListLoaded(false))
-                dispatch(setError('Something went wrong'))
+                dispatch(setError(message))
             })
     }
 }
@@ -34,8 +35,9 @@ export const fetchSingleUser = id => {
                 dispatch(setFetchSingleUser(res.data))
                 dispatch(setEditLoaded(true))
             })
-            .catch(() => {
-                dispatch(setError('Something went wrong'))
+            .catch(err => {
+                const { message } = err.response.data
+                dispatch(setError(message))
             })
     }
 }
@@ -46,10 +48,12 @@ export const registerUser = user => {
         axios.post(`/user`, user)
             .then(() => {
                 dispatch(setUserRegister('User created successfully'))
+                dispatch(fetchUsers())
             })
-            .catch(() => {
+            .catch(err => {
+                const { errors } = err.response.data
+                dispatch(setError(errors[0].message))
                 dispatch(setUserRegister(''))
-                dispatch(setError('Something went wrong'))
             })
     }
 }
@@ -60,10 +64,12 @@ export const editUser = (id, user) => {
         axios.put(`/user/${id}`, user)
             .then(() => {
                 dispatch(setEdited('User edited successfully'))
+                dispatch(fetchUsers())
             })
-            .catch(() => {
+            .catch(err => {
+                const { errors } = err.response.data
+                dispatch(setError(errors[0].message))
                 dispatch(setEdited(''))
-                dispatch(setError('Something went wrong'))
             })
     }
 }
@@ -73,10 +79,12 @@ export const deleteUser = id => {
         axios.delete(`/user/${id}`)
             .then(() => {
                 dispatch(setDeleted('User removed successfully'))
+                dispatch(fetchUsers())
             })
-            .catch(() => {
+            .catch(err => {
+                const { message } = err.response.data
                 dispatch(setDeleted(''))
-                dispatch(setError('Something went wrong'))
+                dispatch(setError(message))
             })
     }
 }
@@ -90,9 +98,10 @@ export const searchUsers = users => {
                 dispatch(setUsersSearch(res.data.data))
                 dispatch(setUsersSearchLoaded(false))
             })
-            .catch(() => {
+            .catch(err => {
+                const { message } = err.response.data
                 dispatch(setUsersSearchLoaded(false))
-                dispatch(setError('Something went wrong'))
+                dispatch(setError(message))
             })
     }
 }

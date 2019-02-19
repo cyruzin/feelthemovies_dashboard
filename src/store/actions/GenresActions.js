@@ -9,9 +9,10 @@ export const fetchGenres = () => {
                 dispatch(setGenres(res.data.data))
                 dispatch(setLoaded(false))
             })
-            .catch(() => {
+            .catch(err => {
+                const { message } = err.response.data
                 dispatch(setLoaded(false))
-                dispatch(setError('Something went wrong'))
+                dispatch(setError(message))
             }
             )
     }
@@ -22,11 +23,15 @@ export const fetchSingleGenre = id => {
         dispatch(setEditLoaded(false))
         axios.get(`/genre/${id}`)
             .then(res => {
-                dispatch({ type: type.GENRES_FETCH_SINGLE, genreData: res.data })
+                dispatch({
+                    type: type.GENRES_FETCH_SINGLE,
+                    genreData: res.data
+                })
                 dispatch(setEditLoaded(true))
             })
-            .catch(() => {
-                dispatch(setError('Something went wrong'))
+            .catch(err => {
+                const { message } = err.response.data
+                dispatch(setError(message))
             })
     }
 }
@@ -37,10 +42,12 @@ export const createGenre = genre => {
         axios.post(`/genre`, genre)
             .then(() => {
                 dispatch(setCreateGenre('Genre created successfully'))
+                dispatch(fetchGenres())
             })
-            .catch(() => {
+            .catch(err => {
+                const { errors } = err.response.data
+                dispatch(setError(errors[0].message))
                 dispatch(setCreateGenre(''))
-                dispatch(setError('Something went wrong'))
             })
     }
 }
@@ -51,10 +58,12 @@ export const editGenre = (id, genre) => {
         axios.put(`/genre/${id}`, genre)
             .then(() => {
                 dispatch(setEdited('Genre edited successfully'))
+                dispatch(fetchGenres())
             })
-            .catch(() => {
+            .catch(err => {
+                const { errors } = err.response.data
+                dispatch(setError(errors[0].message))
                 dispatch(setEdited(''))
-                dispatch(setError('Something went wrong'))
             })
     }
 }
@@ -64,10 +73,12 @@ export const deleteGenre = id => {
         axios.delete(`/genre/${id}`)
             .then(() => {
                 dispatch(setDeleted('Genre removed successfully'))
+                dispatch(fetchGenres())
             })
-            .catch(() => {
+            .catch(err => {
+                const { message } = err.response.data
                 dispatch(setDeleted(''))
-                dispatch(setError('Something went wrong'))
+                dispatch(setError(message))
             })
     }
 }
@@ -84,10 +95,11 @@ export const searchGenres = genres => {
                 dispatch(loadingGenresSearch(false))
                 dispatch(setGenresSearchLoaded(false))
             })
-            .catch(() => {
+            .catch(err => {
+                const { message } = err.response.data
                 dispatch(loadingGenresSearch(false))
                 dispatch(setGenresSearchLoaded(false))
-                dispatch(setError('Something went wrong'))
+                dispatch(setError(message))
             })
     }
 }

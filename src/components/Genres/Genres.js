@@ -7,11 +7,7 @@ import GenresList from './GenresList'
 class Genres extends Component {
 
     componentDidMount() {
-        this.fetchGenres()
-    }
-
-    fetchGenres = () => {
-        this.props.actions.fetchGenres()
+        !this.props.genres.data.length && this.props.actions.fetchGenres()
     }
 
     render() {

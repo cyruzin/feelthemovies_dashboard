@@ -7,11 +7,7 @@ import RecommendationsList from './RecommendationsList'
 class Recommendations extends PureComponent {
 
     componentDidMount() {
-        this.fetchRecommendations()
-    }
-
-    fetchRecommendations = () => {
-        this.props.actions.fetchRecommendations()
+        !this.props.recommendations.data.length && this.props.actions.fetchRecommendations()
     }
 
     render() {

@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import * as actions from '../../store/actions/RecommendationItemsActions'
 import RecommendationItemsList from './RecommendationItemsList'
 
-class RecommendationItemsActions extends Component {
+class RecommendationItems extends Component {
 
     render() {
         const { id } = this.props.match.params
@@ -37,4 +37,4 @@ const mapDispatchToProps = dispatch => ({
 
 export default connect(
     mapStateToProps,
-    mapDispatchToProps)(RecommendationItemsActions)
+    mapDispatchToProps)(RecommendationItems)

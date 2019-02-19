@@ -26,16 +26,18 @@ class RecommendationsEdit extends Component {
         this.typeRef = React.createRef()
         this.statusRef = React.createRef()
 
+        //this.setFields = debounce(this.setFields, 1000)
+        this.setRemainingFields = debounce(this.setRemainingFields, 100)
         this.searchKeywords = debounce(this.searchKeywords, 800)
         this.searchGenres = debounce(this.searchGenres, 800)
         this.fetchRecommendationImages = debounce(this.fetchRecommendationImages, 800)
-        this.setFields = debounce(this.setFields, 1000)
     }
 
     componentDidMount() {
         this.props.actions.setEditRecommendation(false)
         this.fetchRecommendation()
         this.setFields()
+        this.setRemainingFields()
     }
 
     componentWillUnmount() {
@@ -46,9 +48,11 @@ class RecommendationsEdit extends Component {
         if (this.props.recommendations.editLoaded) {
             this.props.actions.setRecommendationEditLoaded(false)
         }
+        this.props.actions.setRecommendationEditLoaded(true)
+    }
 
+    setRemainingFields = () => {
         this.props.actions.setRecommendationImagesChange(this.props.recommendations.recommendationData.backdrop)
-
         this.props.actions.setRecommendationImages(
             this.props.recommendations.recommendationData.poster,
             this.props.recommendations.recommendationData.backdrop
@@ -70,7 +74,6 @@ class RecommendationsEdit extends Component {
 
         this.genresChange(genres)
         this.keywordsChange(keywords)
-        this.props.actions.setRecommendationEditLoaded(true)
     }
 
     editRecommendation = () => {
@@ -128,7 +131,6 @@ class RecommendationsEdit extends Component {
     }
 
     reset = () => {
-        this.props.actions.setRecommendationReset()
         this.props.actions.setGenresReset()
         this.props.actions.setKeywordsReset()
         this.titleRef.current.value = ''
@@ -150,12 +152,19 @@ class RecommendationsEdit extends Component {
 
     render() {
         const {
-            error, edited, editLoaded,
-            images, imagesValue, fetching
-        }
-            = this.props.recommendations
-        const { title, body, type, status }
-            = this.props.recommendations.recommendationData
+            error,
+            edited,
+            editLoaded,
+            images,
+            imagesValue,
+            fetching
+        } = this.props.recommendations
+
+        const { title, body, type, status } = this.props.recommendations.recommendationData
+
+        const { genresValue } = this.props.genres
+        const { keywordsValue } = this.props.keywords
+
         return (
             <div>
                 <div className="container-fluid">
@@ -170,7 +179,7 @@ class RecommendationsEdit extends Component {
                 </div>
                 {!editLoaded ? <Spinner /> : null}
 
-                {editLoaded ?
+                {editLoaded && genresValue.length && keywordsValue.length ?
                     <section className="no-padding-top">
                         <div className="container-fluid">
                             <div className="row">

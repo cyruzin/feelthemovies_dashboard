@@ -7,11 +7,7 @@ import SourcesList from './SourcesList'
 class Sources extends Component {
 
     componentDidMount() {
-        this.fetchSources()
-    }
-
-    fetchSources = () => {
-        this.props.actions.fetchSources()
+        !this.props.sources.data.length && this.props.actions.fetchSources()
     }
 
     render() {

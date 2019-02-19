@@ -9,9 +9,10 @@ export const fetchRecommendationItems = recommendationID => {
                 dispatch(recommedationItemFetch(res.data.data))
                 dispatch(setRecommendationItemLoaded(false))
             })
-            .catch(() => {
+            .catch(err => {
+                const { message } = err.response.data
                 dispatch(setRecommendationItemLoaded(false))
-                dispatch(setRecommendationItemError('Could not fetch recommedation items'))
+                dispatch(setRecommendationItemError(message))
             })
     }
 }
@@ -24,9 +25,10 @@ export const fetchRecommendationItem = recommendationID => {
                 dispatch(recommedationItemSingleFetch(res.data))
                 dispatch(setRecommendationItemEditLoaded(true))
             })
-            .catch(() => {
+            .catch(err => {
+                const { message } = err.response.data
                 dispatch(setRecommendationItemEditLoaded(true))
-                dispatch(setRecommendationItemError('Could not fetch recommedation item'))
+                dispatch(setRecommendationItemError(message))
             })
     }
 }
@@ -37,10 +39,10 @@ export const deleteRecommendationItem = recommendationID => {
             .then(() => {
                 dispatch(setDeleteRecommendationItem(true))
             })
-            .catch(() => {
+            .catch(err => {
+                const { message } = err.response.data
                 setDeleteRecommendationItem(false)
-                dispatch(setRecommendationItemError('Could not delete recommedation item'))
-
+                dispatch(setRecommendationItemError(message))
             })
     }
 }
@@ -60,8 +62,9 @@ export const fetchRecommendationItemData = search => {
                 })
                 dispatch(setRecommendationItemFetching(false))
             })
-            .catch(() => {
-                dispatch(setRecommendationItemError('Something went wrong'))
+            .catch(err => {
+                const { message } = err.response.data
+                dispatch(setRecommendationItemError(message))
                 dispatch(setRecommendationItemFetching(false))
             })
     }
@@ -79,34 +82,70 @@ export const fetchRecommendationItemTrailer = (id, titleType) => {
                     })
                 }
             })
-            .catch(() => dispatch(setRecommendationItemError('Something went wrong')))
-    }
-}
-
-export const setRecommendationItemEditLoaded = value => {
-    return {
-        type: type.RECOMMENDATION_ITEM_EDIT_LOADED, editLoaded: value
+            .catch(err => {
+                const { message } = err.response.data
+                dispatch(setRecommendationItemError(message))
+            })
     }
 }
 
 export const createRecommendationItem = recommendation => {
     return dispatch => {
-
-
         dispatch(setRecommendationItemError(''))
-
         axios.post(`/recommendation_item`, recommendation)
             .then(() => {
                 dispatch({
                     type: type.RECOMMENDATION_ITEM_CREATE, data: true
                 })
             })
-            .catch(() => {
-                dispatch({
-                    type: type.RECOMMENDATION_ITEM_CREATE, data: false
-                })
-                dispatch(setRecommendationItemError('Something went wrong'))
+            .catch(err => {
+                const { errors } = err.response.data
+                dispatch(setRecommendationItemError(errors[0].message))
+                dispatch({ type: type.RECOMMENDATION_ITEM_CREATE, data: false })
             })
+    }
+}
+
+export const editRecommendationItem = (id, recommendation) => {
+    return dispatch => {
+        dispatch(setRecommendationItemError(''))
+        axios.put(`/recommendation_item/${id}`, recommendation)
+            .then(() => {
+                dispatch(setEditRecommendationItem('Item edited successfully'))
+            })
+            .catch(err => {
+                const { errors } = err.response.data
+                dispatch(setRecommendationItemError(errors[0].message))
+                dispatch(setEditRecommendationItem(''))
+            })
+    }
+}
+
+export const recommedationItemSource = value => {
+    let query = encodeURIComponent(value)
+    return dispatch => {
+        dispatch(setRecommendationItemFetching(true))
+        axios.get(`/search_source?query=${query}`)
+            .then(res => {
+                const data = res.data.data === null ? [] : res.data.data
+                dispatch({
+                    type: type.RECOMMENDATION_ITEM_SOURCE_SEARCH,
+                    sources: data
+                })
+                dispatch(setRecommendationItemFetching(false))
+            })
+            .catch(err => {
+                const { message } = err.response.data
+                dispatch(setRecommendationItemFetching(false))
+                dispatch(setRecommendationItemError(message))
+            })
+    }
+}
+
+export const setRecommendationItemEditLoaded = value => {
+    return {
+        type: type.RECOMMENDATION_ITEM_EDIT_LOADED,
+        editLoaded: value
     }
 }
 
@@ -119,7 +158,8 @@ export const setRecommendationItemLoaded = value => {
 
 export const setRecommendationItemCreate = value => {
     return {
-        type: type.RECOMMENDATION_ITEM_CREATE, data: value
+        type: type.RECOMMENDATION_ITEM_CREATE,
+        data: value
     }
 }
 
@@ -130,35 +170,24 @@ export const setRecommendationItemFetching = value => {
     }
 }
 
-export const editRecommendationItem = (id, recommendation) => {
-    return dispatch => {
-        dispatch(setRecommendationItemError(''))
-        axios.put(`/recommendation_item/${id}`, recommendation)
-            .then(() => {
-                dispatch(setEditRecommendationItem('Item edited successfully'))
-            })
-            .catch(() => {
-                dispatch(setEditRecommendationItem(''))
-                dispatch(setRecommendationItemError('Something went wrong'))
-            })
-    }
-}
-
 export const setEditRecommendationItem = value => {
     return {
-        type: type.RECOMMENDATION_ITEM_EDIT, data: value
+        type: type.RECOMMENDATION_ITEM_EDIT,
+        data: value
     }
 }
 
 export const setDeleteRecommendationItem = value => {
     return {
-        type: type.RECOMMENDATION_ITEM_DELETE, data: value
+        type: type.RECOMMENDATION_ITEM_DELETE,
+        data: value
     }
 }
 
 export const setRecommendationItemError = value => {
     return {
-        type: type.RECOMMENDATION_ITEM_ERROR, data: value
+        type: type.RECOMMENDATION_ITEM_ERROR,
+        data: value
     }
 }
 
@@ -195,34 +224,16 @@ export const recommedationItemSingleFetch = payload => {
 
 export const recommendationItemDataChange = value => {
     return {
-        type: type.RECOMMENDATION_ITEM_FETCH_TMDB_VALUE, tmdbValue: value, tmdb: []
-    }
-}
-
-export const recommedationItemSource = value => {
-    let query = encodeURIComponent(value)
-    return dispatch => {
-        dispatch(setRecommendationItemFetching(true))
-        axios.get(`/search_source?query=${query}`)
-            .then(res => {
-                const data = res.data.data === null ? [] : res.data.data
-                dispatch({
-                    type: type.RECOMMENDATION_ITEM_SOURCE_SEARCH,
-                    sources: data
-                })
-                dispatch(setRecommendationItemFetching(false))
-
-            })
-            .catch(() => {
-                dispatch(setRecommendationItemFetching(false))
-                dispatch(setRecommendationItemError('Something went wrong'))
-            })
+        type: type.RECOMMENDATION_ITEM_FETCH_TMDB_VALUE,
+        tmdbValue: value, tmdb: []
     }
 }
 
 export const recommendationItemSourceChange = value => {
     return {
-        type: type.RECOMMENDATION_ITEM_SOURCE_VALUE, sourcesValue: value, sources: []
+        type: type.RECOMMENDATION_ITEM_SOURCE_VALUE,
+        sourcesValue: value,
+        sources: []
     }
 }
 

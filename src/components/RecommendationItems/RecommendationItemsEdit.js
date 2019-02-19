@@ -19,18 +19,16 @@ class RecommendationItemsEdit extends Component {
 
     constructor(props) {
         super(props)
-
-        this.setFields = debounce(this.setFields, 800)
+        this.setSources = debounce(this.setSources, 100)
         this.searchItemData = debounce(this.searchItemData, 800)
         this.searchSources = debounce(this.searchSources, 800)
-        this.setFields = debounce(this.setFields, 800)
-
         this.editorRef = React.createRef()
     }
 
     componentDidMount() {
         this.fetchRecommendationItem()
         this.setFields()
+        this.setSources()
     }
 
     componentWillUnmount() {
@@ -83,24 +81,22 @@ class RecommendationItemsEdit extends Component {
         if (this.props.recommendationItems.editLoaded) {
             this.props.actions.setRecommendationItemEditLoaded(false)
         }
-
         this.props.actions.setRecommendationItemEditValues(this.props.recommendationItems.item)
+        this.props.actions.setRecommendationItemEditLoaded(true)
+    }
 
+    setSources = () => {
         let sources = this.props.recommendationItems.item.sources.map(v => {
             let source = {}
             source.key = v.id
             source.label = v.name
             return source
         })
-
         this.props.actions.recommendationItemDataChange(
             `${this.props.recommendationItems.item.name} 
             ${getYear(this.props.recommendationItems.item.year)}`
         )
-
         this.sourcesChange(sources)
-
-        this.props.actions.setRecommendationItemEditLoaded(true)
     }
 
     editRecommendationItem = () => {
@@ -175,7 +171,7 @@ class RecommendationItemsEdit extends Component {
                     </ul>
                 </div>
                 {!editLoaded ? <Spinner /> : null}
-                {editLoaded ?
+                {editLoaded && !sources.length ?
                     <section className="no-padding-top">
                         <div className="container-fluid">
                             <div className="row">

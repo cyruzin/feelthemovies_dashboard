@@ -10,13 +10,9 @@ export const fetchRecommendations = () => {
                 dispatch(setRecommendationLoaded(false))
             })
             .catch(err => {
+                const { message } = err.response.data
                 dispatch(setRecommendationLoaded(false))
-                const { status, statusText } = err.response
-                dispatch(setRecommendationError(`
-                ERROR!
-                Status: ${status}
-                Message: ${statusText}
-                `))
+                dispatch(setRecommendationError(message))
             })
     }
 }
@@ -30,12 +26,8 @@ export const fetchRecommendation = id => {
                 dispatch(setRecommendationEditLoaded(true))
             })
             .catch(err => {
-                const { status, statusText } = err.response
-                dispatch(setRecommendationError(`
-                ERROR!
-                Status: ${status}
-                Message: ${statusText}
-                `))
+                const { message } = err.response.data
+                dispatch(setRecommendationError(message))
             })
     }
 }
@@ -43,19 +35,16 @@ export const fetchRecommendation = id => {
 export const createRecommendation = recommendation => {
     return dispatch => {
         dispatch(setRecommendationError(''))
-
         axios.post(`/recommendation`, recommendation)
             .then(() => {
-                dispatch(setCreateRecommendation('recommendation created successfully'))
+                dispatch(setCreateRecommendation('Recommendation created successfully'))
+                dispatch(setRecommendationReset())
+                dispatch(fetchRecommendations())
             })
             .catch(err => {
+                const { errors } = err.response.data
+                dispatch(setRecommendationError(errors[0].message))
                 dispatch(setCreateRecommendation(''))
-                const { status, statusText } = err.response
-                dispatch(setRecommendationError(`
-                ERROR!
-                Status: ${status}
-                Message: ${statusText}
-                `))
             })
     }
 }
@@ -66,15 +55,13 @@ export const editRecommendation = (id, recommendation) => {
         axios.put(`/recommendation/${id}`, recommendation)
             .then(() => {
                 setEditRecommendation('Recommendation edited successfully')
+                dispatch(setRecommendationReset())
+                dispatch(fetchRecommendations())
             })
             .catch(err => {
+                const { errors } = err.response.data
+                dispatch(setRecommendationError(errors[0].message))
                 setEditRecommendation('')
-                const { status, statusText } = err.response
-                dispatch(setRecommendationError(`
-                ERROR!
-                Status: ${status}
-                Message: ${statusText}
-                `))
             })
     }
 }
@@ -84,23 +71,19 @@ export const deleteRecommendation = id => {
         axios.delete(`/recommendation/${id}`)
             .then(() => {
                 dispatch(setRecommendationDeleted(true))
+                dispatch(setRecommendationReset())
+                dispatch(fetchRecommendations())
             })
             .catch(err => {
+                const { message } = err.response.data
                 dispatch(setRecommendationDeleted(false))
-                const { status, statusText } = err.response
-                dispatch(setRecommendationError(`
-                ERROR!
-                Status: ${status}
-                Message: ${statusText}
-                `))
+                dispatch(setRecommendationError(message))
             })
     }
 }
 
 export const fetchRecommendationImages = search => {
-
     let query = encodeURIComponent(search)
-
     return dispatch => {
         dispatch(setRecommendationFetching(true))
         axiosTmdb.get(`/search/multi?language=en-US&query=${query}&page=1&include_adult=false`)
@@ -111,13 +94,9 @@ export const fetchRecommendationImages = search => {
                 dispatch(setRecommendationFetching(false))
             })
             .catch(err => {
+                const { message } = err.response.data
                 dispatch(setRecommendationFetching(false))
-                const { status, statusText } = err.response
-                dispatch(setRecommendationError(`
-                ERROR!
-                Status: ${status}
-                Message: ${statusText}
-                `))
+                dispatch(setRecommendationError(message))
             })
     }
 }
@@ -132,13 +111,9 @@ export const searchRecommendation = rec => {
                 dispatch(setRecommendationsSearchLoaded(false))
             })
             .catch(err => {
-                const { status, statusText, message } = err.response
+                const { message } = err.response.data
                 dispatch(setRecommendationsSearchLoaded(false))
-                dispatch(setRecommendationError(`
-                ERROR!
-                Status: ${status} - ${statusText}
-                Message: ${message}
-                `))
+                dispatch(setRecommendationError(message))
             })
     }
 }
