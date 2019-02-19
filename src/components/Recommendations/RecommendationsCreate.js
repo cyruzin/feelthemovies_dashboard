@@ -33,6 +33,7 @@ class RecommendationsCreate extends Component {
         if (this.props.recommendations.created) {
             this.props.actions.setCreateRecommendation(false)
         }
+        this.props.actions.recommendationClear()
     }
 
     componentWillUnmount() {

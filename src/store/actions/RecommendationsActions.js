@@ -223,3 +223,7 @@ export const setRecommendationError = value => {
         error: value
     }
 }
+
+export const recommendationClear = () => ({
+    type: type.RECOMMENDATIONS_CLEAR
+})

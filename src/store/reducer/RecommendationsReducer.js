@@ -92,6 +92,20 @@ export default (state = initialState, action) => {
                 ...state,
                 searchLoaded: action.searchLoaded
             }
+        case type.RECOMMENDATIONS_CLEAR:
+            return {
+                ...state,
+                genres: [],
+                genresValue: [],
+                keywords: [],
+                keywordsValue: [],
+                images: [],
+                imagesValue: [],
+                poster: '',
+                backdrop: '',
+                recommendationData: '',
+                error: ''
+            }
         case type.RECOMMENDATIONS_ERROR:
             return {
                 ...state,
