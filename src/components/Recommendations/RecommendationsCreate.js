@@ -33,7 +33,6 @@ class RecommendationsCreate extends Component {
         if (this.props.recommendations.created) {
             this.props.actions.setCreateRecommendation(false)
         }
-        this.props.actions.recommendationClear()
     }
 
     componentWillUnmount() {
@@ -95,11 +94,11 @@ class RecommendationsCreate extends Component {
         this.props.actions.setRecommendationError('')
         this.props.actions.setGenresReset()
         this.props.actions.setKeywordsReset()
+        this.props.actions.setRecommendationImages('', '')
+        this.props.actions.setRecommendationImagesChange('')
         this.titleRef.current.value = ''
+        this.editorRef.current.value = ''
         this.typeRef.current.value = 0
-        if (this.editorRef.current.value !== undefined) {
-            this.editorRef.current.value = ''
-        }
     }
 
     handleEditorChange = (e) => {

@@ -7,7 +7,7 @@ import KeywordsList from './KeywordsList'
 class Keywords extends Component {
 
     componentDidMount() {
-        !this.props.keywords.data.length && this.props.actions.fetchKeywords()
+        this.props.actions.fetchKeywords()
     }
 
     render() {

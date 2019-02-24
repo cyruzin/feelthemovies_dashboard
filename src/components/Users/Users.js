@@ -7,7 +7,7 @@ import UserList from './UserList'
 class Users extends Component {
 
     componentDidMount() {
-        !this.props.users.data.length && this.props.actions.fetchUsers()
+        this.props.actions.fetchUsers()
     }
 
     render() {
