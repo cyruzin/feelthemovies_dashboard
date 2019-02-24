@@ -132,6 +132,8 @@ class RecommendationsEdit extends Component {
     reset = () => {
         this.props.actions.setGenresReset()
         this.props.actions.setKeywordsReset()
+        this.props.actions.setRecommendationImages('', '')
+        this.props.actions.setRecommendationImagesChange('')
         this.titleRef.current.value = ''
         this.editorRef.current.value = ''
         this.typeRef.current.value = 0

@@ -38,8 +38,6 @@ export const createRecommendation = recommendation => {
         axios.post(`/recommendation`, recommendation)
             .then(() => {
                 dispatch(setCreateRecommendation('Recommendation created successfully'))
-                dispatch(setRecommendationReset())
-                dispatch(fetchRecommendations())
             })
             .catch(err => {
                 const { errors } = err.response.data
@@ -55,8 +53,6 @@ export const editRecommendation = (id, recommendation) => {
         axios.put(`/recommendation/${id}`, recommendation)
             .then(() => {
                 setEditRecommendation('Recommendation edited successfully')
-                dispatch(setRecommendationReset())
-                dispatch(fetchRecommendations())
             })
             .catch(err => {
                 const { errors } = err.response.data
@@ -71,8 +67,6 @@ export const deleteRecommendation = id => {
         axios.delete(`/recommendation/${id}`)
             .then(() => {
                 dispatch(setRecommendationDeleted(true))
-                dispatch(setRecommendationReset())
-                dispatch(fetchRecommendations())
             })
             .catch(err => {
                 const { message } = err.response.data
