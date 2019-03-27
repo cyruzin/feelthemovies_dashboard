@@ -27,7 +27,6 @@ class RecommendationItemsEdit extends Component {
     }
 
     componentDidMount() {
-        this.reset()
         this.fetchRecommendationItem()
         this.setFields()
         this.setSources()
@@ -130,8 +129,9 @@ class RecommendationItemsEdit extends Component {
             sources: sources,
             recommendation_id: parseInt(recommendation_id),
         }
+        debugger
         if (name === '') {
-            setRecommendationItemError('Please, search field')
+            setRecommendationItemError('Please, fill the search field')
             return false
         }
 
