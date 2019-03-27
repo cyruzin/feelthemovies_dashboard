@@ -4,7 +4,7 @@ import axios, { axiosTmdb } from '../../util/constants/axios'
 export const fetchRecommendations = () => {
     return dispatch => {
         dispatch(setRecommendationLoaded(true))
-        axios.get(`/recommendations`)
+        axios.get(`/recommendations_admin`)
             .then(res => {
                 dispatch(setRecommendations(res.data.data))
                 dispatch(setRecommendationLoaded(false))
