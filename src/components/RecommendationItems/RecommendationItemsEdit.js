@@ -22,10 +22,12 @@ class RecommendationItemsEdit extends Component {
         this.setSources = debounce(this.setSources, 1200)
         this.searchItemData = debounce(this.searchItemData, 800)
         this.searchSources = debounce(this.searchSources, 800)
+        this.setSources = debounce(this.setSources, 800)
         this.editorRef = React.createRef()
     }
 
     componentDidMount() {
+        this.reset()
         this.fetchRecommendationItem()
         this.setFields()
         this.setSources()
@@ -37,7 +39,9 @@ class RecommendationItemsEdit extends Component {
 
     reset = () => {
         this.props.actions.recommedationItemReset()
-        this.editorRef.current.value = ''
+        if (this.editorRef.current) {
+            this.editorRef.current.value = ''
+        }
     }
 
     fetchRecommendationItem = () => {
@@ -82,7 +86,6 @@ class RecommendationItemsEdit extends Component {
             this.props.actions.setRecommendationItemEditLoaded(false)
         }
         this.props.actions.setRecommendationItemEditValues(this.props.recommendationItems.item)
-        this.props.actions.setRecommendationItemEditLoaded(true)
     }
 
     setSources = () => {
@@ -97,6 +100,7 @@ class RecommendationItemsEdit extends Component {
             ${getYear(this.props.recommendationItems.item.year)}`
         )
         this.sourcesChange(sources)
+        this.props.actions.setRecommendationItemEditLoaded(true)
     }
 
     editRecommendationItem = () => {
@@ -175,8 +179,8 @@ class RecommendationItemsEdit extends Component {
                         <li className="breadcrumb-item active">Edit</li>
                     </ul>
                 </div>
-                {!sourcesValue.length && <Spinner />}
-                {editLoaded && sourcesValue.length ?
+                {!editLoaded && <Spinner />}
+                {editLoaded && tmdbValue !== '' ?
                     <section className="no-padding-top">
                         <div className="container-fluid">
                             <div className="row">

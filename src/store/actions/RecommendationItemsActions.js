@@ -19,15 +19,15 @@ export const fetchRecommendationItems = recommendationID => {
 
 export const fetchRecommendationItem = recommendationID => {
     return dispatch => {
-        dispatch(setRecommendationItemEditLoaded(false))
+        dispatch(setRecommendationItemEditLoaded(true))
         axios.get(`/recommendation_item/${recommendationID}`)
             .then(res => {
                 dispatch(recommedationItemSingleFetch(res.data))
-                dispatch(setRecommendationItemEditLoaded(true))
+                dispatch(setRecommendationItemEditLoaded(false))
             })
             .catch(err => {
                 const { message } = err.response.data
-                dispatch(setRecommendationItemEditLoaded(true))
+                dispatch(setRecommendationItemEditLoaded(false))
                 dispatch(setRecommendationItemError(message))
             })
     }
