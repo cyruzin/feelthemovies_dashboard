@@ -9,13 +9,7 @@ const store = createStore(reducers, persistedState,
     composeEnhancers(applyMiddleware(ReduxThunk, getTokenMiddleware)))
 
 store.subscribe(() => saveState({
-    auth: store.getState().auth,
-    users: store.getState().users,
-    recommendations: store.getState().recommendations,
-    recommendationItems: store.getState().recommendationItems,
-    keywords: store.getState().keywords,
-    genres: store.getState().genres,
-    sources: store.getState().sources
+    auth: store.getState().auth
 }))
 
 export default store

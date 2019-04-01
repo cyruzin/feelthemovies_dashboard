@@ -13,6 +13,7 @@ export const fetchAuth = ({ email, password }) => {
                     type: type.AUTH_AUTHORIZED,
                     authorized: true,
                     apiToken: res.data.api_token,
+                    token: res.data.token,
                     password: '',
                     id: res.data.id,
                     error: ''

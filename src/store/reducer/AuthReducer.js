@@ -4,6 +4,7 @@ const initialState = {
     email: '',
     password: '',
     apiToken: '',
+    token: '',
     id: '',
     authorized: false,
     session: '',
@@ -27,6 +28,7 @@ export default (state = initialState, action) => {
                 ...state,
                 authorized: action.authorized,
                 apiToken: action.apiToken,
+                token: action.token,
                 password: action.password,
                 id: action.id,
                 error: action.error

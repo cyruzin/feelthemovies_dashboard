@@ -26,8 +26,8 @@ export const getTokenMiddleware = store => {
         return action => {
             axios.interceptors.request.use(req => {
                 if (req.url.includes('themoviedb') === false) {
-                    let apiToken = store.getState().auth.apiToken
-                    req.headers.common['Api-Token'] = apiToken
+                    let token = store.getState().auth.token
+                    req.headers.common['Authorization'] = `Bearer ${token}`
                     return req
                 }
                 return req
