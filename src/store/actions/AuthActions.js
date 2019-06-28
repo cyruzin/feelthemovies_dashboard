@@ -22,8 +22,6 @@ export const fetchAuth = ({ email, password }) => {
                 })
             })
             .catch(err => {
-                debugger
-                console.log(process.env.REACT_APP_BASE_URL)
                 const { message } = err.response.data
                 dispatch({ type: type.AUTH_ERROR, error: message })
             })
