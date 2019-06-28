@@ -30,35 +30,38 @@ const LoginInfo = props => (
                                     null
                                 }
 
-                                <div className="form-group">
-                                    <input
-                                        type="text"
-                                        onKeyUp={props.setEmail}
-                                        ref={props.emailRef}
-                                        className="input-material" />
-                                    <label
-                                        className="label-material">
-                                        E-mail
+                                <form>
+                                    <div className="form-group">
+                                        <input
+                                            type="text"
+                                            onKeyUp={props.setEmail}
+                                            ref={props.emailRef}
+                                            className="input-material" />
+                                        <label
+                                            className="label-material">
+                                            E-mail
                                     </label>
-                                </div>
+                                    </div>
 
-                                <div className="form-group">
-                                    <input
-                                        type="password"
-                                        onKeyUp={props.setPassword}
-                                        ref={props.passwordRef}
-                                        className="input-material" />
-                                    <label
-                                        className="label-material">
-                                        Password
+                                    <div className="form-group">
+                                        <input
+                                            type="password"
+                                            onKeyUp={props.setPassword}
+                                            ref={props.passwordRef}
+                                            className="input-material" />
+                                        <label
+                                            className="label-material">
+                                            Password
                                         </label>
-                                </div>
-                                <button
-                                    onClick={props.fetchAuth}
-                                    className="btn btn-primary"
-                                >
-                                    Login
+                                    </div>
+                                    <button
+                                        type="submit"
+                                        onClick={props.fetchAuth}
+                                        className="btn btn-primary"
+                                    >
+                                        Login
                                     </button>
+                                </form>
 
                             </div>
                         </div>

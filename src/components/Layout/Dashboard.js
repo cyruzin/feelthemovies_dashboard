@@ -35,31 +35,27 @@ import RecommendationItemsCreate from '../RecommendationItems/RecommendationItem
 import RecommendationItemsEdit from '../RecommendationItems/RecommendationItemsEdit';
 import RecommendationItemsDelete from '../RecommendationItems/RecommendationItemsDelete';
 import RecommendationsSearch from '../Recommendations/RecommendationsSearch'
-import { sessionTimeOut, logout } from '../../store/actions/AuthActions'
-import moment from 'moment'
+import { logout } from '../../store/actions/AuthActions'
 
 class Dashboard extends Component {
 
-    componentDidMount() {
+    componentDidMount () {
         this.sessionTimeOut()
         loadJs()
     }
 
     sessionTimeOut = () => {
         const { authorized, session } = this.props.auth
-        const { sessionTimeOut, logout } = this.props.actions
+        const { logout } = this.props.actions
 
-        if (authorized && session === '') {
-            sessionTimeOut(new Date().getTime())
-        } else if (authorized && session !== '') {
-            let duration = moment.duration(moment().diff(session)).asMinutes().toFixed(2)
-            if (duration >= 60.00) {
+        if (authorized) {
+            if (session < new Date().getTime() / 1000) {
                 logout()
             }
         }
     }
 
-    render() {
+    render () {
         let authRedirect = null
 
         if (!this.props.auth.authorized) {
@@ -122,7 +118,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators({ sessionTimeOut, logout }, dispatch)
+    actions: bindActionCreators({ logout }, dispatch)
 })
 
 

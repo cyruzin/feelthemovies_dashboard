@@ -3,7 +3,6 @@ import { Redirect } from 'react-router-dom'
 import LoginInfo from './LoginInfo'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import debounce from 'lodash/debounce'
 import { loadJs } from '../../util/helpers'
 import * as actions from '../../store/actions/AuthActions'
 
@@ -16,31 +15,26 @@ class Auth extends Component {
     }
 
     componentDidMount = () => {
-        window.addEventListener('keypress', this.isEnterPressed);
         loadJs()
         this.shouldClearError()
     }
 
-    componentWillUnmount() {
-        window.removeEventListener('keypress', this.isEnterPressed);
+    setEmail = () => {
+        const { setEmail } = this.props.actions
+        setEmail(this.emailRef.current.value.trim())
     }
 
-    setEmail = debounce(() => {
-        const { setEmail } = this.props.actions
-        setEmail(this.emailRef.current.value)
-    }, 800)
-
-    setPassword = debounce(() => {
+    setPassword = () => {
         const { setPassword } = this.props.actions
         const { authorized } = this.props.auth
         if (!authorized) {
-            setPassword(this.passwordRef.current.value)
+            setPassword(this.passwordRef.current.value.trim())
         }
-    }, 800)
+    }
 
-    fetchAuth = () => {
-        this.setEmail.flush()
-        this.setPassword.flush()
+    fetchAuth = e => {
+        e.preventDefault()
+        this.shouldClearError()
         const { value: email } = this.emailRef.current
         const { value: password } = this.passwordRef.current
 
@@ -52,21 +46,13 @@ class Auth extends Component {
         this.props.actions.fetchAuth(this.props.auth)
     }
 
-    isEnterPressed = e => {
-        if (e.keyCode === 13) {
-            this.setEmail.flush()
-            this.setPassword.flush()
-            this.fetchAuth()
-        }
-    }
-
     shouldClearError = () => {
         if (this.props.auth.error !== '') {
             this.props.actions.setError('')
         }
     }
 
-    render() {
+    render () {
         let authRedirect = null
 
         if (this.props.auth.authorized) {

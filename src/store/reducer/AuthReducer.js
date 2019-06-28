@@ -3,7 +3,6 @@ import type from '../types/AuthTypes'
 const initialState = {
     email: '',
     password: '',
-    apiToken: '',
     token: '',
     id: '',
     authorized: false,
@@ -26,12 +25,13 @@ export default (state = initialState, action) => {
         case type.AUTH_AUTHORIZED:
             return {
                 ...state,
-                authorized: action.authorized,
-                apiToken: action.apiToken,
-                token: action.token,
-                password: action.password,
-                id: action.id,
-                error: action.error
+                authorized: true,
+                id: action.payload.id,
+                email: action.payload.email,
+                token: action.payload.token,
+                session: action.payload.exp,
+                password: '',
+                error: ''
             }
         case type.AUTH_LOGOUT:
             return initialState
