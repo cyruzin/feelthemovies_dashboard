@@ -7,7 +7,6 @@ export default axios.create({
 
 export const axiosTmdb = axios.create({
     baseURL: 'https://api.themoviedb.org/3',
-    headers: {},
     params: {
         'api_key': tmdbToken
     }
