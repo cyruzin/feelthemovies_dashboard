@@ -1,4 +1,4 @@
-FROM node:9.11.2-slim as build-stage
+FROM node:10.16.0-slim as build-stage
 ENV HOME /etc/app
 ADD . $HOME/
 WORKDIR $HOME
