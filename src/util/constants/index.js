@@ -1,8 +1,5 @@
-// TODO: Send this info from the back-end
-export const tmdbToken = '9aca69849a23528a419aea463387945f'
-
-// dev
-export const baseURL = 'http://localhost:8000/v1'
-export const authURL = 'http://localhost:8000/auth'
+export const tmdbToken = process.env.REACT_APP_TMDB_TOKEN
+export const authURL = process.env.REACT_APP_AUTH_URL
+export const baseURL = process.env.REACT_APP_BASE_URL
 
 
