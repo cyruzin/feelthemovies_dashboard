@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { baseURL, tmdbToken } from '.'
+import { baseURL, tmdbToken } from './constants'
 
 export default axios.create({
     baseURL: baseURL

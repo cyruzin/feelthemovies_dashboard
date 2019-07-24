@@ -1,5 +1,23 @@
 import axios from 'axios'
-import { baseURL } from './constants'
+import { baseURL, authURL, tmdbToken } from './constants'
+
+/** 
+ * For authentication requests 
+ */
+
+const feelTheMoviesAuth = axios.create({
+    method: 'POST',
+    baseURL: authURL
+})
+
+export const httpFetchAuthentication = credentials =>
+    feelTheMoviesAuth({ data: credentials })
+        .then(response => response.data)
+        .catch(error => Promise.reject(error.response.data))
+
+/** 
+ * For common requests  
+ */
 
 const feelTheMovies = axios.create({
     baseURL: baseURL
@@ -15,5 +33,22 @@ feelTheMovies.interceptors.request.use(req => {
 
 export const httpFetch = ({ url, method, data, params }) =>
     feelTheMovies({ url, method, data, params })
+        .then(response => response.data)
+        .catch(error => Promise.reject(error.response.data))
+
+/** 
+ * For TMDb requests 
+ */
+
+const tmdb = axios.create({
+    method: 'GET',
+    baseURL: 'https://api.themoviedb.org/3',
+    params: {
+        'api_key': tmdbToken
+    }
+})
+
+export const httpFetchTMDb = ({ url }) =>
+    tmdb({ url })
         .then(response => response.data)
         .catch(error => Promise.reject(error.response.data))

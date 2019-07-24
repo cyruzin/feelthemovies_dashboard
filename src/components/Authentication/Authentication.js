@@ -1,27 +1,27 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchAuth } from '../../store/actions/AuthActions'
+import { checkAuthentication } from '../../redux/ducks/authentication'
 import Input from '../Layout/Input'
 import Button from '../Layout/Button'
 import { loadJs } from '../../util/helpers'
 
-function Auth (props) {
+function Authentication (props) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
     const dispatch = useDispatch()
-    const auth = useSelector(state => state.auth)
+    const authentication = useSelector(state => state.authentication)
 
     useEffect(() => {
         loadJs()
         const { push } = props.history
-        if (auth.authorized) push('/dashboard/recommendations')
-    }, [email, password, error, auth, props])
+        if (authentication.authorized) push('/dashboard/recommendations')
+    }, [email, password, error, authentication, props])
 
     function loginHandler (event) {
         event.preventDefault()
         errorHandler()
-        dispatch(fetchAuth({ email, password }))
+        dispatch(checkAuthentication({ email, password }))
     }
 
     function errorHandler () {
@@ -51,10 +51,10 @@ function Auth (props) {
                         <div className="col-lg-6 bg-white">
                             <div className="form d-flex align-items-center">
                                 <div className="content">
-                                    {error !== '' || auth.error !== '' ?
+                                    {error !== '' || authentication.error !== '' ?
                                         <div className="form-group">
                                             <label className="form-control-label text-primary">
-                                                {error || auth.error}
+                                                {error || authentication.error}
                                             </label>
                                         </div>
                                         : null
@@ -94,4 +94,4 @@ function Auth (props) {
     )
 }
 
-export default Auth
+export default Authentication

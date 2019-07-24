@@ -1,4 +1,4 @@
-import axios, { axiosTmdb } from '../../util/constants/axios'
+import axios, { axiosTmdb } from '../../util/axios'
 import type from '../types/RecommendationItemsTypes'
 
 export const fetchRecommendationItems = recommendationID => {

@@ -1,5 +1,5 @@
 import type from '../types/KeywordsTypes'
-import axios from '../../util/constants/axios'
+import axios from '../../util/axios'
 
 export const fetchKeywords = () => {
     return dispatch => {

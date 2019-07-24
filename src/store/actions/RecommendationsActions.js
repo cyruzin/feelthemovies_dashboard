@@ -1,5 +1,5 @@
 import type from '../types/RecommendationsTypes'
-import axios, { axiosTmdb } from '../../util/constants/axios'
+import axios, { axiosTmdb } from '../../util/axios'
 import { httpFetch } from '../../util/request'
 
 export const fetchRecommendations = () => {
