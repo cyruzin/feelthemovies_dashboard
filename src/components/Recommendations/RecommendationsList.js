@@ -19,12 +19,12 @@ class RecommendationsList extends Component {
         this.searchRef = React.createRef()
     }
 
-    componentDidMount() {
+    componentDidMount () {
         this.deleteMessage()
         window.addEventListener('keypress', this.isEnterPressed)
     }
 
-    componentWillUnmount() {
+    componentWillUnmount () {
         window.removeEventListener('keypress', this.isEnterPressed)
     }
 
@@ -43,7 +43,7 @@ class RecommendationsList extends Component {
         }
     }
 
-    render() {
+    render () {
         const { error, deleted, data, loaded } = this.props.recommendations
         return (
             <div>

@@ -1,5 +1,4 @@
 import $ from 'jquery'
-import axios from '../constants/axios'
 
 export const loadState = () => {
     try {
@@ -18,28 +17,6 @@ export const saveState = state => {
         const serializedState = JSON.stringify(state)
         localStorage.setItem('state', serializedState)
     } catch (err) { }
-}
-
-
-export const getTokenMiddleware = store => {
-    return next => {
-        return action => {
-            axios.interceptors.request.use(req => {
-                if (req.url.includes('themoviedb') === false) {
-                    let token = store.getState().auth.token
-                    req.headers.common['Authorization'] = `Bearer ${token}`
-                    return req
-                }
-                return req
-            },
-                error => Promise.reject(error)
-            )
-
-            const result = next(action)
-
-            return result
-        }
-    }
 }
 
 export const loadJs = () => {
@@ -88,7 +65,7 @@ export const loadJs = () => {
         adjustFooter();
     })
 
-    function adjustFooter() {
+    function adjustFooter () {
         var footerBlockHeight = $('.footer__block').outerHeight();
         pageContent.css('padding-bottom', footerBlockHeight + 'px');
     }

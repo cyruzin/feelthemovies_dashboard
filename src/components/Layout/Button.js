@@ -1,12 +1,12 @@
 import React from 'react'
 
 const Button = props => {
-    const { title, size, style } = props
+    const { title, size, style, children } = props
     return (
         <button
             className={`btn btn-${style} btn-${size}`}
             {...props}>
-            {title}
+            {title} {children}
         </button>
     )
 }

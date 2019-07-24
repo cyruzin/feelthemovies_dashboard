@@ -1,34 +1,35 @@
 import type from '../types/RecommendationsTypes'
 import axios, { axiosTmdb } from '../../util/constants/axios'
+import { httpFetch } from '../../util/request'
 
 export const fetchRecommendations = () => {
     return dispatch => {
         dispatch(setRecommendationLoaded(true))
-        axios.get(`/recommendations_admin`)
-            .then(res => {
-                dispatch(setRecommendations(res.data.data))
-                dispatch(setRecommendationLoaded(false))
-            })
-            .catch(err => {
-                const { message } = err.response.data
-                dispatch(setRecommendationLoaded(false))
-                dispatch(setRecommendationError(message))
-            })
+        httpFetch({
+            method: 'GET',
+            url: '/recommendations_admin'
+        }).then(res => {
+            dispatch(setRecommendations(res.data))
+            dispatch(setRecommendationLoaded(false))
+        }).catch(err => {
+            dispatch(setRecommendationLoaded(false))
+            dispatch(setRecommendationError(err))
+        })
     }
 }
 
 export const fetchRecommendation = id => {
     return dispatch => {
         dispatch(setRecommendationEditLoaded(false))
-        axios.get(`/recommendation/${id}`)
-            .then(res => {
-                dispatch(setRecommendationFetch(res.data))
-                dispatch(setRecommendationEditLoaded(true))
-            })
-            .catch(err => {
-                const { message } = err.response.data
-                dispatch(setRecommendationError(message))
-            })
+        httpFetch({
+            method: 'GET',
+            url: `/recommendation/${id}`
+        }).then(res => {
+            dispatch(setRecommendationFetch(res))
+            dispatch(setRecommendationEditLoaded(true))
+        }).catch(err => {
+            dispatch(setRecommendationError(err.data))
+        })
     }
 }
 
@@ -96,19 +97,18 @@ export const fetchRecommendationImages = search => {
 }
 
 export const searchRecommendation = rec => {
-    let query = encodeURIComponent(rec)
     return dispatch => {
         dispatch(setRecommendationsSearchLoaded(true))
-        axios.get(`/search_recommendation?query=${query}`)
-            .then(res => {
-                dispatch(setRecommendationsSearch(res.data))
-                dispatch(setRecommendationsSearchLoaded(false))
-            })
-            .catch(err => {
-                const { message } = err.response.data
-                dispatch(setRecommendationsSearchLoaded(false))
-                dispatch(setRecommendationError(message))
-            })
+        httpFetch({
+            method: 'GET',
+            url: `/search_recommendation?query=${encodeURIComponent(rec)}`
+        }).then(res => {
+            dispatch(setRecommendationsSearch(res.data !== null ? res.data : []))
+            dispatch(setRecommendationsSearchLoaded(false))
+        }).catch(err => {
+            dispatch(setRecommendationsSearchLoaded(false))
+            dispatch(setRecommendationError(err))
+        })
     }
 }
 

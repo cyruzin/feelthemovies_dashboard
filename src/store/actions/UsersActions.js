@@ -1,108 +1,99 @@
 import type from '../types/UsersTypes'
-import axios from '../../util/constants/axios'
-import store from '../../store'
-
-axios.interceptors.request.use(req => {
-    if (req.url.includes('themoviedb') === false) {
-        let apiToken = store.getState().auth.apiToken
-        req.headers.common['Api-Token'] = apiToken
-        return req
-    }
-    return req
-})
+import { httpFetch } from '../../util/request'
 
 export const fetchUsers = () => {
     return dispatch => {
         dispatch(setListLoaded(true))
-        axios.get(`/users`)
-            .then(res => {
-                dispatch(setFetchUser(res.data.data))
-                dispatch(setListLoaded(false))
-            })
-            .catch(err => {
-                const { message } = err.response.data
-                dispatch(setListLoaded(false))
-                dispatch(setError(message))
-            })
+        httpFetch({
+            method: 'GET',
+            url: '/users'
+        }).then(res => {
+            dispatch(setFetchUser(res.data))
+            dispatch(setListLoaded(false))
+        }).catch(err => {
+            dispatch(setListLoaded(false))
+            dispatch(setError(err))
+        })
     }
 }
 
 export const fetchSingleUser = id => {
     return dispatch => {
         dispatch(setEditLoaded(false))
-        axios.get(`/user/${id}`)
-            .then(res => {
-                dispatch(setFetchSingleUser(res.data))
-                dispatch(setEditLoaded(true))
-            })
-            .catch(err => {
-                const { message } = err.response.data
-                dispatch(setError(message))
-            })
+        httpFetch({
+            method: 'GET',
+            url: `/user/${id}`
+        }).then(res => {
+            dispatch(setFetchSingleUser(res))
+            dispatch(setEditLoaded(true))
+        }).catch(err => {
+            dispatch(setError(err))
+        })
     }
 }
 
 export const registerUser = user => {
     return dispatch => {
         dispatch(setError(''))
-        axios.post(`/user`, user)
-            .then(() => {
-                dispatch(setUserRegister('User created successfully'))
-                dispatch(fetchUsers())
-            })
-            .catch(err => {
-                const { errors } = err.response.data
-                dispatch(setError(errors[0].message))
-                dispatch(setUserRegister(''))
-            })
+        httpFetch({
+            method: 'POST',
+            url: `/user`,
+            data: user
+        }).then(() => {
+            dispatch(setUserRegister('User created successfully'))
+            dispatch(fetchUsers())
+        }).catch(err => {
+            dispatch(setError(err))
+            dispatch(setUserRegister(''))
+        })
     }
 }
 
 export const editUser = (id, user) => {
     return dispatch => {
         dispatch(setError(''))
-        axios.put(`/user/${id}`, user)
-            .then(() => {
-                dispatch(setEdited('User edited successfully'))
-                dispatch(fetchUsers())
-            })
-            .catch(err => {
-                const { errors } = err.response.data
-                dispatch(setError(errors[0].message))
-                dispatch(setEdited(''))
-            })
+        httpFetch({
+            method: 'PUT',
+            url: `/user/${id}`,
+            data: user
+        }).then(() => {
+            dispatch(setEdited('User edited successfully'))
+            dispatch(fetchUsers())
+        }).catch(err => {
+            dispatch(setError(err.errors[0].message))
+            dispatch(setEdited(''))
+        })
     }
 }
 
 export const deleteUser = id => {
     return dispatch => {
-        axios.delete(`/user/${id}`)
-            .then(() => {
-                dispatch(setDeleted('User removed successfully'))
-                dispatch(fetchUsers())
-            })
-            .catch(err => {
-                const { message } = err.response.data
-                dispatch(setDeleted(''))
-                dispatch(setError(message))
-            })
+        httpFetch({
+            method: 'DELETE',
+            url: `/user/${id}`
+        }).then(() => {
+            dispatch(setDeleted('User removed successfully'))
+            dispatch(fetchUsers())
+        }).catch(err => {
+            dispatch(setDeleted(''))
+            dispatch(setError(err))
+        })
     }
 }
 
 export const searchUsers = users => {
-    let query = encodeURIComponent(users)
     return dispatch => {
         dispatch(setUsersSearchLoaded(true))
-        axios.get(`/search_user?query=${query}`)
-            .then(res => {
-                dispatch(setUsersSearch(res.data.data))
-                dispatch(setUsersSearchLoaded(false))
-            })
-            .catch(err => {
-                const { message } = err.response.data
-                dispatch(setUsersSearchLoaded(false))
-                dispatch(setError(message))
-            })
+        httpFetch({
+            method: 'GET',
+            url: `/search_user?query=${encodeURIComponent(users)}`
+        }).then(res => {
+            dispatch(setUsersSearch(res.data.data))
+            dispatch(setUsersSearchLoaded(false))
+        }).catch(err => {
+            dispatch(setUsersSearchLoaded(false))
+            dispatch(setError(err))
+        })
     }
 }
 

@@ -10,7 +10,7 @@ import { checkType, checkStatus } from '../../util/helpers'
 
 class RecommendationsSearch extends Component {
 
-    componentDidMount() {
+    componentDidMount () {
         this.searchRecommendation()
     }
 
@@ -20,9 +20,8 @@ class RecommendationsSearch extends Component {
         this.props.actions.searchRecommendation(query)
     }
 
-    render() {
+    render () {
         const { search, searchLoaded } = this.props.recommendations
-
         return (
             <div>
                 <div className="container-fluid">
@@ -35,15 +34,16 @@ class RecommendationsSearch extends Component {
                         <li className="breadcrumb-item active">Search</li>
                     </ul>
                 </div>
+
                 {searchLoaded ? <Spinner /> : null}
 
-                {!searchLoaded && search.total === 0 ?
+                {!searchLoaded && search.length === 0 ?
                     <NoResults message="No Results" />
                     :
                     null
                 }
 
-                {!searchLoaded && search.total > 0 ?
+                {!searchLoaded && search.length > 0 ?
                     <section className="no-padding-top">
                         <div className="container-fluid">
                             <div className="row">
@@ -63,7 +63,7 @@ class RecommendationsSearch extends Component {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {search.data.map(r => (
+                                                    {search.map(r => (
                                                         <tr key={r.id}>
                                                             <th scope="row">{r.id}</th>
                                                             <td>{r.title}</td>

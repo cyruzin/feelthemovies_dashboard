@@ -32,14 +32,14 @@ class RecommendationsEdit extends Component {
         this.fetchRecommendationImages = debounce(this.fetchRecommendationImages, 800)
     }
 
-    componentDidMount() {
+    componentDidMount () {
         this.props.actions.setEditRecommendation(false)
         this.fetchRecommendation()
         this.setFields()
         this.setRemainingFields()
     }
 
-    componentWillUnmount() {
+    componentWillUnmount () {
         this.reset()
     }
 
@@ -151,7 +151,7 @@ class RecommendationsEdit extends Component {
 
     fetchRecommendationImages = value => this.props.actions.fetchRecommendationImages(value)
 
-    render() {
+    render () {
         const {
             error,
             edited,
