@@ -1,7 +1,11 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import { Redirect, Route, Switch } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Route, Switch } from 'react-router-dom'
+import useReactRouter from 'use-react-router'
+import { authenticationReset } from '../../redux/ducks/authentication'
+import { loadJs } from '../../util/helpers'
+
+/** Route Components. */
 import Header from './Header'
 import Content from './Content'
 import Recommendations from '../Recommendations/Recommendations'
@@ -14,7 +18,7 @@ import SourcesCreate from '../Sources/SourcesCreate'
 import SourcesEdit from '../Sources/SourcesEdit'
 import SourcesDelete from '../Sources/SourcesDelete'
 import SourcesSearch from '../Sources/SourcesSearch'
-import Logout from '../Auth/Logout'
+import Logout from '../Authentication/Logout'
 import Users from '../Users/Users'
 import UserRegistration from '../Users/UserRegistration';
 import UserEdit from '../Users/UserEdit';
@@ -30,96 +34,81 @@ import KeywordsCreate from '../Keywords/KeywordsCreate'
 import KeywordsEdit from '../Keywords/KeywordsEdit'
 import KeywordsDelete from '../Keywords/KeywordsDelete'
 import KeywordsSearch from '../Keywords/KeywordsSearch'
-import { loadJs } from '../../util/helpers'
 import RecommendationItemsCreate from '../RecommendationItems/RecommendationItemsCreate';
 import RecommendationItemsEdit from '../RecommendationItems/RecommendationItemsEdit';
 import RecommendationItemsDelete from '../RecommendationItems/RecommendationItemsDelete';
 import RecommendationsSearch from '../Recommendations/RecommendationsSearch'
-import { logout } from '../../store/actions/AuthActions'
 
-class Dashboard extends Component {
+function Dashboard () {
+    const authentication = useSelector(state => state.authentication)
+    const { history } = useReactRouter()
+    const dispatch = useDispatch()
 
-    componentDidMount () {
-        this.sessionTimeOut()
+    useEffect(() => {
         loadJs()
-    }
+        sessionTimeOut()
 
-    sessionTimeOut = () => {
-        const { authorized, session } = this.props.auth
-        const { logout } = this.props.actions
+        const { authorized } = authentication
+        const { push } = history
+
+        if (!authorized) push('/dashboard/recommendations')
+    })
+
+    function sessionTimeOut () {
+        const { authorized } = authentication
+        const { exp } = authentication.user
 
         if (authorized) {
-            if (session < new Date().getTime() / 1000) {
-                logout()
-            }
+            if (exp < new Date().getTime() / 1000) dispatch(authenticationReset())
         }
     }
 
-    render () {
-        let authRedirect = null
+    return (
+        <>
+            <Header />
+            <Content>
+                <Switch>
+                    <Route path='/dashboard/users' component={Users} />
+                    <Route path='/dashboard/create_user' component={UserRegistration} />
+                    <Route path='/dashboard/edit_user/:id' component={UserEdit} />
+                    <Route path='/dashboard/delete_user/:id' component={UserDelete} />
+                    <Route path='/dashboard/search_user' component={UserSearch} />
 
-        if (!this.props.auth.authorized) {
-            authRedirect = <Redirect to='/' />
-        }
+                    <Route path='/dashboard/recommendations' component={Recommendations} />
+                    <Route path='/dashboard/create_recommendation' component={RecommendationsCreate} />
+                    <Route path='/dashboard/edit_recommendation/:id' component={RecommendationsEdit} />
+                    <Route path='/dashboard/delete_recommendation/:id' component={RecommendationsDelete} />
+                    <Route path='/dashboard/search_recommendation' component={RecommendationsSearch} />
 
-        return (
-            <div>
-                {authRedirect}
-                <Header />
-                <Content>
-                    <Switch>
-                        <Route path='/dashboard/users' component={Users} />
-                        <Route path='/dashboard/create_user' component={UserRegistration} />
-                        <Route path='/dashboard/edit_user/:id' component={UserEdit} />
-                        <Route path='/dashboard/delete_user/:id' component={UserDelete} />
-                        <Route path='/dashboard/search_user' component={UserSearch} />
+                    <Route path='/dashboard/items/:id' component={RecommendationItems} />
+                    <Route path='/dashboard/create_item/:id' component={RecommendationItemsCreate} />
+                    <Route path='/dashboard/edit_item/:id' component={RecommendationItemsEdit} />
+                    <Route path='/dashboard/delete_item/:id' component={RecommendationItemsDelete} />
 
-                        <Route path='/dashboard/recommendations' component={Recommendations} />
-                        <Route path='/dashboard/create_recommendation' component={RecommendationsCreate} />
-                        <Route path='/dashboard/edit_recommendation/:id' component={RecommendationsEdit} />
-                        <Route path='/dashboard/delete_recommendation/:id' component={RecommendationsDelete} />
-                        <Route path='/dashboard/search_recommendation' component={RecommendationsSearch} />
+                    <Route path='/dashboard/genres' component={Genres} />
+                    <Route path='/dashboard/create_genre' component={GenresCreate} />
+                    <Route path='/dashboard/edit_genre/:id' component={GenresEdit} />
+                    <Route path='/dashboard/delete_genre/:id' component={GenresDelete} />
+                    <Route path='/dashboard/search_genre' component={GenresSearch} />
 
-                        <Route path='/dashboard/items/:id' component={RecommendationItems} />
-                        <Route path='/dashboard/create_item/:id' component={RecommendationItemsCreate} />
-                        <Route path='/dashboard/edit_item/:id' component={RecommendationItemsEdit} />
-                        <Route path='/dashboard/delete_item/:id' component={RecommendationItemsDelete} />
+                    <Route path='/dashboard/keywords' component={Keywords} />
+                    <Route path='/dashboard/create_keyword' component={KeywordsCreate} />
+                    <Route path='/dashboard/edit_keyword/:id' component={KeywordsEdit} />
+                    <Route path='/dashboard/delete_keyword/:id' component={KeywordsDelete} />
+                    <Route path='/dashboard/search_keyword' component={KeywordsSearch} />
 
-                        <Route path='/dashboard/genres' component={Genres} />
-                        <Route path='/dashboard/create_genre' component={GenresCreate} />
-                        <Route path='/dashboard/edit_genre/:id' component={GenresEdit} />
-                        <Route path='/dashboard/delete_genre/:id' component={GenresDelete} />
-                        <Route path='/dashboard/search_genre' component={GenresSearch} />
+                    <Route path='/dashboard/sources' component={Sources} />
+                    <Route path='/dashboard/create_source' component={SourcesCreate} />
+                    <Route path='/dashboard/edit_source/:id' component={SourcesEdit} />
+                    <Route path='/dashboard/delete_source/:id' component={SourcesDelete} />
+                    <Route path='/dashboard/search_source' component={SourcesSearch} />
 
-                        <Route path='/dashboard/keywords' component={Keywords} />
-                        <Route path='/dashboard/create_keyword' component={KeywordsCreate} />
-                        <Route path='/dashboard/edit_keyword/:id' component={KeywordsEdit} />
-                        <Route path='/dashboard/delete_keyword/:id' component={KeywordsDelete} />
-                        <Route path='/dashboard/search_keyword' component={KeywordsSearch} />
-
-                        <Route path='/dashboard/sources' component={Sources} />
-                        <Route path='/dashboard/create_source' component={SourcesCreate} />
-                        <Route path='/dashboard/edit_source/:id' component={SourcesEdit} />
-                        <Route path='/dashboard/delete_source/:id' component={SourcesDelete} />
-                        <Route path='/dashboard/search_source' component={SourcesSearch} />
-
-                        <Route path='/dashboard/logout' component={Logout} />
-                    </Switch>
-                </Content>
-            </div>
-        )
-    }
+                    <Route path='/dashboard/logout' component={Logout} />
+                </Switch>
+            </Content>
+        </>
+    )
 }
 
-const mapStateToProps = state => {
-    return {
-        auth: state.auth
-    }
-}
 
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators({ logout }, dispatch)
-})
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)
+export default Dashboard

@@ -1,28 +1,16 @@
-import React, { Component } from 'react'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
+import React, { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import { Redirect } from 'react-router-dom'
-import * as actions from '../../store/actions/AuthActions'
+import { authenticationReset } from '../../redux/ducks/authentication'
 
-class Logout extends Component {
+function Logout () {
+    const dispatch = useDispatch()
 
-    componentDidMount() {
-        this.props.actions.logout()
-    }
+    useEffect(() => {
+        dispatch(authenticationReset())
+    })
 
-    render() {
-        return <Redirect to='/' />
-    }
+    return <Redirect to="/" />
 }
 
-const mapStateToProps = state => {
-    return {
-        auth: state.auth
-    }
-}
-
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(actions, dispatch)
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(Logout)
+export default Logout

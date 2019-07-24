@@ -11,7 +11,7 @@ const store = createStore(ReduxDucks, persistedState,
     composeEnhancers(applyMiddleware(ReduxThunk)))
 
 store.subscribe(() => saveState({
-    auth: store.getState().auth
+    authentication: store.getState().authentication
 }))
 
 export default store

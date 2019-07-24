@@ -4,8 +4,8 @@
   "private": true,
   "homepage": "https://dashboard.feelthemovies.com.br/",
   "dependencies": {
-    "axios": "^0.18.1",
     "antd": "^3.20.6",
+    "axios": "^0.18.1",
     "bootstrap": "^4.3.1",
     "font-awesome": "^4.7.0",
     "jquery": "^3.4.1",
@@ -19,7 +19,8 @@
     "react-router-dom": "^5.0.1",
     "react-scripts": "^3.0.1",
     "redux": "^4.0.4",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "use-react-router": "^1.0.7"
   },
   "scripts": {
     "start": "react-scripts start",

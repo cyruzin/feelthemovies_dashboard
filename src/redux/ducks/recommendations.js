@@ -1,15 +1,13 @@
 import { httpFetchAuthentication } from '../../util/request'
-import jwtDecode from 'jwt-decode'
 
 /**
  * Authentication Action Types.
  */
 
 const types = {
-    FETCH: 'AUTHORIZATION/FETCH',
-    SUCCESS: 'AUTHORIZATION/SUCCESS',
-    FAILURE: 'AUTHORIZATION/FAILURE',
-    RESET: 'AUTHORIZATION/RESET'
+    FETCH: 'RECOMMENDATIONS/FETCH',
+    SUCCESS: 'RECOMMENDATIONS/SUCCESS',
+    FAILURE: 'RECOMMENDATIONS/FAILURE'
 }
 
 /**
@@ -18,8 +16,6 @@ const types = {
 
 const initialState = {
     fetch: false,
-    authorized: false,
-    user: {},
     error: ''
 }
 
@@ -82,13 +78,6 @@ export const authenticationReset = () => ({
 export const checkAuthentication = credentials => dispatch => {
     dispatch(fetchAuthentication())
     return httpFetchAuthentication(credentials)
-        .then(response => {
-            const claims = jwtDecode(response.token)
-            const payload = {
-                token: response.token,
-                ...claims
-            }
-            dispatch(successAuthentication(payload))
-        })
+        .then(response => dispatch(successAuthentication(response.data)))
         .catch(error => dispatch(failureAuthentication(error.message || 'Something went wrong')))
 }
