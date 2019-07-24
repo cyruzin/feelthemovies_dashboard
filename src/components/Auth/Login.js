@@ -1,87 +1,97 @@
-import React, { Component, Fragment } from 'react'
-import { Redirect } from 'react-router-dom'
-import LoginInfo from './LoginInfo'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchAuth } from '../../store/actions/AuthActions'
+import Input from '../Layout/Input'
+import Button from '../Layout/Button'
 import { loadJs } from '../../util/helpers'
-import * as actions from '../../store/actions/AuthActions'
 
-class Auth extends Component {
+function Auth (props) {
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [error, setError] = useState('')
+    const dispatch = useDispatch()
+    const auth = useSelector(state => state.auth)
 
-    constructor(props) {
-        super(props)
-        this.emailRef = React.createRef()
-        this.passwordRef = React.createRef()
-    }
-
-    componentDidMount = () => {
+    useEffect(() => {
         loadJs()
-        this.shouldClearError()
+        const { push } = props.history
+        if (auth.authorized) push('/dashboard/recommendations')
+    }, [email, password, error, auth, props])
+
+    function loginHandler (event) {
+        event.preventDefault()
+        errorHandler()
+        dispatch(fetchAuth({ email, password }))
     }
 
-    setEmail = () => {
-        const { setEmail } = this.props.actions
-        setEmail(this.emailRef.current.value.trim())
-    }
-
-    setPassword = () => {
-        const { setPassword } = this.props.actions
-        const { authorized } = this.props.auth
-        if (!authorized) {
-            setPassword(this.passwordRef.current.value.trim())
-        }
-    }
-
-    fetchAuth = e => {
-        e.preventDefault()
-        this.shouldClearError()
-        const { value: email } = this.emailRef.current
-        const { value: password } = this.passwordRef.current
-
+    function errorHandler () {
         if (email === '' || password === '') {
-            this.props.actions.setError('Please, fill all fields')
-            return false
+            setError('Please, fill all fields')
+            return
         }
-
-        this.props.actions.fetchAuth(this.props.auth)
+        setError('')
     }
 
-    shouldClearError = () => {
-        if (this.props.auth.error !== '') {
-            this.props.actions.setError('')
-        }
-    }
+    return (
+        <div className="login-page">
+            <div className="container d-flex align-items-center">
+                <div className="form-holder has-shadow">
+                    <div className="row">
+                        <div className="col-lg-6">
+                            <div className="info d-flex align-items-center">
+                                <div className="content">
+                                    <div className="logo">
+                                        <h1>Feel the Movies</h1>
+                                    </div>
+                                    <p>Can You Feel It?</p>
+                                </div>
+                            </div>
+                        </div>
 
-    render () {
-        let authRedirect = null
-
-        if (this.props.auth.authorized) {
-            authRedirect = <Redirect to='/dashboard/recommendations' />
-        }
-
-        return (
-            <Fragment>
-                {authRedirect}
-                <LoginInfo
-                    {...this.props}
-                    emailRef={this.emailRef}
-                    passwordRef={this.passwordRef}
-                    setEmail={this.setEmail}
-                    setPassword={this.setPassword}
-                    fetchAuth={this.fetchAuth} />
-            </Fragment>
-        )
-    }
+                        <div className="col-lg-6 bg-white">
+                            <div className="form d-flex align-items-center">
+                                <div className="content">
+                                    {error !== '' || auth.error !== '' ?
+                                        <div className="form-group">
+                                            <label className="form-control-label text-primary">
+                                                {error || auth.error}
+                                            </label>
+                                        </div>
+                                        : null
+                                    }
+                                    <form>
+                                        <Input
+                                            type="text"
+                                            name="email"
+                                            label="E-mail"
+                                            value={email}
+                                            onChange={e => setEmail(e.target.value.trim())}
+                                            onBlur={e => setEmail(e.target.value.trim())}
+                                            className="input-material"
+                                        />
+                                        <Input
+                                            type="password"
+                                            name="password"
+                                            label="Password"
+                                            value={password}
+                                            onChange={e => setPassword(e.target.value.trim())}
+                                            onBlur={e => setPassword(e.target.value.trim())}
+                                            className="input-material"
+                                        />
+                                        <Button
+                                            type="submit"
+                                            size="primary"
+                                            title="Login"
+                                            onClick={loginHandler} />
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
 }
 
-const mapStateToProps = state => {
-    return {
-        auth: state.auth
-    }
-}
-
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(actions, dispatch)
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(Auth)
+export default Auth
