@@ -26,7 +26,7 @@ const feelTheMovies = axios.create({
 feelTheMovies.interceptors.request.use(req => {
     const store = localStorage.getItem('state')
     const state = JSON.parse(store)
-    const { token } = state.auth
+    const { token } = state.authentication.user
     req.headers.common['Authorization'] = `Bearer ${token}`
     return req
 }, error => Promise.reject(error))

@@ -11,7 +11,8 @@ const store = createStore(ReduxDucks, persistedState,
     composeEnhancers(applyMiddleware(ReduxThunk)))
 
 store.subscribe(() => saveState({
-    authentication: store.getState().authentication
+    authentication: store.getState().authentication,
+    recommendations: store.getState().recommendations
 }))
 
 export default store

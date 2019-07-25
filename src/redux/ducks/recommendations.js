@@ -1,7 +1,7 @@
-import { httpFetchAuthentication } from '../../util/request'
+import { httpFetch } from '../../util/request'
 
 /**
- * Authentication Action Types.
+ * Recommendations Action Types.
  */
 
 const types = {
@@ -11,16 +11,17 @@ const types = {
 }
 
 /**
- * Authentication State.
+ * Recommendations State.
  */
 
 const initialState = {
     fetch: false,
+    data: [],
     error: ''
 }
 
 /**
- * Authentication Reducer.
+ * Recommendations Reducer.
  */
 
 export default (state = initialState, action) => {
@@ -34,9 +35,8 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 fetch: false,
-                error: '',
-                authorized: true,
-                user: action.payload
+                data: action.payload,
+                error: ''
             }
         case types.FAILURE:
             return {
@@ -44,40 +44,34 @@ export default (state = initialState, action) => {
                 fetch: false,
                 error: action.payload
             }
-        case types.RESET:
-            return initialState
         default:
             return state
     }
 }
 
 /**
- * Authentication Action Creators Functions.
+ * Recommendations Action Creators Functions.
  */
 
-export const fetchAuthentication = () => ({
+export const fetchRecommendations = () => ({
     type: types.FETCH
 })
 
-export const successAuthentication = payload => ({
+export const successRecommendations = payload => ({
     type: types.SUCCESS, payload
 })
 
-export const failureAuthentication = payload => ({
+export const failureRecommendations = payload => ({
     type: types.FAILURE, payload
 })
 
-export const authenticationReset = () => ({
-    type: types.RESET
-})
-
 /**
- * Authentication Side Effects Types and Functions.
+ * Recommendations Side Effects Types and Functions.
  */
 
-export const checkAuthentication = credentials => dispatch => {
-    dispatch(fetchAuthentication())
-    return httpFetchAuthentication(credentials)
-        .then(response => dispatch(successAuthentication(response.data)))
-        .catch(error => dispatch(failureAuthentication(error.message || 'Something went wrong')))
+export const getRecommendations = () => dispatch => {
+    dispatch(fetchRecommendations())
+    return httpFetch({ method: 'GET', url: '/recommendations_admin' })
+        .then(response => dispatch(successRecommendations(response.data)))
+        .catch(error => dispatch(failureRecommendations(error.message)))
 }

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { Redirect } from 'react-router-dom'
 import { checkAuthentication } from '../../redux/ducks/authentication'
 import Input from '../Layout/Input'
 import Button from '../Layout/Button'
 import { loadJs } from '../../util/helpers'
 
-function Authentication (props) {
+function Authentication () {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
@@ -14,9 +15,7 @@ function Authentication (props) {
 
     useEffect(() => {
         loadJs()
-        const { push } = props.history
-        if (authentication.authorized) push('/dashboard/recommendations')
-    }, [email, password, error, authentication, props])
+    }, [email, password, error, authentication])
 
     function loginHandler (event) {
         event.preventDefault()
@@ -32,8 +31,12 @@ function Authentication (props) {
         setError('')
     }
 
+    let isAuthorized = authentication.authorized ?
+        <Redirect to="/dashboard/recommendations" /> : null
+
     return (
         <div className="login-page">
+            {isAuthorized}
             <div className="container d-flex align-items-center">
                 <div className="form-holder has-shadow">
                     <div className="row">
