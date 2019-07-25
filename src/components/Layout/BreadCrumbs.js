@@ -4,7 +4,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 type BreadCrumb = {
-    id: number,
+    key: number,
     path: string,
     name: string
 }
@@ -20,7 +20,7 @@ function BreadCrumbs (props: Props) {
         <div className="container-fluid">
             <ul className="breadcrumb">
                 {breadCrumbs.map(bc => (
-                    <li key={bc.id} className="breadcrumb-item">
+                    <li key={bc.key} className="breadcrumb-item">
                         <Link to={bc.path}>
                             {bc.name}
                         </Link>
