@@ -31,12 +31,10 @@ function Authentication () {
         setError('')
     }
 
-    let isAuthorized = authentication.authorized ?
-        <Redirect to="/dashboard/recommendations" /> : null
+    if (authentication.authorized) return <Redirect to="/dashboard/recommendations" />
 
     return (
         <div className="login-page">
-            {isAuthorized}
             <div className="container d-flex align-items-center">
                 <div className="form-holder has-shadow">
                     <div className="row">

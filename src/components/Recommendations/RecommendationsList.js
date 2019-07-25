@@ -17,7 +17,10 @@ function RecommendationsList (props) {
     function searchHandler () {
         if (searchKeyword === '') return false
         const { push } = history
-        return push(`/dashboard/search_recommendation?query=${searchKeyword}`)
+        return push(
+            `/dashboard/search_recommendation?query=${searchKeyword}`,
+            { query: searchKeyword }
+        )
     }
 
     return (

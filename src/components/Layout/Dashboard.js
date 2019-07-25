@@ -1,8 +1,5 @@
 import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import { Route, Switch } from 'react-router-dom'
-import useReactRouter from 'use-react-router'
-import { authenticationReset } from '../../redux/ducks/authentication'
 import { loadJs } from '../../util/helpers'
 
 /** Route Components. */
@@ -40,28 +37,9 @@ import RecommendationItemsDelete from '../RecommendationItems/RecommendationItem
 import RecommendationsSearch from '../Recommendations/RecommendationsSearch'
 
 function Dashboard () {
-    const authentication = useSelector(state => state.authentication)
-    const { history } = useReactRouter()
-    const dispatch = useDispatch()
-
     useEffect(() => {
         loadJs()
-        sessionTimeOut()
-
-        const { authorized } = authentication
-        const { push } = history
-
-        if (!authorized) push('/dashboard/recommendations')
     })
-
-    function sessionTimeOut () {
-        const { authorized } = authentication
-        const { exp } = authentication.user
-
-        if (authorized) {
-            if (exp < new Date().getTime() / 1000) dispatch(authenticationReset())
-        }
-    }
 
     return (
         <>
