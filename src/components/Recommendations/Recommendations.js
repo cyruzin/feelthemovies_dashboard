@@ -2,8 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getRecommendations } from '../../redux/ducks/recommendations'
 import RecommendationsList from './RecommendationsList'
-import Spinner from '../Layout/Spinner'
-import NoResults from '../Layout/NoResults';
+import { Spinner, NoResults } from '../Common'
 
 function Recommendations () {
     const recommendations = useSelector(state => state.recommendations)

@@ -2,11 +2,11 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import distanceInWordsStrict from 'date-fns/distance_in_words_strict'
 import { checkType, checkStatus } from '../../util/helpers'
-import Section from '../Layout/Section'
-import SearchInput from '../Layout/SearchInput'
-import Table from '../Layout/Table'
-import TR from '../Layout/TR'
-import TD from '../Layout/TD'
+import Section from '../Common/Section'
+import SearchInput from '../Common/SearchInput'
+import Table from '../Common/Table'
+import TR from '../Common/TR'
+import TD from '../Common/TD'
 
 function RecommendationsList (props) {
     const { data } = props

@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { checkAuthentication } from '../../redux/ducks/authentication'
-import Input from '../Layout/Input'
-import Button from '../Layout/Button'
+import { Input, Button } from '../Common'
 import { loadJs } from '../../util/helpers'
 
 function Authentication () {
