@@ -62,7 +62,6 @@ function Authentication (props) {
                                     <form>
                                         <Input
                                             type="text"
-                                            name="email"
                                             label="E-mail"
                                             value={email}
                                             onChange={e => setEmail(e.target.value.trim())}
@@ -71,7 +70,6 @@ function Authentication (props) {
                                         />
                                         <Input
                                             type="password"
-                                            name="password"
                                             label="Password"
                                             value={password}
                                             onChange={e => setPassword(e.target.value.trim())}
@@ -80,9 +78,9 @@ function Authentication (props) {
                                         />
                                         <Button
                                             type="submit"
-                                            size="primary"
-                                            title="Login"
-                                            onClick={loginHandler} />
+                                            onClick={loginHandler}>
+                                            Login
+                                        </Button>
                                     </form>
                                 </div>
                             </div>

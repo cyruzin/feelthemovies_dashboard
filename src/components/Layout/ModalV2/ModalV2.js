@@ -28,14 +28,16 @@ function ModalV2 (props) {
                             <Button
                                 type="button"
                                 onClick={onClick}
-                                title={okBtnName || 'Save'}
-                                className="btn btn-primary" />
+                                className="btn btn-primary">
+                                    {okBtnName}
+                            </Button>
 
                             <Button
                                 type="button"
                                 onClick={close}
-                                title={closeBtnName || 'Close'}
-                                className="btn btn-secondary" />
+                                className="btn btn-secondary" >
+                                    {closeBtnName}
+                            </Button>
                         </div>
                     </div>
                 </div>

@@ -1,6 +1,7 @@
 import React from 'react'
+import RecommendationsList from './RecommendationsList';
 
-function Recommendations (props) {
+function Recommendations () {
     return (
         <div>
             <div className="page-header">
@@ -10,8 +11,7 @@ function Recommendations (props) {
                     </h2>
                 </div>
             </div>
-
-
+            <RecommendationsList />
         </div>
     )
 }

@@ -1,12 +1,20 @@
-import React from 'react'
+// @flow
+import * as React from 'react'
 
-const Button = props => {
-    const { title, size, style, children } = props
+type Props = {
+    children?: React.Node,
+    className: string
+}
+
+Button.defaultProps = {
+    className: 'btn btn-primary'
+}
+
+function Button (props: Props) {
+    const { className, children } = props
     return (
-        <button
-            className={`btn btn-${style} btn-${size}`}
-            {...props}>
-            {title} {children}
+        <button className={className} {...props}>
+            {children}
         </button>
     )
 }

@@ -90,5 +90,5 @@ export const checkAuthentication = credentials => dispatch => {
             }
             dispatch(successAuthentication(payload))
         })
-        .catch(error => dispatch(failureAuthentication(error.message || 'Something went wrong')))
+        .catch(error => dispatch(failureAuthentication(error.message)))
 }
