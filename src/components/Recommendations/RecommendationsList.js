@@ -1,28 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
-import useReactRouter from 'use-react-router'
 import distanceInWordsStrict from 'date-fns/distance_in_words_strict'
 import { checkType, checkStatus } from '../../util/helpers'
-import Search from '../Layout/Search'
+import SearchInput from '../Layout/SearchInput'
 
 function RecommendationsList (props) {
-    const [searchKeyword, setSearchKeyword] = useState('')
-    const { history } = useReactRouter()
     const { data } = props
-
-    function getSearchKeyword (event) {
-        setSearchKeyword(event.target.value)
-    }
-
-    function searchHandler () {
-        if (searchKeyword === '') return false
-        const { push } = history
-        return push(
-            `/dashboard/search_recommendation?query=${searchKeyword}`,
-            { query: searchKeyword }
-        )
-    }
-
     return (
         <div>
             <section className="no-padding-top">
@@ -36,10 +19,10 @@ function RecommendationsList (props) {
                                         to='/dashboard/create_recommendation'>
                                         New
                                     </Link>
-                                    <Search
-                                        placeholder="Search for keywords, genres or titles"
-                                        onChange={getSearchKeyword}
-                                        searchHandler={searchHandler} />
+                                    <SearchInput
+                                        path='/dashboard/search_recommendation'
+                                        placeholder="Search for a title, keyword or genre"
+                                    />
                                     <div className="line"></div>
                                     <table className="table table-striped table-sm">
                                         <thead>

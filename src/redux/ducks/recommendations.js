@@ -89,11 +89,11 @@ export const getRecommendations = () => dispatch => {
         .catch(error => dispatch(failureRecommendations(error.message)))
 }
 
-export const getSearchRecommendations = keywords => dispatch => {
+export const getSearchRecommendations = query => dispatch => {
     dispatch(fetchRecommendations())
     return httpFetch({
         method: 'GET',
-        url: `/search_recommendation?query=${encodeURIComponent(keywords)}`
+        url: `/search_recommendation?query=${query}`
     }).then(response => dispatch(
         searchRecommendations(response.data !== null ? response.data : []))
     ).catch(error => dispatch(failureRecommendations(error)))
