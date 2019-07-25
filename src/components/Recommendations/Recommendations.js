@@ -14,7 +14,6 @@ function Recommendations () {
         data.length === 0 && dispatch(getRecommendations())
     }, [data.length, dispatch])
 
-
     return (
         <div>
             <div className="page-header">

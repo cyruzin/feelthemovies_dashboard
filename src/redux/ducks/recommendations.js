@@ -7,7 +7,8 @@ import { httpFetch } from '../../util/request'
 const types = {
     FETCH: 'RECOMMENDATIONS/FETCH',
     SUCCESS: 'RECOMMENDATIONS/SUCCESS',
-    FAILURE: 'RECOMMENDATIONS/FAILURE'
+    FAILURE: 'RECOMMENDATIONS/FAILURE',
+    SEARCH: 'RECOMMENDATIONS/SEARCH'
 }
 
 /**
@@ -17,6 +18,7 @@ const types = {
 const initialState = {
     fetch: false,
     data: [],
+    searchData: [],
     error: ''
 }
 
@@ -36,6 +38,13 @@ export default (state = initialState, action) => {
                 ...state,
                 fetch: false,
                 data: action.payload,
+                error: ''
+            }
+        case types.SEARCH:
+            return {
+                ...state,
+                fetch: false,
+                searchData: action.payload,
                 error: ''
             }
         case types.FAILURE:
@@ -61,6 +70,10 @@ export const successRecommendations = payload => ({
     type: types.SUCCESS, payload
 })
 
+export const searchRecommendations = payload => ({
+    type: types.SEARCH, payload
+})
+
 export const failureRecommendations = payload => ({
     type: types.FAILURE, payload
 })
@@ -74,4 +87,14 @@ export const getRecommendations = () => dispatch => {
     return httpFetch({ method: 'GET', url: '/recommendations_admin' })
         .then(response => dispatch(successRecommendations(response.data)))
         .catch(error => dispatch(failureRecommendations(error.message)))
+}
+
+export const getSearchRecommendations = keywords => dispatch => {
+    dispatch(fetchRecommendations())
+    return httpFetch({
+        method: 'GET',
+        url: `/search_recommendation?query=${encodeURIComponent(keywords)}`
+    }).then(response => dispatch(
+        searchRecommendations(response.data !== null ? response.data : []))
+    ).catch(error => dispatch(failureRecommendations(error)))
 }

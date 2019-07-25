@@ -1,11 +1,25 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import useReactRouter from 'use-react-router'
 import distanceInWordsStrict from 'date-fns/distance_in_words_strict'
 import { checkType, checkStatus } from '../../util/helpers'
-import Input from '../Layout/Input'
+import Search from '../Layout/Search'
 
 function RecommendationsList (props) {
+    const [searchKeyword, setSearchKeyword] = useState('')
+    const { history } = useReactRouter()
     const { data } = props
+
+    function getSearchKeyword (event) {
+        setSearchKeyword(event.target.value)
+    }
+
+    function searchHandler () {
+        if (searchKeyword === '') return false
+        const { push } = history
+        return push(`/dashboard/search_recommendation?query=${searchKeyword}`)
+    }
+
     return (
         <div>
             <section className="no-padding-top">
@@ -19,16 +33,10 @@ function RecommendationsList (props) {
                                         to='/dashboard/create_recommendation'>
                                         New
                                     </Link>
-                                    <div className="form-group row">
-                                        <div className="col-lg-6">
-                                            <form>
-                                                <Input
-                                                    type="text"
-                                                    placeholder="Search"
-                                                    className="form-control" />
-                                            </form>
-                                        </div>
-                                    </div>
+                                    <Search
+                                        placeholder="Search for keywords, genres or titles"
+                                        onChange={getSearchKeyword}
+                                        searchHandler={searchHandler} />
                                     <div className="line"></div>
                                     <table className="table table-striped table-sm">
                                         <thead>
@@ -78,7 +86,7 @@ function RecommendationsList (props) {
                     </div>
                 </div>
             </section>
-        </div>
+        </div >
     )
 }
 
