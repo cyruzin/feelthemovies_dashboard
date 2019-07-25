@@ -8,7 +8,8 @@ const types = {
     FETCH: 'RECOMMENDATIONS/FETCH',
     SUCCESS: 'RECOMMENDATIONS/SUCCESS',
     FAILURE: 'RECOMMENDATIONS/FAILURE',
-    SEARCH: 'RECOMMENDATIONS/SEARCH'
+    SEARCH: 'RECOMMENDATIONS/SEARCH',
+    REMOVE: 'RECOMMENDATIONS/REMOVE'
 }
 
 /**
@@ -47,6 +48,12 @@ export default (state = initialState, action) => {
                 searchData: action.payload,
                 error: ''
             }
+        case types.REMOVE:
+            return {
+                ...state,
+                fetch: false,
+                error: ''
+            }
         case types.FAILURE:
             return {
                 ...state,
@@ -70,12 +77,16 @@ export const successRecommendations = payload => ({
     type: types.SUCCESS, payload
 })
 
+export const failureRecommendations = payload => ({
+    type: types.FAILURE, payload
+})
+
 export const searchRecommendations = payload => ({
     type: types.SEARCH, payload
 })
 
-export const failureRecommendations = payload => ({
-    type: types.FAILURE, payload
+export const removeRecommendations = () => ({
+    type: types.REMOVE
 })
 
 /**
@@ -97,4 +108,11 @@ export const getSearchRecommendations = query => dispatch => {
     }).then(response => dispatch(
         searchRecommendations(response.data !== null ? response.data : []))
     ).catch(error => dispatch(failureRecommendations(error)))
+}
+
+export const deleteRecommendations = id => dispatch => {
+    dispatch(fetchRecommendations())
+    return httpFetch({ method: 'DELETE', url: `/recommendation/${id}` })
+        .then(response => dispatch(response.data.message))
+        .catch(err => dispatch(failureRecommendations(err.data.message)))
 }
