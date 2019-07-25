@@ -1,34 +1,49 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import Button from './Button'
+import './Modal.css'
 
-const Modal = props => (
-    <section className="no-padding-top">
-        <div className="container-fluid">
-            <div className="row">
-                <div className="col-lg-8">
-                    <div className="statistic-block block">
-                        <div className="progress-details">
-                            <h4 className="text-primary">
-                                {props.message}
-                            </h4>
-                            <div className="mt-3">
-                                <Link
-                                    to={props.cancelPath}
-                                    className="btn btn-outline-secondary mr-2">
-                                    No
-                                </Link>
-                                <button
-                                    className="btn btn-outline-primary"
-                                    onClick={props.action}>
-                                    Yes
-                                </button>
-                            </div>
+function Modal (props) {
+    const { children, title, closeBtnName, okBtnName, onClick, close, show } = props
+    return (
+        <div style={{ display: show ? 'block' : 'none' }}>
+            <div className="modal-wrapper text-left">
+                <div role="document" className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <strong id="exampleModalLabel" className="modal-title">
+                                {title}
+                            </strong>
+                            <Button
+                                type="button"
+                                data-dismiss="modal"
+                                aria-label="Close"
+                                className="close">
+                                <span aria-hidden="true">×</span>
+                            </Button>
+                        </div>
+                        <div className="modal-body">
+                            {children}
+                        </div>
+                        <div className="modal-footer">
+                            <Button
+                                type="button"
+                                onClick={onClick}
+                                className="btn btn-primary">
+                                {okBtnName}
+                            </Button>
+
+                            <Button
+                                type="button"
+                                onClick={close}
+                                className="btn btn-secondary" >
+                                {closeBtnName}
+                            </Button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-)
+    )
+}
 
 export default Modal
