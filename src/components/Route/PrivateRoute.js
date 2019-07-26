@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { authenticationReset } from '../../redux/ducks/authentication'
+import { resetAuthentication } from '../../redux/ducks/authentication'
 
 function PrivateRoute ({ component: Component, ...rest }) {
   const dispatch = useDispatch()
@@ -15,7 +15,7 @@ function PrivateRoute ({ component: Component, ...rest }) {
   if (authorized) {
     const { exp } = authentication.user
     if (exp < new Date().getTime() / 1000) {
-      dispatch(authenticationReset())
+      dispatch(resetAuthentication())
       return <Redirect to={{ pathname: "/" }} />
     }
   }

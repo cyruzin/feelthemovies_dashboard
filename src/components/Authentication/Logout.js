@@ -1,11 +1,11 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { Redirect } from 'react-router-dom'
-import { authenticationReset } from '../../redux/ducks/authentication'
+import { resetAuthentication } from '../../redux/ducks/authentication'
 
 function Logout () {
     const dispatch = useDispatch()
-    dispatch(authenticationReset())
+    dispatch(resetAuthentication())
     return <Redirect to="/" />
 }
 

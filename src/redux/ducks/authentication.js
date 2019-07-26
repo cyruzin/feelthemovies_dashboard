@@ -71,7 +71,7 @@ export const failureAuthentication = payload => ({
     type: types.FAILURE, payload
 })
 
-export const authenticationReset = () => ({
+export const resetAuthentication = () => ({
     type: types.RESET
 })
 
