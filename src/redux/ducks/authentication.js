@@ -84,10 +84,7 @@ export const checkAuthentication = credentials => dispatch => {
     return httpFetchAuthentication(credentials)
         .then(response => {
             const claims = jwtDecode(response.token)
-            const payload = {
-                token: response.token,
-                ...claims
-            }
+            const payload = { token: response.token, ...claims }
             dispatch(successAuthentication(payload))
         })
         .catch(error => dispatch(failureAuthentication(error.message)))
