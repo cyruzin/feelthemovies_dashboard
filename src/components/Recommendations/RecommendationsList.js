@@ -2,11 +2,10 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import distanceInWordsStrict from 'date-fns/distance_in_words_strict'
 import { checkType, checkStatus } from '../../util/helpers'
-import Section from '../Common/Section'
-import SearchInput from '../Common/SearchInput'
-import Table from '../Common/Table'
-import TR from '../Common/TR'
-import TD from '../Common/TD'
+import {
+    Section, SearchInput, Table, TR, TD,
+    Modal
+} from '../Common'
 
 function RecommendationsList (props) {
     const { data } = props
@@ -22,6 +21,7 @@ function RecommendationsList (props) {
 
     return (
         <Section>
+            <Modal show />
             <Link
                 className="btn btn btn-outline-success mb-3 float-right"
                 to='/dashboard/create_recommendation'>

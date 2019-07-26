@@ -14,7 +14,10 @@ function PrivateRoute ({ component: Component, ...rest }) {
 
   if (authorized) {
     const { exp } = authentication.user
-    if (exp < new Date().getTime() / 1000) return dispatch(authenticationReset())
+    if (exp < new Date().getTime() / 1000) {
+      dispatch(authenticationReset())
+      return <Redirect to={{ pathname: "/" }} />
+    }
   }
 
   return (

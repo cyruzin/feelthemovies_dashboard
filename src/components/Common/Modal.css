@@ -9,26 +9,26 @@
 }
 
 .modal-header {
-    border-bottom: 1px solid #495057;
+    border-bottom: 1px solid #495057!important;
 }
 
 .modal-content {
-    background-color: #2d3035;
+    background-color: #2d3035!important;
 }
 
 .modal-footer {
-    border-top: 1px solid #495057;
+    border-top: 1px solid #495057!important;
 }
 
 .modal-title {
-    font-size: 1.25rem;
+    font-size: 1.25rem!important;
 }
 
 .close {
-    color: #8a8d93;
-    text-shadow: 0 1px 0 #fff;
+    color: #8a8d93!important;
+    text-shadow: 0 1px 0 #fff!important;
 }
 
 .close:hover {
-    color: #fff;
+    color: #fff!important;
 }

@@ -1,9 +1,25 @@
-import React from 'react'
+// @flow
+import * as React from 'react'
 import Button from './Button'
 import './Modal.css'
 
-function Modal (props) {
-    const { children, title, closeBtnName, okBtnName, onClick, close, show } = props
+type Props = {
+    show: boolean,
+    title: string,
+    children: React.Node,
+    closeBtnName: string,
+    okBtnName: string,
+    onClose: () => any,
+    onClick: () => any
+}
+
+Modal.defaulProps = {
+    closeBtnName: 'Close',
+    okBtnName: 'Save'
+}
+
+function Modal (props: Props) {
+    const { children, title, closeBtnName, okBtnName, onClick, onClose, show } = props
     return (
         <div style={{ display: show ? 'block' : 'none' }}>
             <div className="modal-wrapper text-left">
@@ -34,7 +50,7 @@ function Modal (props) {
 
                             <Button
                                 type="button"
-                                onClick={close}
+                                onClick={onClose}
                                 className="btn btn-secondary" >
                                 {closeBtnName}
                             </Button>
