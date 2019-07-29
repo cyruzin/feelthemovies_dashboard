@@ -107,12 +107,15 @@ export const getSearchRecommendations = query => dispatch => {
         url: `/search_recommendation?query=${query}`
     }).then(response => dispatch(
         searchRecommendations(response.data !== null ? response.data : []))
-    ).catch(error => dispatch(failureRecommendations(error)))
+    ).catch(error => dispatch(failureRecommendations(error.message)))
 }
 
 export const deleteRecommendations = id => dispatch => {
     dispatch(fetchRecommendations())
     return httpFetch({ method: 'DELETE', url: `/recommendation/${id}` })
-        .then(response => dispatch(response.data.message))
-        .catch(err => dispatch(failureRecommendations(err.data.message)))
+        .then(response => {
+            dispatch(removeRecommendations())
+            return response.message
+        })
+        .catch(error => dispatch(failureRecommendations(error.message)))
 }

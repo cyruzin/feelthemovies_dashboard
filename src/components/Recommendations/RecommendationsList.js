@@ -1,14 +1,23 @@
-import React from 'react'
+// @flow
+import React, { useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { getRecommendations, deleteRecommendations } from '../../redux/ducks/recommendations'
 import distanceInWordsStrict from 'date-fns/distance_in_words_strict'
 import { checkType, checkStatus } from '../../util/helpers'
 import {
     Section, SearchInput, Table, TR, TD,
-    Modal
+    Modal, Button
 } from '../Common'
 
-function RecommendationsList (props) {
+type Props = {
+    data: Object
+}
+
+function RecommendationsList (props: Props) {
+    const dispatch = useDispatch()
     const { data } = props
+
     const tableColumns = [
         { key: 1, name: '#' },
         { key: 2, name: 'Title' },
@@ -19,9 +28,35 @@ function RecommendationsList (props) {
         { key: 7, name: 'Actions' }
     ]
 
+    const [modalShow, setModal] = useState(false)
+    const [recommedationID, setRecommendationID] = useState(null)
+
+    function modalOpenHandler (id: number) {
+        setRecommendationID(id)
+        setModal(true)
+    }
+
+    function modalCloseHandler () {
+        setModal(false)
+    }
+
+    function deleteRecommendation () {
+        dispatch(deleteRecommendations(recommedationID))
+        setModal(false)
+        // TODO: Implement alert
+    }
+
     return (
         <Section>
-            <Modal show />
+            <Modal
+                show={modalShow}
+                title="Remove Recommendation"
+                onClick={deleteRecommendation}
+                onClose={modalCloseHandler}>
+                <p>
+                    Are you sure that you want to remove this recommedation?
+                </p>
+            </Modal>
             <Link
                 className="btn btn btn-outline-success mb-3 float-right"
                 to='/dashboard/create_recommendation'>
@@ -51,16 +86,16 @@ function RecommendationsList (props) {
                                 to={`/dashboard/edit_recommendation/${recommendation.id}`}>
                                 <i className="fa fa-edit"></i>
                             </Link>
-                            <Link
+                            <Button
                                 className="btn btn-sm btn-outline-danger"
-                                to={`/dashboard/delete_recommendation/${recommendation.id}`}>
+                                onClick={() => modalOpenHandler(recommendation.id)}>
                                 <i className="fa fa-trash"></i>
-                            </Link>
+                            </Button>
                         </TD>
                     </TR>
                 ))}
             </Table>
-        </Section>
+        </Section >
     )
 }
 

@@ -10,8 +10,8 @@ function Recommendations () {
     const { fetch, data } = recommendations
 
     useEffect(() => {
-        data.length === 0 && dispatch(getRecommendations())
-    }, [data.length, dispatch])
+        dispatch(getRecommendations())
+    }, [dispatch])
 
     return (
         <div>

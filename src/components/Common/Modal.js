@@ -7,35 +7,40 @@ type Props = {
     show: boolean,
     title: string,
     children: React.Node,
+    showCloseBtn: boolean,
     closeBtnName: string,
     okBtnName: string,
-    onClose: () => any,
-    onClick: () => any
+    onClick: () => any,
+    onClose: () => any
 }
 
-Modal.defaulProps = {
+Modal.defaultProps = {
+    showCloseBtn: true,
     closeBtnName: 'Close',
-    okBtnName: 'Save'
+    okBtnName: 'Save',
 }
 
 function Modal (props: Props) {
-    const { children, title, closeBtnName, okBtnName, onClick, onClose, show } = props
+    const {
+        show,
+        title,
+        children,
+        closeBtnName,
+        showCloseBtn,
+        okBtnName,
+        onClick,
+        onClose
+    } = props
+
     return (
         <div style={{ display: show ? 'block' : 'none' }}>
             <div className="modal-wrapper text-left">
                 <div role="document" className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <strong id="exampleModalLabel" className="modal-title">
+                            <strong className="modal-title">
                                 {title}
                             </strong>
-                            <Button
-                                type="button"
-                                data-dismiss="modal"
-                                aria-label="Close"
-                                className="close">
-                                <span aria-hidden="true">×</span>
-                            </Button>
                         </div>
                         <div className="modal-body">
                             {children}
@@ -48,12 +53,12 @@ function Modal (props: Props) {
                                 {okBtnName}
                             </Button>
 
-                            <Button
+                            {showCloseBtn && <Button
                                 type="button"
                                 onClick={onClose}
-                                className="btn btn-secondary" >
+                                className="btn btn-secondary">
                                 {closeBtnName}
-                            </Button>
+                            </Button>}
                         </div>
                     </div>
                 </div>
