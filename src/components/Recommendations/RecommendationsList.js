@@ -29,10 +29,10 @@ function RecommendationsList (props: Props) {
     ]
 
     const [modalShow, setModal] = useState(false)
-    const [recommedationID, setRecommendationID] = useState(null)
+    const [recommendation, setRecommendation] = useState(null)
 
-    function modalOpenHandler (id: number) {
-        setRecommendationID(id)
+    function modalOpenHandler (recommendation: Object) {
+        setRecommendation(recommendation)
         setModal(true)
     }
 
@@ -41,7 +41,7 @@ function RecommendationsList (props: Props) {
     }
 
     function deleteRecommendation () {
-        dispatch(deleteRecommendations(recommedationID))
+        dispatch(deleteRecommendations(recommendation.id))
         setModal(false)
     }
 
@@ -49,15 +49,15 @@ function RecommendationsList (props: Props) {
         <Section>
             <Modal
                 show={modalShow}
-                title="Remove Recommendation"
+                title="Delete Recommendation"
                 okBtnName="Yes"
                 onClick={deleteRecommendation}
                 onClose={modalCloseHandler}>
                 <p>
                     Are you sure that you want to
-                    remove recommedation <strong>{recommedationID}</strong>?
+                    delete recommendation <strong>{recommendation && recommendation.title}</strong>?
                 </p>
-            </Modal>
+            </Modal >
             <Link
                 className="btn btn btn-outline-success mb-3 float-right"
                 to='/dashboard/create_recommendation'>
@@ -89,7 +89,7 @@ function RecommendationsList (props: Props) {
                             </Link>
                             <Button
                                 className="btn btn-sm btn-outline-danger"
-                                onClick={() => modalOpenHandler(recommendation.id)}>
+                                onClick={() => modalOpenHandler(recommendation)}>
                                 <i className="fa fa-trash"></i>
                             </Button>
                         </TD>

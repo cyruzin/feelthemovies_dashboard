@@ -1,6 +1,5 @@
 // @flow
 import React, { useState } from 'react'
-// $FlowFixMe
 import useReactRouter from 'use-react-router'
 import Input from './Input'
 

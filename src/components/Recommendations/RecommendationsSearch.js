@@ -4,14 +4,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getSearchRecommendations } from '../../redux/ducks/recommendations'
 import distanceInWordsStrict from 'date-fns/distance_in_words_strict'
 import { checkType, checkStatus } from '../../util/helpers'
-import Section from '../Common/Section'
-import SearchInput from '../Common/SearchInput'
-import BreadCrumbs from '../Common/BreadCrumbs'
-import Spinner from '../Common/Spinner'
-import NoResults from '../Common/NoResults'
-import Table from '../Common/Table'
-import TR from '../Common/TR'
-import TD from '../Common/TD'
+import {
+    Section, SearchInput, BreadCrumbs, Spinner,
+    NoResults, Table, TR, TD
+} from '../Common'
 
 function RecommendationsSearch (props) {
     const dispatch = useDispatch()
