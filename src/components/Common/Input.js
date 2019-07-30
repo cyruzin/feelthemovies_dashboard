@@ -1,6 +1,11 @@
+// @flow
 import React from 'react'
 
-const Input = props => {
+type Props = {
+    label: string
+}
+
+function Input (props: Props) {
     const { label } = props
     return (
         <div className="form-group">
