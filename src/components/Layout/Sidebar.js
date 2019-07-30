@@ -20,7 +20,7 @@ function Siderbar () {
                     <p>{user.name}</p>
                 </div>
             </div>
-            <span className="heading">Main</span>
+            <span className="heading">Dash</span>
             <ul className="list-unstyled">
                 <li className={activeCheck('/dashboard/users')}>
                     <Link to='/dashboard/users'><i className="fa fa-user"></i>Users</Link>

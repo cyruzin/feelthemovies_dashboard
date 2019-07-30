@@ -51,4 +51,4 @@ const tmdb = axios.create({
 export const httpFetchTMDb = ({ url }) =>
     tmdb({ url })
         .then(response => response.data)
-        .catch(error => Promise.reject(error.response.data))
+        .catch(error => Promise.reject(error.response.data || 'Something went wrong'))

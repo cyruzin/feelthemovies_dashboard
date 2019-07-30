@@ -1,13 +1,53 @@
-import React from 'react'
+// @flow
+import React, { useEffect } from 'react'
+import Snackbar from '@material-ui/core/Snackbar'
+import AlertContent from './AlertContent'
 
-const Alert = props => (
-    <div className="form-group row">
-        <div className="col-lg-12">
-            <label className={`form-control-label text-${props.type}`}>
-                {props.message}
-            </label>
+type Props = {
+    message: string,
+    variant: string,
+    showAlert: boolean
+}
+
+function Alert (props: Props) {
+    const { showAlert, message, variant } = props
+    const [open, setOpen] = React.useState(false)
+
+    useEffect(() => {
+        handleClick(showAlert)
+    }, [showAlert])
+
+    function handleClick (showAlert: boolean) {
+        setOpen(showAlert)
+    }
+
+    function handleClose (event, reason) {
+        if (reason === 'clickaway') {
+            return
+        }
+        setOpen(false)
+    }
+
+    return (
+        <div>
+            <Snackbar
+                anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}
+                open={open}
+                autoHideDuration={6000}
+                onClose={handleClose}
+            >
+                <AlertContent
+                    onClose={handleClose}
+                    // $FlowFixMe
+                    variant={variant}
+                    message={message}
+                />
+            </Snackbar>
         </div>
-    </div>
-)
+    )
+}
 
 export default Alert

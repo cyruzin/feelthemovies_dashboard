@@ -20,6 +20,7 @@ const initialState = {
     fetch: false,
     data: [],
     searchData: [],
+    message: '',
     error: ''
 }
 
@@ -32,7 +33,8 @@ export default (state = initialState, action) => {
         case types.FETCH:
             return {
                 ...state,
-                fetch: true
+                fetch: true,
+                message: ''
             }
         case types.SUCCESS:
             return {
@@ -52,6 +54,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 fetch: false,
+                message: action.payload,
                 error: ''
             }
         case types.FAILURE:
@@ -85,8 +88,8 @@ export const searchRecommendations = payload => ({
     type: types.SEARCH, payload
 })
 
-export const removeRecommendations = () => ({
-    type: types.REMOVE
+export const removeRecommendations = payload => ({
+    type: types.REMOVE, payload
 })
 
 /**
@@ -114,8 +117,8 @@ export const deleteRecommendations = id => dispatch => {
     dispatch(fetchRecommendations())
     return httpFetch({ method: 'DELETE', url: `/recommendation/${id}` })
         .then(response => {
-            dispatch(removeRecommendations())
-            return response.message
+            dispatch(getRecommendations())
+            dispatch(removeRecommendations(response.message))
         })
         .catch(error => dispatch(failureRecommendations(error.message)))
 }

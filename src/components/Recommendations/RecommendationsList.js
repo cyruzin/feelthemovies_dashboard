@@ -1,8 +1,8 @@
 // @flow
-import React, { useState, useCallback } from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { getRecommendations, deleteRecommendations } from '../../redux/ducks/recommendations'
+import { deleteRecommendations } from '../../redux/ducks/recommendations'
 import distanceInWordsStrict from 'date-fns/distance_in_words_strict'
 import { checkType, checkStatus } from '../../util/helpers'
 import {
@@ -43,7 +43,6 @@ function RecommendationsList (props: Props) {
     function deleteRecommendation () {
         dispatch(deleteRecommendations(recommedationID))
         setModal(false)
-        // TODO: Implement alert
     }
 
     return (
@@ -51,10 +50,12 @@ function RecommendationsList (props: Props) {
             <Modal
                 show={modalShow}
                 title="Remove Recommendation"
+                okBtnName="Yes"
                 onClick={deleteRecommendation}
                 onClose={modalCloseHandler}>
                 <p>
-                    Are you sure that you want to remove this recommedation?
+                    Are you sure that you want to
+                    remove recommedation <strong>{recommedationID}</strong>?
                 </p>
             </Modal>
             <Link

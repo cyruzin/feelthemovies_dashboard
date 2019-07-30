@@ -2,19 +2,21 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getRecommendations } from '../../redux/ducks/recommendations'
 import RecommendationsList from './RecommendationsList'
-import { Spinner, NoResults } from '../Common'
+import { Spinner, NoResults, Alert } from '../Common'
 
 function Recommendations () {
     const recommendations = useSelector(state => state.recommendations)
     const dispatch = useDispatch()
-    const { fetch, data } = recommendations
+    const { fetch, data, error, message } = recommendations
 
     useEffect(() => {
         dispatch(getRecommendations())
     }, [dispatch])
 
     return (
-        <div>
+        <>
+            <Alert message={error} variant="error" showAlert={error !== ''} />
+            <Alert message={message} variant="success" showAlert={message !== ''} />
             <div className="page-header">
                 <div className="container-fluid">
                     <h2 className="h5 no-margin-bottom">
@@ -32,7 +34,7 @@ function Recommendations () {
             }
 
             {!fetch && data.length > 0 && <RecommendationsList data={data} />}
-        </div>
+        </>
     )
 }
 
