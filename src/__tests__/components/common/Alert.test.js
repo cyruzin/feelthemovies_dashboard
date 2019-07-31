@@ -3,5 +3,5 @@ import { shallow } from 'enzyme'
 import Alert from '../../../components/Common/Alert'
 
 it('renders without crashing', () => {
-    shallow(<Alert />)
+    shallow(<Alert variant="success" message="Test Message" />)
 })
