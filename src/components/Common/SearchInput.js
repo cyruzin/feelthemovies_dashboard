@@ -1,7 +1,7 @@
 // @flow
 import React, { useState } from 'react'
 import useReactRouter from 'use-react-router'
-import Input from './Input'
+import InputLabel from './InputLabel'
 
 type Props = {
     path: string,
@@ -39,7 +39,7 @@ function SearchInput (props: Props) {
     return (
         <div className="form-group row">
             <div className="col-lg-6">
-                <Input
+                <InputLabel
                     type="text"
                     className="form-control"
                     placeholder={placeholder}

@@ -57,7 +57,7 @@ function RecommendationsList (props: Props) {
                     Are you sure that you want to
                     delete recommendation <strong>{recommendation && recommendation.title}</strong>?
                 </p>
-            </Modal >
+            </Modal>
             <Link
                 className="btn btn btn-outline-success mb-3 float-right"
                 to='/dashboard/create_recommendation'>

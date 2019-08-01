@@ -7,7 +7,7 @@ import Header from './Header'
 import Content from './Content'
 
 import Recommendations from '../Recommendations/Recommendations'
-//import RecommendationsCreate from '../Recommendations/RecommendationsCreate'
+import RecommendationsCreate from '../Recommendations/RecommendationsCreate'
 //import RecommendationsEdit from '../Recommendations/RecommendationsEdit'
 //import RecommendationsDelete from '../Recommendations/RecommendationsDelete'
 import RecommendationsSearch from '../Recommendations/RecommendationsSearch'
@@ -60,8 +60,8 @@ function Dashboard () {
                     <Route path='/dashboard/search_user' component={UserSearch} /> */}
 
                     <Route path='/dashboard/recommendations' component={Recommendations} />
-                    {/* <Route path='/dashboard/create_recommendation' component={RecommendationsCreate} />
-                    <Route path='/dashboard/edit_recommendation/:id' component={RecommendationsEdit} />
+                    <Route path='/dashboard/create_recommendation' component={RecommendationsCreate} />
+                    {/*<Route path='/dashboard/edit_recommendation/:id' component={RecommendationsEdit} />
                     <Route path='/dashboard/delete_recommendation/:id' component={RecommendationsDelete} /> */}
                     <Route path='/dashboard/search_recommendation' component={RecommendationsSearch} />
 

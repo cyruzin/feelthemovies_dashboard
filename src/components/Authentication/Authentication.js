@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { checkAuthentication } from '../../redux/ducks/authentication'
-import { Input, Button } from '../Common'
+import { InputLabel, Button } from '../Common'
 import { loadJs } from '../../util/helpers'
 
 function Authentication () {
@@ -60,7 +60,7 @@ function Authentication () {
                                         : null
                                     }
                                     <form>
-                                        <Input
+                                        <InputLabel
                                             type="text"
                                             label="E-mail"
                                             value={email}
@@ -68,7 +68,7 @@ function Authentication () {
                                             onBlur={e => setEmail(e.target.value.trim())}
                                             className="input-material"
                                         />
-                                        <Input
+                                        <InputLabel
                                             type="password"
                                             label="Password"
                                             value={password}

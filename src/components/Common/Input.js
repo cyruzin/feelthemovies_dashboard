@@ -1,18 +1,7 @@
-// @flow
 import React from 'react'
 
-type Props = {
-    label: string
-}
-
-function Input (props: Props) {
-    const { label } = props
-    return (
-        <div className="form-group">
-            <input type="text" className="input-material" {...props} />
-            <label className="label-material">{label}</label>
-        </div>
-    )
+function Input (props) {
+    return <input type="text" className="input-material" {...props} />
 }
 
 export default Input
