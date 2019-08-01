@@ -51,6 +51,11 @@ function RecommendationsSearch (props) {
 
             {!fetch && searchData.length > 0 &&
                 <Section>
+                    <Link
+                        className="btn btn-primary mb-3 float-right"
+                        to='/dashboard/create_recommendation'>
+                        New
+                    </Link>
                     <SearchInput
                         path='/dashboard/search_recommendation'
                         placeholder="Search for a title, keyword or genre"
@@ -66,17 +71,17 @@ function RecommendationsSearch (props) {
                                 <TD>{distanceInWordsStrict(recommendation.updated_at, Date.now())}</TD>
                                 <TD>
                                     <Link
-                                        className="btn btn-sm btn-outline-success mr-2"
+                                        className="btn btn-sm btn-primary mr-2"
                                         to={`/dashboard/items/${recommendation.id}`}>
                                         <i className="fa fa-plus"></i>
                                     </Link>
                                     <Link
-                                        className="btn btn-sm btn-outline-secondary mr-2"
+                                        className="btn btn-sm btn-primary mr-2"
                                         to={`/dashboard/edit_recommendation/${recommendation.id}`}>
                                         <i className="fa fa-edit"></i>
                                     </Link>
                                     <Link
-                                        className="btn btn-sm btn-outline-danger"
+                                        className="btn btn-sm btn-primary"
                                         to={`/dashboard/delete_recommendation/${recommendation.id}`}>
                                         <i className="fa fa-trash"></i>
                                     </Link>

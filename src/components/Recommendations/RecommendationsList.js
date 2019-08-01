@@ -59,10 +59,10 @@ function RecommendationsList (props: Props) {
                 </p>
             </Modal>
             <Link
-                className="btn btn btn-outline-success mb-3 float-right"
+                className="btn btn-primary mb-3 float-right"
                 to='/dashboard/create_recommendation'>
                 New
-                </Link>
+            </Link>
             <SearchInput
                 path='/dashboard/search_recommendation'
                 placeholder="Search for a title, keyword or genre"
@@ -78,17 +78,17 @@ function RecommendationsList (props: Props) {
                         <TD>{distanceInWordsStrict(recommendation.updated_at, Date.now())}</TD>
                         <TD>
                             <Link
-                                className="btn btn-sm btn-outline-success mr-2"
+                                className="btn btn-sm btn-primary mr-2"
                                 to={`/dashboard/items/${recommendation.id}`}>
                                 <i className="fa fa-plus"></i>
                             </Link>
                             <Link
-                                className="btn btn-sm btn-outline-secondary mr-2"
+                                className="btn btn-sm btn-primary mr-2"
                                 to={`/dashboard/edit_recommendation/${recommendation.id}`}>
                                 <i className="fa fa-edit"></i>
                             </Link>
                             <Button
-                                className="btn btn-sm btn-outline-danger"
+                                className="btn btn-sm btn-primary"
                                 onClick={() => modalOpenHandler(recommendation)}>
                                 <i className="fa fa-trash"></i>
                             </Button>

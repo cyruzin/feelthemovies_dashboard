@@ -7,11 +7,7 @@ type Props = {
 
 function Option (props: Props) {
     const { children, ...rest } = props
-    return (
-        <option {...rest}>
-            {children}
-        </option>
-    )
+    return <option {...rest}>{children}</option>
 }
 
 export default Option

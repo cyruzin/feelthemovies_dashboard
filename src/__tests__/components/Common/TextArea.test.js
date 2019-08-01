@@ -1,7 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import Input from '../../../components/Common/Input'
+import TextArea from '../../../components/Common/TextArea'
 
 it('renders without crashing', () => {
-    shallow(<Input type="text" />)
+    shallow(<TextArea rows={4} />)
 })
