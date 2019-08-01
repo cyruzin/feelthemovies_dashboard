@@ -29,7 +29,7 @@ function RecommendationsList (props: Props) {
     ]
 
     const [modalShow, setModal] = useState(false)
-    const [recommendation, setRecommendation] = useState(null)
+    const [recommendation, setRecommendation] = useState({})
 
     function modalOpenHandler (recommendation: Object) {
         setRecommendation(recommendation)

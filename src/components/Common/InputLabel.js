@@ -2,7 +2,7 @@
 import React from 'react'
 
 type Props = {
-    label: string
+    label?: string
 }
 
 function InputLabel (props: Props) {

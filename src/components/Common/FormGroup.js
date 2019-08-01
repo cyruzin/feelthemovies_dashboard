@@ -4,7 +4,7 @@ import * as React from 'react'
 
 type Props = {
     label?: string,
-    size?: number,
+    size: string | number,
     children: React.Node,
 }
 
