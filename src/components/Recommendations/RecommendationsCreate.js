@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useReducer } from 'react'
+import debounce from 'lodash/debounce'
+import { httpFetch, httpFetchTMDb } from '../../util/request'
 import AntSelect from 'antd/lib/select'
 import AntSpin from 'antd/lib/spin'
 import 'antd/lib/select/style/css'
@@ -8,9 +10,80 @@ import {
     Input, TextArea, Select, Option, Button
 } from '../Common'
 
-const AntOption = AntSelect.Option
-
 function RecommendationsCreate () {
+    const types = {
+        TITLE: 'RECOMMENDATIONS_CREATE/TITLE',
+        BODY: 'RECOMMENDATIONS_CREATE/BODY',
+        TYPE: 'RECOMMENDATIONS_CREATE/TYPE',
+        IMAGE: 'RECOMMENDATIONS_CREATE/IMAGE',
+        GENRES: 'RECOMMENDATIONS_CREATE/GENRES',
+        KEYWORDS: 'RECOMMENDATIONS_CREATE/KEYWORDS',
+        FETCH: 'RECOMMENDATIONS_CREATE/FETCH',
+        SUCCESS: 'RECOMMENDATIONS_CREATE/SUCCESS',
+        FAILURE: 'RECOMMENDATIONS_CREATE/ERROR'
+    }
+
+    const initialState = {
+        title: '',
+        body: '',
+        image: '',
+        genres: [],
+        keywords: [],
+        type: 0
+    }
+
+    function reducer (state, action) {
+        switch (action.type) {
+            case types.TITLE:
+                return {
+                    ...state,
+                    title: action.payload
+                }
+            case types.BODY:
+                return {
+                    ...state,
+                    body: action.payload
+                }
+            case types.TYPE:
+                return {
+                    ...state,
+                    type: +action.payload
+                }
+            case types.IMAGE:
+                return {
+                    ...state,
+                    image: action.payload
+                }
+            case types.GENRES:
+                return {
+                    ...state,
+                    genres: action.payload
+                }
+            case types.KEYWORDS:
+                return {
+                    ...state,
+                    keywords: action.payload
+                }
+            default: return state
+        }
+    }
+
+    const [recommendations, dispatch] = useReducer(reducer, initialState)
+
+    console.log(recommendations)
+
+    const getImage = debounce(query => {
+        if (query === '') return
+
+        httpFetchTMDb({
+            url: `/search/multi?language=en-US&query=${encodeURIComponent(query)}&page=1&include_adult=false`
+        }).then(response => {
+            const payload = response.results
+                .filter(v => v.media_type !== 'person' && v.backdrop_path !== null)
+            dispatch({ type: types.IMAGE, payload })
+        })
+    }, 800)
+
     return (
         <>
             <BreadCrumbs
@@ -24,15 +97,21 @@ function RecommendationsCreate () {
                 <SectionTitle title="Create Recommendation" />
 
                 <FormGroup label="Title">
-                    <Input className="form-control" />
+                    <Input
+                        className="form-control"
+                        onChange={event => dispatch({ type: types.TITLE, payload: event.target.value })} />
                 </FormGroup>
 
                 <FormGroup label="Body">
-                    <TextArea className="form-control" />
+                    <TextArea
+                        className="form-control"
+                        onChange={event => dispatch({ type: types.BODY, payload: event.target.value })} />
                 </FormGroup>
 
                 <FormGroup label="Type">
-                    <Select className="form-control mb-3" >
+                    <Select
+                        className="form-control mb-3"
+                        onChange={event => dispatch({ type: types.TYPE, payload: event.target.value })}>
                         <Option value="0" defaultValue>Movie</Option>
                         <Option value="1">TV Show</Option>
                         <Option value="2">Mixed</Option>
@@ -51,12 +130,12 @@ function RecommendationsCreate () {
                         }
                         showArrow={false}
                         filterOption={false}
-                    // onSearch={this.fetchRecommendationImages}
+                        onSearch={query => getImage(query)}
                     //onChange={this.handleRecommendationImage}
                     >
-                        <AntOption key={1} value="test">
+                        <AntSelect.Option key={1} value="test">
                             Test
-                        </AntOption>
+                        </AntSelect.Option>
                     </AntSelect>
                 </FormGroup>
 
@@ -75,9 +154,9 @@ function RecommendationsCreate () {
                     // onSearch={this.fetchRecommendationImages}
                     //onChange={this.handleRecommendationImage}
                     >
-                        <AntOption key={1} value="test">
+                        <AntSelect.Option key={1} value="test">
                             Test
-                        </AntOption>
+                        </AntSelect.Option>
                     </AntSelect>
                 </FormGroup>
 
@@ -96,9 +175,9 @@ function RecommendationsCreate () {
                     // onSearch={this.fetchRecommendationImages}
                     //onChange={this.handleRecommendationImage}
                     >
-                        <AntOption key={1} value="test">
+                        <AntSelect.Option key={1} value="test">
                             Test
-                        </AntOption>
+                        </AntSelect.Option>
                     </AntSelect>
                 </FormGroup>
 
