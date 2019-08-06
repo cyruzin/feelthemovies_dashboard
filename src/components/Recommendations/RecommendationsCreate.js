@@ -1,6 +1,7 @@
 import React, { useReducer } from 'react'
+import { types, initialState, reducer } from './duck'
 import debounce from 'lodash/debounce'
-import { httpFetch, httpFetchTMDb } from '../../util/request'
+import { httpFetchTMDb } from '../../util/request'
 import AntSelect from 'antd/lib/select'
 import AntSpin from 'antd/lib/spin'
 import 'antd/lib/select/style/css'
@@ -11,78 +12,35 @@ import {
 } from '../Common'
 
 function RecommendationsCreate () {
-    const types = {
-        TITLE: 'RECOMMENDATIONS_CREATE/TITLE',
-        BODY: 'RECOMMENDATIONS_CREATE/BODY',
-        TYPE: 'RECOMMENDATIONS_CREATE/TYPE',
-        IMAGE: 'RECOMMENDATIONS_CREATE/IMAGE',
-        GENRES: 'RECOMMENDATIONS_CREATE/GENRES',
-        KEYWORDS: 'RECOMMENDATIONS_CREATE/KEYWORDS',
-        FETCH: 'RECOMMENDATIONS_CREATE/FETCH',
-        SUCCESS: 'RECOMMENDATIONS_CREATE/SUCCESS',
-        FAILURE: 'RECOMMENDATIONS_CREATE/ERROR'
-    }
-
-    const initialState = {
-        title: '',
-        body: '',
-        image: '',
-        genres: [],
-        keywords: [],
-        type: 0
-    }
-
-    function reducer (state, action) {
-        switch (action.type) {
-            case types.TITLE:
-                return {
-                    ...state,
-                    title: action.payload
-                }
-            case types.BODY:
-                return {
-                    ...state,
-                    body: action.payload
-                }
-            case types.TYPE:
-                return {
-                    ...state,
-                    type: +action.payload
-                }
-            case types.IMAGE:
-                return {
-                    ...state,
-                    image: action.payload
-                }
-            case types.GENRES:
-                return {
-                    ...state,
-                    genres: action.payload
-                }
-            case types.KEYWORDS:
-                return {
-                    ...state,
-                    keywords: action.payload
-                }
-            default: return state
-        }
-    }
-
     const [recommendations, dispatch] = useReducer(reducer, initialState)
 
-    console.log(recommendations)
-
-    const getImage = debounce(query => {
+    const getImages = debounce(query => {
         if (query === '') return
 
+        dispatch({ type: types.FETCH })
         httpFetchTMDb({
             url: `/search/multi?language=en-US&query=${encodeURIComponent(query)}&page=1&include_adult=false`
         }).then(response => {
             const payload = response.results
-                .filter(v => v.media_type !== 'person' && v.backdrop_path !== null)
-            dispatch({ type: types.IMAGE, payload })
+                .filter(img => img.media_type !== 'person' && img.backdrop_path !== null)
+            dispatch({ type: types.IMAGES, payload })
         })
     }, 800)
+
+    function imageChangeHandler (selectedImage) {
+        const { images } = recommendations
+        const image = images.find(img => img.id === selectedImage)
+        const payload = {
+            imageValue: image.original_name ?
+                `${image.original_name} (${image.first_air_date})`
+                : `${image.original_title} (${image.release_date})`,
+            poster: image.poster_path,
+            backdrop: image.backdrop_path
+        }
+        dispatch({ type: types.IMAGE_CHANGE, payload })
+    }
+
+    const { fetch, images, imageValue } = recommendations
 
     return (
         <>
@@ -122,20 +80,20 @@ function RecommendationsCreate () {
                     <AntSelect
                         showSearch
                         size='large'
-                        value={''}
+                        value={imageValue}
                         style={{ width: '100%' }}
                         defaultActiveFirstOption={false}
-                        notFoundContent={
-                            true ? <AntSpin size="small" /> : null
-                        }
+                        notFoundContent={fetch && <AntSpin size="small" />}
                         showArrow={false}
                         filterOption={false}
-                        onSearch={query => getImage(query)}
-                    //onChange={this.handleRecommendationImage}
-                    >
-                        <AntSelect.Option key={1} value="test">
-                            Test
-                        </AntSelect.Option>
+                        onSearch={query => getImages(query)}
+                        onChange={selectedImage => imageChangeHandler(selectedImage)}>
+                        {images.map(img =>
+                            <AntSelect.Option key={img.id} value={img.id}>
+                                {img.original_name && `${img.original_name} (${img.first_air_date})`}
+                                {img.original_title && `${img.original_title} (${img.release_date})`}
+                            </AntSelect.Option>
+                        )}
                     </AntSelect>
                 </FormGroup>
 
