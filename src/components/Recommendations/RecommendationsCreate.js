@@ -116,15 +116,13 @@ function RecommendationsCreate () {
         const recommendation = {
             title: title,
             body: body,
-            type: type,
+            type: +type,
             genres: genresValue.map(genre => genre.key),
             keywords: keywordsValue.map(keywords => keywords.key),
             poster: poster,
             backdrop: backdrop,
-            user_id: userData.id
+            user_id: +userData.id
         }
-
-        dispatch({ type: types.FAILURE, payload: '' })
 
         httpFetch({
             url: '/recommendation',
@@ -133,7 +131,7 @@ function RecommendationsCreate () {
         }).then(() => {
             dispatch({ type: types.RESET })
             dispatch({ type: types.MESSAGE, payload: "Recommendation created successfully" })
-        }).catch(error => dispatch({ type: types.FAILURE, payload: error.errors[0].message }))
+        }).catch(error => dispatch({ type: types.FAILURE, payload: error.message || error.errors[0].message }))
     }
 
     const {

@@ -1,25 +1,31 @@
 export const types = {
-    FETCH: 'RECOMMENDATIONS_CREATE/FETCH',
-    FAILURE: 'RECOMMENDATIONS_CREATE/FAILURE',
-    MESSAGE: 'RECOMMENDATIONS_CREATE/MESSAGE',
-    RESET: 'RECOMMENDATIONS_CREATE/RESET',
-    TITLE: 'RECOMMENDATIONS_CREATE/TITLE',
-    BODY: 'RECOMMENDATIONS_CREATE/BODY',
-    TYPE: 'RECOMMENDATIONS_CREATE/TYPE',
-    IMAGES: 'RECOMMENDATIONS_CREATE/IMAGES',
-    IMAGE_CHANGE: 'RECOMMENDATIONS_CREATE/IMAGE_CHANGE',
-    GENRES: 'RECOMMENDATIONS_CREATE/GENRES',
-    GENRES_CHANGE: 'RECOMMENDATIONS_CREATE/GENRES_CHANGE',
-    KEYWORDS: 'RECOMMENDATIONS_CREATE/KEYWORDS',
-    KEYWORDS_CHANGE: 'RECOMMENDATIONS_CREATE/KEYWORDS_CHANGE'
+    FETCH: 'RECOMMENDATIONS_CREATE/EDIT/FETCH',
+    FAILURE: 'RECOMMENDATIONS_CREATE/EDIT/FAILURE',
+    MESSAGE: 'RECOMMENDATIONS_CREATE/EDIT/MESSAGE',
+    RESET: 'RECOMMENDATIONS_CREATE/EDIT/RESET',
+    TITLE: 'RECOMMENDATIONS_CREATE/EDIT/TITLE',
+    BODY: 'RECOMMENDATIONS_CREATE/EDIT/BODY',
+    TYPE: 'RECOMMENDATIONS_CREATE/EDIT/TYPE',
+    STATUS: 'RECOMMENDATIONS_CREATE/EDIT/STATUS',
+    IMAGES: 'RECOMMENDATIONS_CREATE/EDIT/IMAGES',
+    IMAGE_CHANGE: 'RECOMMENDATIONS_CREATE/EDIT/IMAGE_CHANGE',
+    GENRES: 'RECOMMENDATIONS_CREATE/EDIT/GENRES',
+    GENRES_CHANGE: 'RECOMMENDATIONS_CREATE/EDIT/GENRES_CHANGE',
+    KEYWORDS: 'RECOMMENDATIONS_CREATE/EDIT/KEYWORDS',
+    KEYWORDS_CHANGE: 'RECOMMENDATIONS_CREATE/EDIT/KEYWORDS_CHANGE',
+    RECOMMENDATION: 'RECOMMENDATIONS_CREATE/EDIT/RECOMMENDATION',
+    FORM_FILLED: 'RECOMMENDATIONS_CREATE/EDIT/FORM_FILLED'
 }
 
 export const initialState = {
     fetch: false,
+    formFilled: false,
     error: '',
     message: '',
     title: '',
     body: '',
+    type: 0,
+    status: 0,
     poster: '',
     backdrop: '',
     images: [],
@@ -27,8 +33,7 @@ export const initialState = {
     genres: [],
     genresValue: [],
     keywords: [],
-    keywordsValue: [],
-    type: 0
+    keywordsValue: []
 }
 
 export function reducer (state, action) {
@@ -38,6 +43,24 @@ export function reducer (state, action) {
                 ...state,
                 fetch: true,
                 error: ''
+            }
+        case types.RECOMMENDATION:
+            return {
+                ...state,
+                title: action.payload.title,
+                body: action.payload.body,
+                type: action.payload.type,
+                status: action.payload.status,
+                poster: action.payload.poster,
+                backdrop: action.payload.backdrop,
+                imageValue: action.payload.backdrop,
+                fetch: false,
+                error: ''
+            }
+        case types.FORM_FILLED:
+            return {
+                ...state,
+                formFilled: true
             }
         case types.FAILURE:
             return {
@@ -65,7 +88,12 @@ export function reducer (state, action) {
         case types.TYPE:
             return {
                 ...state,
-                type: +action.payload
+                type: action.payload
+            }
+        case types.STATUS:
+            return {
+                ...state,
+                status: +action.payload
             }
         case types.IMAGES:
             return {

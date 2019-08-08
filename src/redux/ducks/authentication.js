@@ -87,5 +87,5 @@ export const checkAuthentication = credentials => dispatch => {
             const payload = { token: response.token, ...claims }
             dispatch(successAuthentication(payload))
         })
-        .catch(error => dispatch(failureAuthentication(error.message)))
+        .catch(error => dispatch(failureAuthentication(error.message || error.errors[0].message)))
 }
