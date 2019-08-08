@@ -1,16 +1,24 @@
-import React, { useEffect } from 'react'
+// @flow
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { getSearchRecommendations } from '../../redux/ducks/recommendations'
+import { getSearchRecommendations, deleteRecommendations } from '../../redux/ducks/recommendations'
 import distanceInWordsStrict from 'date-fns/distance_in_words_strict'
 import { checkType, checkStatus } from '../../util/helpers'
 import {
     Section, SearchInput, BreadCrumbs, Spinner,
-    NoResults, Table, TR, TD
+    NoResults, Table, TR, TD, Modal, Button
 } from '../Common'
 
-function RecommendationsSearch (props) {
+type Props = {
+    location: Object,
+    history: Object
+}
+
+function RecommendationsSearch (props: Props) {
     const dispatch = useDispatch()
+    const [modalShow, setModal] = useState(false)
+    const [recommendation, setRecommendation] = useState({})
     const recommendations = useSelector(state => state.recommendations)
     const { fetch, searchData } = recommendations
     const tableColumns = [
@@ -27,6 +35,23 @@ function RecommendationsSearch (props) {
         const { query } = props.location.state
         dispatch(getSearchRecommendations(query))
     }, [dispatch, props.location.state])
+
+
+    function modalOpenHandler (recommendation: Object) {
+        setRecommendation(recommendation)
+        setModal(true)
+    }
+
+    function modalCloseHandler () {
+        setModal(false)
+    }
+
+    function deleteRecommendation () {
+        dispatch(deleteRecommendations(recommendation.id))
+        setModal(false)
+        const { push } = props.history
+        return push('/dashboard/recommendations')
+    }
 
     return (
         <>
@@ -51,6 +76,17 @@ function RecommendationsSearch (props) {
 
             {!fetch && searchData.length > 0 &&
                 <Section>
+                    <Modal
+                        show={modalShow}
+                        title="Delete Recommendation"
+                        okBtnName="Yes"
+                        onClick={deleteRecommendation}
+                        onClose={modalCloseHandler}>
+                        <p>
+                            Are you sure that you want to
+                        delete recommendation <strong>{recommendation && recommendation.title}</strong>?
+                        </p>
+                    </Modal>
                     <Link
                         className="btn btn-primary mb-3 float-right"
                         to='/dashboard/create_recommendation'>
@@ -80,11 +116,11 @@ function RecommendationsSearch (props) {
                                         to={`/dashboard/edit_recommendation/${recommendation.id}`}>
                                         <i className="fa fa-edit"></i>
                                     </Link>
-                                    <Link
+                                    <Button
                                         className="btn btn-sm btn-primary"
-                                        to={`/dashboard/delete_recommendation/${recommendation.id}`}>
+                                        onClick={() => modalOpenHandler(recommendation)}>
                                         <i className="fa fa-trash"></i>
-                                    </Link>
+                                    </Button>
                                 </TD>
                             </TR>
                         ))}
