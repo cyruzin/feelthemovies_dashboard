@@ -93,7 +93,7 @@ export function reducer (state, action) {
         case types.STATUS:
             return {
                 ...state,
-                status: +action.payload
+                status: action.payload
             }
         case types.IMAGES:
             return {
