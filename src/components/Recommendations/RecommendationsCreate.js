@@ -1,7 +1,9 @@
+// @flow
 import React, { useReducer } from 'react'
 import { useSelector } from 'react-redux'
-import { types, initialState, reducer } from './duck'
+import format from 'date-fns/format'
 import debounce from 'lodash/debounce'
+import { types, initialState, reducer } from './duck'
 import { httpFetch, httpFetchTMDb } from '../../util/request'
 import AntSelect from 'antd/lib/select'
 import AntSpin from 'antd/lib/spin'
@@ -16,7 +18,12 @@ function RecommendationsCreate () {
     const [recommendations, dispatch] = useReducer(reducer, initialState)
     const userData = useSelector(state => state.authentication.user)
 
-    const fetchImages = debounce(query => {
+    /**
+     * Fetch the Poster/Backdrop from TMDb.
+     * 
+     * @param {string} query - Search query
+     */
+    const fetchImages = debounce((query: string) => {
         if (query === '') return
 
         dispatch({ type: types.FETCH })
@@ -29,20 +36,30 @@ function RecommendationsCreate () {
         }).catch(error => dispatch({ type: types.FAILURE, payload: error }))
     }, 800)
 
-    function imageChangeHandler (selectedImage) {
+    /** 
+     * Set the selected image in the input.
+     * 
+     * @param {string} selectedImage - Selected image 
+     */
+    function imageChangeHandler (selectedImage: string) {
         const { images } = recommendations
         const image = images.find(img => img.id === selectedImage)
         const payload = {
             imageValue: image.original_name ?
-                `${image.original_name} (${image.first_air_date})`
-                : `${image.original_title} (${image.release_date})`,
+                `${image.original_name} (${format(image.first_air_date, 'YYYY')})`
+                : `${image.original_title} (${format(image.release_date, 'YYYY')})`,
             poster: image.poster_path,
             backdrop: image.backdrop_path
         }
         dispatch({ type: types.IMAGE_CHANGE, payload })
     }
 
-    const fetchGenres = debounce(query => {
+    /**
+     * Fetch the genres.
+     * 
+     * @param {string} query - Search query
+     */
+    const fetchGenres = debounce((query: string) => {
         if (query === '') return
         dispatch({ type: types.FETCH })
 
@@ -53,11 +70,21 @@ function RecommendationsCreate () {
             .catch(error => dispatch({ type: types.FAILURE, payload: error.message }))
     }, 800)
 
-    function genresChangeHandler (selectedGenre) {
+    /**
+     * Set the selected genre in the input.
+     * 
+     * @param {string} selectedGenre - Selected genre 
+     */
+    function genresChangeHandler (selectedGenre: string) {
         dispatch({ type: types.GENRES_CHANGE, payload: selectedGenre })
     }
 
-    const fetchKeywords = debounce(query => {
+    /**
+     * Fetch the keywords.
+     * 
+     * @param {string} query - Search query
+     */
+    const fetchKeywords = debounce((query: string) => {
         if (query === '') return
         dispatch({ type: types.FETCH })
 
@@ -68,10 +95,18 @@ function RecommendationsCreate () {
             .catch(error => dispatch({ type: types.FAILURE, payload: error.message }))
     }, 800)
 
-    function keywordsChangeHandler (selectedKeyword) {
+    /**
+     * Set the selected keyword in the input.
+     * 
+     * @param {string} selectedKeyword - Selected keyword 
+     */
+    function keywordsChangeHandler (selectedKeyword: string) {
         dispatch({ type: types.KEYWORDS_CHANGE, payload: selectedKeyword })
     }
 
+    /**
+     * Create the recommendation.
+     */
     function createRecommendation () {
         const {
             title, body, type, poster, backdrop,
@@ -120,21 +155,18 @@ function RecommendationsCreate () {
                 }]} />
             <Section>
                 <SectionTitle title="Create Recommendation" />
-
                 <FormGroup label="Title">
                     <Input
                         className="form-control"
                         value={title}
                         onChange={event => dispatch({ type: types.TITLE, payload: event.target.value })} />
                 </FormGroup>
-
                 <FormGroup label="Body">
                     <TextArea
                         className="form-control"
                         value={body}
                         onChange={event => dispatch({ type: types.BODY, payload: event.target.value })} />
                 </FormGroup>
-
                 <FormGroup label="Type">
                     <Select
                         className="form-control mb-3"
@@ -145,11 +177,10 @@ function RecommendationsCreate () {
                         <Option value="2">Mixed</Option>
                     </Select>
                 </FormGroup>
-
-                <FormGroup label="Image">
+                <FormGroup label="Poster/Backdrop">
                     <AntSelect
                         showSearch
-                        size='large'
+                        size="large"
                         value={imageValue}
                         style={{ width: '100%' }}
                         defaultActiveFirstOption={false}
@@ -160,13 +191,12 @@ function RecommendationsCreate () {
                         onChange={selectedImage => imageChangeHandler(selectedImage)}>
                         {images && images.map(img =>
                             <AntSelect.Option key={img.id} value={img.id}>
-                                {img.original_name && `${img.original_name} (${img.first_air_date})`}
-                                {img.original_title && `${img.original_title} (${img.release_date})`}
+                                {img.original_name && `${img.original_name} (${format(img.first_air_date, 'YYYY')})`}
+                                {img.original_title && `${img.original_title} (${format(img.release_date, 'YYYY')})`}
                             </AntSelect.Option>
                         )}
                     </AntSelect>
                 </FormGroup>
-
                 <FormGroup label="Genres">
                     <AntSelect
                         mode="multiple"
@@ -186,7 +216,6 @@ function RecommendationsCreate () {
                         )}
                     </AntSelect>
                 </FormGroup>
-
                 <FormGroup label="Keywords">
                     <AntSelect
                         mode="multiple"
@@ -206,11 +235,9 @@ function RecommendationsCreate () {
                         )}
                     </AntSelect>
                 </FormGroup>
-
                 <FormGroup>
                     <Button onClick={createRecommendation}>Create</Button>
                 </FormGroup>
-
             </Section>
         </>
     )

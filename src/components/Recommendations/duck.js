@@ -14,26 +14,22 @@ export const types = {
     KEYWORDS_CHANGE: 'RECOMMENDATIONS_CREATE/KEYWORDS_CHANGE'
 }
 
-const getInitialState = () => {
-    return {
-        fetch: false,
-        error: '',
-        message: '',
-        title: '',
-        body: '',
-        poster: '',
-        backdrop: '',
-        images: [],
-        imageValue: '',
-        genres: [],
-        genresValue: [],
-        keywords: [],
-        keywordsValue: [],
-        type: 0
-    }
+export const initialState = {
+    fetch: false,
+    error: '',
+    message: '',
+    title: '',
+    body: '',
+    poster: '',
+    backdrop: '',
+    images: [],
+    imageValue: '',
+    genres: [],
+    genresValue: [],
+    keywords: [],
+    keywordsValue: [],
+    type: 0
 }
-
-export const initialState = getInitialState()
 
 export function reducer (state, action) {
     switch (action.type) {
