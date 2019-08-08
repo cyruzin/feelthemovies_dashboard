@@ -1,14 +1,16 @@
 export const types = {
     FETCH: 'RECOMMENDATIONS_CREATE/FETCH',
-    SUCCESS: 'RECOMMENDATIONS_CREATE/SUCCESS',
     FAILURE: 'RECOMMENDATIONS_CREATE/ERROR',
+    RESET: 'RECOMMENDATIONS_CREATE/RESET',
     TITLE: 'RECOMMENDATIONS_CREATE/TITLE',
     BODY: 'RECOMMENDATIONS_CREATE/BODY',
     TYPE: 'RECOMMENDATIONS_CREATE/TYPE',
     IMAGES: 'RECOMMENDATIONS_CREATE/IMAGES',
     IMAGE_CHANGE: 'RECOMMENDATIONS_CREATE/IMAGE_CHANGE',
     GENRES: 'RECOMMENDATIONS_CREATE/GENRES',
-    KEYWORDS: 'RECOMMENDATIONS_CREATE/KEYWORDS'
+    GENRES_CHANGE: 'RECOMMENDATIONS_CREATE/GENRES_CHANGE',
+    KEYWORDS: 'RECOMMENDATIONS_CREATE/KEYWORDS',
+    KEYWORDS_CHANGE: 'RECOMMENDATIONS_CREATE/KEYWORDS_CHANGE'
 }
 
 export const initialState = {
@@ -21,7 +23,9 @@ export const initialState = {
     images: [],
     imageValue: '',
     genres: [],
+    genresValue: [],
     keywords: [],
+    keywordsValue: [],
     type: 0
 }
 
@@ -77,14 +81,28 @@ export function reducer (state, action) {
                 fetch: false,
                 error: ''
             }
+        case types.GENRES_CHANGE:
+            return {
+                ...state,
+                genresValue: action.payload,
+                genres: []
+            }
         case types.KEYWORDS:
             return {
                 ...state,
-                keywords:
-                    action.payload,
+                keywords: action.payload,
                 fetch: false,
                 error: ''
             }
-        default: return state
+        case types.KEYWORDS_CHANGE:
+            return {
+                ...state,
+                keywordsValue: action.payload,
+                keywords: []
+            }
+        case types.RESET:
+            return initialState
+        default:
+            return state
     }
 }

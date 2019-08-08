@@ -1,7 +1,7 @@
 import React, { useReducer } from 'react'
 import { types, initialState, reducer } from './duck'
 import debounce from 'lodash/debounce'
-import { httpFetchTMDb } from '../../util/request'
+import { httpFetch, httpFetchTMDb } from '../../util/request'
 import AntSelect from 'antd/lib/select'
 import AntSpin from 'antd/lib/spin'
 import 'antd/lib/select/style/css'
@@ -14,7 +14,7 @@ import {
 function RecommendationsCreate () {
     const [recommendations, dispatch] = useReducer(reducer, initialState)
 
-    const getImages = debounce(query => {
+    const fetchImages = debounce(query => {
         if (query === '') return
 
         dispatch({ type: types.FETCH })
@@ -24,7 +24,7 @@ function RecommendationsCreate () {
             const payload = response.results
                 .filter(img => img.media_type !== 'person' && img.backdrop_path !== null)
             dispatch({ type: types.IMAGES, payload })
-        })
+        }).catch(error => dispatch({ type: types.FAILURE, payload: error }))
     }, 800)
 
     function imageChangeHandler (selectedImage) {
@@ -40,7 +40,42 @@ function RecommendationsCreate () {
         dispatch({ type: types.IMAGE_CHANGE, payload })
     }
 
-    const { fetch, images, imageValue } = recommendations
+    const fetchGenres = debounce(query => {
+        dispatch({ type: types.FETCH })
+
+        httpFetch({
+            url: `/search_genre?query=${encodeURIComponent(query)}`,
+            method: 'GET'
+        }).then(response => dispatch({ type: types.GENRES, payload: response.data }))
+            .catch(error => dispatch({ type: types.FAILURE, payload: error }))
+    }, 800)
+
+    function genresChangeHandler (selectedGenre) {
+        dispatch({ type: types.GENRES_CHANGE, payload: selectedGenre })
+    }
+
+    const fetchKeywords = debounce(query => {
+        dispatch({ type: types.FETCH })
+
+        httpFetch({
+            url: `/search_keyword?query=${encodeURIComponent(query)}`,
+            method: 'GET'
+        }).then(response => dispatch({ type: types.KEYWORDS, payload: response.data }))
+            .catch(error => dispatch({ type: types.FAILURE, payload: error }))
+    }, 800)
+
+    function keywordsChangeHandler (selectedKeyword) {
+        dispatch({ type: types.KEYWORDS_CHANGE, payload: selectedKeyword })
+    }
+
+
+
+    const {
+        fetch, images, imageValue, genres, genresValue,
+        keywords, keywordsValue
+    } = recommendations
+
+    console.log(recommendations)
 
     return (
         <>
@@ -86,9 +121,9 @@ function RecommendationsCreate () {
                         notFoundContent={fetch && <AntSpin size="small" />}
                         showArrow={false}
                         filterOption={false}
-                        onSearch={query => getImages(query)}
+                        onSearch={query => fetchImages(query)}
                         onChange={selectedImage => imageChangeHandler(selectedImage)}>
-                        {images.map(img =>
+                        {images && images.map(img =>
                             <AntSelect.Option key={img.id} value={img.id}>
                                 {img.original_name && `${img.original_name} (${img.first_air_date})`}
                                 {img.original_title && `${img.original_title} (${img.release_date})`}
@@ -102,19 +137,18 @@ function RecommendationsCreate () {
                         mode="multiple"
                         labelInValue
                         size='large'
-                        //value={''}
+                        value={genresValue}
                         style={{ width: '100%' }}
-                        notFoundContent={
-                            true ? <AntSpin size="small" /> : null
-                        }
+                        notFoundContent={fetch && <AntSpin size="small" />}
                         showArrow={false}
                         filterOption={false}
-                    // onSearch={this.fetchRecommendationImages}
-                    //onChange={this.handleRecommendationImage}
-                    >
-                        <AntSelect.Option key={1} value="test">
-                            Test
-                        </AntSelect.Option>
+                        onSearch={query => fetchGenres(query)}
+                        onChange={selectedGenre => genresChangeHandler(selectedGenre)}>
+                        {genres && genres.map(genre =>
+                            <AntSelect.Option key={genre.id} value={genre.id}>
+                                {genre.name}
+                            </AntSelect.Option>
+                        )}
                     </AntSelect>
                 </FormGroup>
 
@@ -123,19 +157,18 @@ function RecommendationsCreate () {
                         mode="multiple"
                         labelInValue
                         size='large'
-                        // value={''}
+                        value={keywordsValue}
                         style={{ width: '100%' }}
-                        notFoundContent={
-                            true ? <AntSpin size="small" /> : null
-                        }
+                        notFoundContent={fetch && <AntSpin size="small" />}
                         showArrow={false}
                         filterOption={false}
-                    // onSearch={this.fetchRecommendationImages}
-                    //onChange={this.handleRecommendationImage}
-                    >
-                        <AntSelect.Option key={1} value="test">
-                            Test
-                        </AntSelect.Option>
+                        onSearch={query => fetchKeywords(query)}
+                        onChange={selectedKeyword => keywordsChangeHandler(selectedKeyword)}>
+                        {keywords && keywords.map(keyword =>
+                            <AntSelect.Option key={keyword.id} value={keyword.id}>
+                                {keyword.name}
+                            </AntSelect.Option>
+                        )}
                     </AntSelect>
                 </FormGroup>
 
