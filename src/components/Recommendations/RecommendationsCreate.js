@@ -1,4 +1,5 @@
 import React, { useReducer } from 'react'
+import { useSelector } from 'react-redux'
 import { types, initialState, reducer } from './duck'
 import debounce from 'lodash/debounce'
 import { httpFetch, httpFetchTMDb } from '../../util/request'
@@ -8,11 +9,12 @@ import 'antd/lib/select/style/css'
 import 'antd/lib/spin/style/css'
 import {
     Section, SectionTitle, BreadCrumbs, FormGroup,
-    Input, TextArea, Select, Option, Button
+    Input, TextArea, Select, Option, Button, Alert
 } from '../Common'
 
 function RecommendationsCreate () {
     const [recommendations, dispatch] = useReducer(reducer, initialState)
+    const userData = useSelector(state => state.authentication.user)
 
     const fetchImages = debounce(query => {
         if (query === '') return
@@ -41,13 +43,14 @@ function RecommendationsCreate () {
     }
 
     const fetchGenres = debounce(query => {
+        if (query === '') return
         dispatch({ type: types.FETCH })
 
         httpFetch({
             url: `/search_genre?query=${encodeURIComponent(query)}`,
             method: 'GET'
         }).then(response => dispatch({ type: types.GENRES, payload: response.data }))
-            .catch(error => dispatch({ type: types.FAILURE, payload: error }))
+            .catch(error => dispatch({ type: types.FAILURE, payload: error.message }))
     }, 800)
 
     function genresChangeHandler (selectedGenre) {
@@ -55,30 +58,59 @@ function RecommendationsCreate () {
     }
 
     const fetchKeywords = debounce(query => {
+        if (query === '') return
         dispatch({ type: types.FETCH })
 
         httpFetch({
             url: `/search_keyword?query=${encodeURIComponent(query)}`,
             method: 'GET'
         }).then(response => dispatch({ type: types.KEYWORDS, payload: response.data }))
-            .catch(error => dispatch({ type: types.FAILURE, payload: error }))
+            .catch(error => dispatch({ type: types.FAILURE, payload: error.message }))
     }, 800)
 
     function keywordsChangeHandler (selectedKeyword) {
         dispatch({ type: types.KEYWORDS_CHANGE, payload: selectedKeyword })
     }
 
+    function createRecommendation () {
+        const {
+            title, body, type, poster, backdrop,
+            genresValue, keywordsValue
+        } = recommendations
 
+        const recommendation = {
+            title: title,
+            body: body,
+            type: type,
+            genres: genresValue.map(genre => genre.key),
+            keywords: keywordsValue.map(keywords => keywords.key),
+            poster: poster,
+            backdrop: backdrop,
+            user_id: userData.id
+        }
+
+        dispatch({ type: types.FAILURE, payload: '' })
+
+        httpFetch({
+            url: '/recommendation',
+            method: 'POST',
+            data: recommendation
+        }).then(() => {
+            dispatch({ type: types.RESET })
+            dispatch({ type: types.MESSAGE, payload: "Recommendation created successfully" })
+        }).catch(error => dispatch({ type: types.FAILURE, payload: error.errors[0].message }))
+    }
 
     const {
-        fetch, images, imageValue, genres, genresValue,
-        keywords, keywordsValue
+        fetch, title, body, type, images, imageValue,
+        genres, genresValue, keywords, keywordsValue,
+        error, message
     } = recommendations
-
-    console.log(recommendations)
 
     return (
         <>
+            <Alert message={error} variant="error" showAlert={error !== ''} />
+            <Alert message={message} variant="success" showAlert={message !== ''} />
             <BreadCrumbs
                 activeName="Create"
                 breadCrumbs={[{
@@ -92,18 +124,21 @@ function RecommendationsCreate () {
                 <FormGroup label="Title">
                     <Input
                         className="form-control"
+                        value={title}
                         onChange={event => dispatch({ type: types.TITLE, payload: event.target.value })} />
                 </FormGroup>
 
                 <FormGroup label="Body">
                     <TextArea
                         className="form-control"
+                        value={body}
                         onChange={event => dispatch({ type: types.BODY, payload: event.target.value })} />
                 </FormGroup>
 
                 <FormGroup label="Type">
                     <Select
                         className="form-control mb-3"
+                        value={type}
                         onChange={event => dispatch({ type: types.TYPE, payload: event.target.value })}>
                         <Option value="0" defaultValue>Movie</Option>
                         <Option value="1">TV Show</Option>
@@ -173,7 +208,7 @@ function RecommendationsCreate () {
                 </FormGroup>
 
                 <FormGroup>
-                    <Button>Create</Button>
+                    <Button onClick={createRecommendation}>Create</Button>
                 </FormGroup>
 
             </Section>

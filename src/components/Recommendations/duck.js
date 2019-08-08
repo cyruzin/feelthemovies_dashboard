@@ -1,6 +1,7 @@
 export const types = {
     FETCH: 'RECOMMENDATIONS_CREATE/FETCH',
-    FAILURE: 'RECOMMENDATIONS_CREATE/ERROR',
+    FAILURE: 'RECOMMENDATIONS_CREATE/FAILURE',
+    MESSAGE: 'RECOMMENDATIONS_CREATE/MESSAGE',
     RESET: 'RECOMMENDATIONS_CREATE/RESET',
     TITLE: 'RECOMMENDATIONS_CREATE/TITLE',
     BODY: 'RECOMMENDATIONS_CREATE/BODY',
@@ -13,21 +14,26 @@ export const types = {
     KEYWORDS_CHANGE: 'RECOMMENDATIONS_CREATE/KEYWORDS_CHANGE'
 }
 
-export const initialState = {
-    fetch: false,
-    error: '',
-    title: '',
-    body: '',
-    poster: '',
-    backdrop: '',
-    images: [],
-    imageValue: '',
-    genres: [],
-    genresValue: [],
-    keywords: [],
-    keywordsValue: [],
-    type: 0
+const getInitialState = () => {
+    return {
+        fetch: false,
+        error: '',
+        message: '',
+        title: '',
+        body: '',
+        poster: '',
+        backdrop: '',
+        images: [],
+        imageValue: '',
+        genres: [],
+        genresValue: [],
+        keywords: [],
+        keywordsValue: [],
+        type: 0
+    }
 }
+
+export const initialState = getInitialState()
 
 export function reducer (state, action) {
     switch (action.type) {
@@ -41,6 +47,13 @@ export function reducer (state, action) {
             return {
                 ...state,
                 error: action.payload,
+                fetch: false
+            }
+        case types.MESSAGE:
+            return {
+                ...state,
+                message: action.payload,
+                error: '',
                 fetch: false
             }
         case types.TITLE:
@@ -103,6 +116,6 @@ export function reducer (state, action) {
         case types.RESET:
             return initialState
         default:
-            return state
+            throw new Error()
     }
 }
