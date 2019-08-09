@@ -1,8 +1,8 @@
 // @flow
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useReducer } from 'react'
+import { types, initialState, reducer } from './duck'
+import { httpFetch } from '../../util/request'
 import { Link } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { getSearchRecommendations, deleteRecommendations } from '../../redux/ducks/recommendations'
 import distanceInWordsStrict from 'date-fns/distance_in_words_strict'
 import { checkType, checkStatus } from '../../util/helpers'
 import {
@@ -16,10 +16,9 @@ type Props = {
 }
 
 function RecommendationsSearch (props: Props) {
-    const dispatch = useDispatch()
+    const [recommendations, dispatch] = useReducer(reducer, initialState)
     const [modalShow, setModal] = useState(false)
-    const [recommendation, setRecommendation] = useState({})
-    const recommendations = useSelector(state => state.recommendations)
+    const [currentRecommendation, setRecommendation] = useState({})
     const { fetch, searchData } = recommendations
     const tableColumns = [
         { key: 1, name: '#' },
@@ -33,8 +32,8 @@ function RecommendationsSearch (props: Props) {
 
     useEffect(() => {
         const { query } = props.location.state
-        dispatch(getSearchRecommendations(query))
-    }, [dispatch, props.location.state])
+        fetchSearchRecommendations(query)
+    }, [props.location.state])
 
 
     function modalOpenHandler (recommendation: Object) {
@@ -46,8 +45,40 @@ function RecommendationsSearch (props: Props) {
         setModal(false)
     }
 
+    /**
+     * Lists the latest recommendations.
+     */
+    function fetchRecommendations () {
+        dispatch({ type: types.FETCH })
+        httpFetch({ method: 'GET', url: '/recommendations_admin' })
+            .then(response => dispatch({ type: types.SUCCESS, payload: response.data }))
+            .catch(error => dispatch({ type: types.FAILURE, payload: error.message }))
+    }
+
+    /**
+     * Searches for recommendations based on the query param.
+     * 
+     * @param {string} query - Search query
+     */
+    function fetchSearchRecommendations (query: string) {
+        dispatch({ type: types.FETCH })
+        return httpFetch({
+            method: 'GET',
+            url: `/search_recommendation?query=${query}`
+        }).then(response => dispatch({ type: types.SEARCH, payload: response.data !== null ? response.data : [] }))
+            .catch(error => dispatch({ type: types.FAILURE, payload: error.message }))
+    }
+
+    /** 
+     * Deletes a recommendation.
+     */
     function deleteRecommendation () {
-        dispatch(deleteRecommendations(recommendation.id))
+        httpFetch({ method: 'DELETE', url: `/recommendation/${currentRecommendation.id}` })
+            .then(response => {
+                fetchRecommendations()
+                dispatch({ type: types.REMOVE, payload: response.message })
+            })
+            .catch(error => dispatch({ type: types.FAILURE, payload: error.message }))
         setModal(false)
         const { push } = props.history
         return push('/dashboard/recommendations')
@@ -84,7 +115,8 @@ function RecommendationsSearch (props: Props) {
                         onClose={modalCloseHandler}>
                         <p>
                             Are you sure that you want to
-                        delete recommendation <strong>{recommendation && recommendation.title}</strong>?
+                            delete recommendation
+                            <strong>{currentRecommendation && currentRecommendation.title}</strong>?
                         </p>
                     </Modal>
                     <Link

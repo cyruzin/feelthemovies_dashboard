@@ -7,7 +7,7 @@ import Header from './Header'
 import Content from './Content'
 
 /** Route Components. */
-import Recommendations from '../Recommendations/Recommendations'
+import RecommendationsList from '../Recommendations/RecommendationsList'
 import RecommendationsCreate from '../Recommendations/RecommendationsCreate'
 import RecommendationsEdit from '../Recommendations/RecommendationsEdit'
 import RecommendationsSearch from '../Recommendations/RecommendationsSearch'
@@ -48,7 +48,7 @@ function Dashboard () {
             <Header />
             <Content>
                 <Switch>
-                    <Route path='/dashboard/recommendations' component={Recommendations} />
+                    <Route path='/dashboard/recommendations' component={RecommendationsList} />
                     <Route path='/dashboard/create_recommendation' component={RecommendationsCreate} />
                     <Route path='/dashboard/edit_recommendation/:id' component={RecommendationsEdit} />
                     <Route path='/dashboard/search_recommendation' component={RecommendationsSearch} />
