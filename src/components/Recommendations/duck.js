@@ -1,29 +1,24 @@
 export const types = {
-    FETCH: 'RECOMMENDATIONS/FETCH',
-    SUCCESS: 'RECOMMENDATIONS/SUCCESS',
-    REMOVE: 'RECOMMENDATIONS/REMOVE',
-    SEARCH: 'RECOMMENDATIONS/SEARCH',
-    FAILURE: 'RECOMMENDATIONS/FAILURE',
-    MESSAGE: 'RECOMMENDATIONS/MESSAGE',
-    RESET: 'RECOMMENDATIONS/RESET',
-    TITLE: 'RECOMMENDATIONS/TITLE',
-    BODY: 'RECOMMENDATIONS/BODY',
-    TYPE: 'RECOMMENDATIONS/TYPE',
-    STATUS: 'RECOMMENDATIONS/STATUS',
-    IMAGES: 'RECOMMENDATIONS/IMAGES',
-    IMAGE_CHANGE: 'RECOMMENDATIONS/IMAGE_CHANGE',
-    GENRES: 'RECOMMENDATIONS/GENRES',
-    GENRES_CHANGE: 'RECOMMENDATIONS/GENRES_CHANGE',
-    KEYWORDS: 'RECOMMENDATIONS/KEYWORDS',
-    KEYWORDS_CHANGE: 'RECOMMENDATIONS/KEYWORDS_CHANGE',
-    RECOMMENDATION: 'RECOMMENDATIONS/RECOMMENDATION',
-    FORM_FILLED: 'RECOMMENDATIONS/FORM_FILLED'
+    FETCH: 'RECOMMENDATIONS_CREATE/EDIT/FETCH',
+    FAILURE: 'RECOMMENDATIONS_CREATE/EDIT/FAILURE',
+    MESSAGE: 'RECOMMENDATIONS_CREATE/EDIT/MESSAGE',
+    RESET: 'RECOMMENDATIONS_CREATE/EDIT/RESET',
+    TITLE: 'RECOMMENDATIONS_CREATE/EDIT/TITLE',
+    BODY: 'RECOMMENDATIONS_CREATE/EDIT/BODY',
+    TYPE: 'RECOMMENDATIONS_CREATE/EDIT/TYPE',
+    STATUS: 'RECOMMENDATIONS_CREATE/EDIT/STATUS',
+    IMAGES: 'RECOMMENDATIONS_CREATE/EDIT/IMAGES',
+    IMAGE_CHANGE: 'RECOMMENDATIONS_CREATE/EDIT/IMAGE_CHANGE',
+    GENRES: 'RECOMMENDATIONS_CREATE/EDIT/GENRES',
+    GENRES_CHANGE: 'RECOMMENDATIONS_CREATE/EDIT/GENRES_CHANGE',
+    KEYWORDS: 'RECOMMENDATIONS_CREATE/EDIT/KEYWORDS',
+    KEYWORDS_CHANGE: 'RECOMMENDATIONS_CREATE/EDIT/KEYWORDS_CHANGE',
+    RECOMMENDATION: 'RECOMMENDATIONS_CREATE/EDIT/RECOMMENDATION',
+    FORM_FILLED: 'RECOMMENDATIONS_CREATE/EDIT/FORM_FILLED'
 }
 
 export const initialState = {
     fetch: false,
-    data: [],
-    searchData: [],
     formFilled: false,
     error: '',
     message: '',
@@ -49,20 +44,6 @@ export function reducer (state, action) {
                 fetch: true,
                 error: ''
             }
-        case types.SUCCESS:
-            return {
-                ...state,
-                fetch: false,
-                data: action.payload,
-                error: ''
-            }
-        case types.SEARCH:
-            return {
-                ...state,
-                fetch: false,
-                searchData: action.payload,
-                error: ''
-            }
         case types.RECOMMENDATION:
             return {
                 ...state,
@@ -74,13 +55,6 @@ export function reducer (state, action) {
                 backdrop: action.payload.backdrop,
                 imageValue: action.payload.backdrop,
                 fetch: false,
-                error: ''
-            }
-        case types.REMOVE:
-            return {
-                ...state,
-                fetch: false,
-                message: action.payload,
                 error: ''
             }
         case types.FORM_FILLED:
