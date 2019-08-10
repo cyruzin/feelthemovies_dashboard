@@ -11,9 +11,9 @@ import RecommendationsCreate from '../Recommendations/RecommendationsCreate'
 import RecommendationsEdit from '../Recommendations/RecommendationsEdit'
 import RecommendationsSearch from '../Recommendations/RecommendationsSearch'
 
-// import RecommendationItems from '../RecommendationItems/RecommendationItems'
-// import RecommendationItemsCreate from '../RecommendationItems/RecommendationItemsCreate'
-// import RecommendationItemsEdit from '../RecommendationItems/RecommendationItemsEdit'
+import RecommendationItems from '../RecommendationItems/RecommendationItems'
+import RecommendationItemsCreate from '../RecommendationItems/RecommendationItemsCreate'
+import RecommendationItemsEdit from '../RecommendationItems/RecommendationItemsEdit'
 
 // import Users from '../Users/Users'
 // import UserRegistration from '../Users/UserRegistration';
@@ -52,7 +52,7 @@ function Dashboard () {
                     <Route path='/dashboard/edit_recommendation/:id' component={RecommendationsEdit} />
                     <Route path='/dashboard/search_recommendation' component={RecommendationsSearch} />
 
-                    {/* <Route path='/dashboard/items/:id' component={RecommendationItems} />
+                    <Route path='/dashboard/items/:id' component={RecommendationItems} />
                     <Route path='/dashboard/create_item/:id' component={RecommendationItemsCreate} />
                     <Route path='/dashboard/edit_item/:id' component={RecommendationItemsEdit} />
 
