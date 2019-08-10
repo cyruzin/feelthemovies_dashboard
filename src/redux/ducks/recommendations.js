@@ -5,11 +5,11 @@ import { httpFetch } from '../../util/request'
  */
 
 const types = {
-    FETCH: 'RECOMMENDATIONS/FETCH',
-    SUCCESS: 'RECOMMENDATIONS/SUCCESS',
-    FAILURE: 'RECOMMENDATIONS/FAILURE',
-    SEARCH: 'RECOMMENDATIONS/SEARCH',
-    REMOVE: 'RECOMMENDATIONS/REMOVE'
+    FETCH: 'RECOMMENDATIONS_LIST/FETCH',
+    SUCCESS: 'RECOMMENDATIONS_LIST/SUCCESS',
+    FAILURE: 'RECOMMENDATIONS_LIST/FAILURE',
+    SEARCH: 'RECOMMENDATIONS_LIST/SEARCH',
+    REMOVE: 'RECOMMENDATIONS_LIST/REMOVE'
 }
 
 /**
@@ -119,6 +119,5 @@ export const deleteRecommendations = id => dispatch => {
         .then(response => {
             dispatch(getRecommendations())
             dispatch(removeRecommendations(response.message))
-        })
-        .catch(error => dispatch(failureRecommendations(error.message)))
+        }).catch(error => dispatch(failureRecommendations(error.message)))
 }
