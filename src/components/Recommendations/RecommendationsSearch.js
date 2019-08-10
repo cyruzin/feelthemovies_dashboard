@@ -2,12 +2,26 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { getSearchRecommendations, deleteRecommendations } from '../../redux/ducks/recommendations'
+
 import distanceInWordsStrict from 'date-fns/distance_in_words_strict'
-import { checkType, checkStatus } from '../../util/helpers'
+
 import {
-    Section, SearchInput, BreadCrumbs, Spinner,
-    NoResults, Table, TR, TD, Modal, Button
+    getSearchRecommendations,
+    deleteRecommendations
+} from '../../redux/ducks/recommendations'
+import { checkType, checkStatus } from '../../util/helpers'
+
+import {
+    Button,
+    BreadCrumbs,
+    Modal,
+    Section,
+    SearchInput,
+    Spinner,
+    NoResults,
+    Table,
+    TR,
+    TD
 } from '../Common'
 
 type Props = {

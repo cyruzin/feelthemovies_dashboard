@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Redirect } from 'react-router-dom'
+
 import { checkAuthentication } from '../../redux/ducks/authentication'
-import { InputLabel, Button } from '../Common'
 import { loadJs } from '../../util/helpers'
+
+import { InputLabel, Button } from '../Common'
 
 function Authentication () {
     const [email, setEmail] = useState('')

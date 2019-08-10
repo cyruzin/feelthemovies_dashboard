@@ -1,6 +1,7 @@
 import React from 'react'
-import { Route, Redirect } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
+import { Route, Redirect } from 'react-router-dom'
+
 import { resetAuthentication } from '../../redux/ducks/authentication'
 
 function PrivateRoute ({ component: Component, ...rest }) {

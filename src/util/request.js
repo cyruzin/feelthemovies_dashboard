@@ -13,7 +13,7 @@ const feelTheMoviesAuth = axios.create({
 export const httpFetchAuthentication = credentials =>
     feelTheMoviesAuth({ data: credentials })
         .then(response => response.data)
-        .catch(error => Promise.reject(error.response.data))
+        .catch(error => Promise.reject(error.response.data || error))
 
 /** 
  * For common requests  
@@ -34,7 +34,7 @@ feelTheMovies.interceptors.request.use(req => {
 export const httpFetch = ({ url, method, data, params }) =>
     feelTheMovies({ url, method, data, params })
         .then(response => response.data)
-        .catch(error => Promise.reject(error.response.data))
+        .catch(error => Promise.reject(error.response.data || error))
 
 /** 
  * For TMDb requests 
@@ -51,4 +51,4 @@ const tmdb = axios.create({
 export const httpFetchTMDb = ({ url }) =>
     tmdb({ url })
         .then(response => response.data)
-        .catch(error => Promise.reject(error.response.data || 'Something went wrong'))
+        .catch(error => Promise.reject(error.response.data || error))

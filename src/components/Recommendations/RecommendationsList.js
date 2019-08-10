@@ -1,13 +1,21 @@
 // @flow
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { deleteRecommendations } from '../../redux/ducks/recommendations'
+import { Link } from 'react-router-dom'
+
 import distanceInWordsStrict from 'date-fns/distance_in_words_strict'
+
+import { deleteRecommendations } from '../../redux/ducks/recommendations'
 import { checkType, checkStatus } from '../../util/helpers'
+
 import {
-    Section, SearchInput, Table, TR, TD,
-    Modal, Button
+    Button,
+    SearchInput,
+    Modal,
+    Section,
+    Table,
+    TR,
+    TD
 } from '../Common'
 
 type Props = {

@@ -64,8 +64,9 @@ export function checkStatus (status) {
 }
 
 /** 
- * This function is a workaround to make theme works properly.
- * This theme was not made for React.
+ * This function is a workaround to make this theme works properly.
+ * This theme was not made for React, this is just a wrapper around
+ * Dark Admin theme.
  */
 export function loadJs () {
     /**

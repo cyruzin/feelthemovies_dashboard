@@ -1,18 +1,29 @@
 // @flow
 import React, { useReducer, useEffect, useCallback } from 'react'
 import { useSelector } from 'react-redux'
+
 import format from 'date-fns/format'
 import debounce from 'lodash/debounce'
+
 import { types, initialState, reducer } from './duck'
 import { httpFetch, httpFetchTMDb } from '../../util/request'
+
 import AntSelect from 'antd/lib/select'
 import AntSpin from 'antd/lib/spin'
 import 'antd/lib/select/style/css'
 import 'antd/lib/spin/style/css'
 import {
-    Section, SectionTitle, BreadCrumbs, FormGroup,
-    Input, TextArea, Select, Option, Button, Alert,
-    Spinner
+    Alert,
+    BreadCrumbs,
+    Button,
+    Input,
+    FormGroup,
+    Section,
+    SectionTitle,
+    Select,
+    Spinner,
+    TextArea,
+    Option
 } from '../Common'
 
 type Props = {

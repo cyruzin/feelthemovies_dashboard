@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react'
 import { Route, Switch } from 'react-router-dom'
+
 import { loadJs } from '../../util/helpers'
 
-/** Layout Components. */
 import Header from './Header'
 import Content from './Content'
 
-/** Route Components. */
 import Recommendations from '../Recommendations/Recommendations'
 import RecommendationsCreate from '../Recommendations/RecommendationsCreate'
 import RecommendationsEdit from '../Recommendations/RecommendationsEdit'

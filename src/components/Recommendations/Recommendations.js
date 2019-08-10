@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+
 import { getRecommendations } from '../../redux/ducks/recommendations'
+
 import RecommendationsList from './RecommendationsList'
 import { Spinner, NoResults, Alert } from '../Common'
 
