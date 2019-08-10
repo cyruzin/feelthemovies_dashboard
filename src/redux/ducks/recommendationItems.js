@@ -85,16 +85,16 @@ export const removeRecommendationItems = payload => ({
 
 export const getRecommendationItems = id => dispatch => {
     dispatch(fetchRecommendationItems())
-    return httpFetch({ method: 'GET', url: `/recommendation_item/${id}` })
+    return httpFetch({ method: 'GET', url: `/recommendation_items/${id}` })
         .then(response => dispatch(successRecommendationItems(response.data)))
         .catch(error => dispatch(failureRecommendationItems(error.message)))
 }
 
-export const deleteRecommendations = id => dispatch => {
+export const deleteRecommendationItems = (id, recommendationID) => dispatch => {
     dispatch(fetchRecommendationItems())
     return httpFetch({ method: 'DELETE', url: `/recommendation_item/${id}` })
         .then(response => {
-            dispatch(getRecommendationItems())
+            dispatch(getRecommendationItems(recommendationID))
             dispatch(removeRecommendationItems(response.message))
         }).catch(error => dispatch(failureRecommendationItems(error.message)))
 }

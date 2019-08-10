@@ -63,6 +63,15 @@ export function checkStatus (status) {
     }
 }
 
+/**
+ * Capitalize the first letter of the given string.
+ * 
+ * @param {string} word - Word to capitalize
+ */
+export function capitalizeFirstLetter (word) {
+    return word.charAt(0).toUpperCase() + word.slice(1)
+}
+
 /** 
  * This function is a workaround to make this theme works properly.
  * This theme was not made for React, this is just a wrapper around

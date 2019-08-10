@@ -63,7 +63,7 @@ function RecommendationsList (props: Props) {
                 onClose={modalCloseHandler}>
                 <p>
                     Are you sure that you want to
-                    delete recommendation <strong>{recommendation && recommendation.title}</strong>?
+                    delete <strong>{recommendation && recommendation.title}</strong>?
                 </p>
             </Modal>
             <Link
