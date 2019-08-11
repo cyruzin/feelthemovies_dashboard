@@ -98,8 +98,7 @@ export function reducer (state, action) {
         case types.IMAGES:
             return {
                 ...state,
-                images:
-                    action.payload,
+                images: action.payload,
                 fetch: false,
                 error: ''
             }

@@ -7,7 +7,8 @@ type Props = {
 }
 
 Button.defaultProps = {
-    className: 'btn btn-primary'
+    className: 'btn btn-primary',
+    children: 'Ok'
 }
 
 function Button (props: Props) {
