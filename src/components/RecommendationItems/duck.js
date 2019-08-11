@@ -38,6 +38,9 @@ export function reducer (state, action) {
         case types.RECOMMENDATION_ITEM:
             return {
                 ...state,
+                item: action.payload.item,
+                commentary: action.payload.commentary,
+                searchValue: action.payload.searchValue,
                 fetch: false,
                 error: ''
             }
