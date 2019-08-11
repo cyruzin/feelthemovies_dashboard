@@ -10,10 +10,30 @@ const feelTheMoviesAuth = axios.create({
     baseURL: authURL
 })
 
-export const httpFetchAuthentication = credentials =>
-    feelTheMoviesAuth({ data: credentials })
-        .then(response => response.data)
-        .catch(error => Promise.reject(error.response.data || error))
+export async function httpFetchAuthentication (credentials) {
+    try {
+        const response = await feelTheMoviesAuth({ data: credentials })
+        return response.data
+    } catch (error) {
+        if (error.response) {
+            /**
+             * The server responded with a status code
+             * that falls out of the range of 2xx.
+             */
+            throw error.response.data
+        } else if (error.request) {
+            /**
+            * The request was made but no response was received.
+            */
+            throw error.request
+        } else {
+            /**
+             * Something went wrong in setting up the request.
+             */
+            throw error.message
+        }
+    }
+}
 
 /** 
  * For common requests  
@@ -23,18 +43,47 @@ const feelTheMovies = axios.create({
     baseURL: baseURL
 })
 
-feelTheMovies.interceptors.request.use(req => {
-    const store = localStorage.getItem('state')
-    const state = JSON.parse(store)
-    const { token } = state.authentication.user
-    req.headers.common['Authorization'] = `Bearer ${token}`
-    return req
-}, error => Promise.reject(error))
+feelTheMovies.interceptors.request.use(async (req) => {
+    try {
+        const newReq = req
 
-export const httpFetch = ({ url, method, data, params }) =>
-    feelTheMovies({ url, method, data, params })
-        .then(response => response.data)
-        .catch(error => Promise.reject(error.response.data || error))
+        const store = await localStorage.getItem('state')
+        const state = JSON.parse(store)
+
+        const { token } = state.authentication.user
+
+        newReq.headers.common['Authorization'] = `Bearer ${token}`
+
+        return newReq
+    } catch (error) {
+        throw error
+    }
+})
+
+export async function httpFetch ({ url, method, data, params }) {
+    try {
+        const response = await feelTheMovies({ url, method, data, params })
+        return response.data
+    } catch (error) {
+        if (error.response) {
+            /**
+             * The server responded with a status code
+             * that falls out of the range of 2xx.
+             */
+            throw error.response.data
+        } else if (error.request) {
+            /**
+             * The request was made but no response was received.
+             */
+            throw error.request
+        } else {
+            /**
+             * Something went wrong in setting up the request.
+             */
+            throw error.message
+        }
+    }
+}
 
 /** 
  * For TMDb requests 
@@ -48,7 +97,27 @@ const tmdb = axios.create({
     }
 })
 
-export const httpFetchTMDb = ({ url }) =>
-    tmdb({ url })
-        .then(response => response.data)
-        .catch(error => Promise.reject(error.response.data || error))
+export async function httpFetchTMDb ({ url }) {
+    try {
+        const response = await tmdb({ url })
+        return response.data
+    } catch (error) {
+        if (error.response) {
+            /**
+             * The server responded with a status code
+             * that falls out of the range of 2xx.
+             */
+            throw error.response.data.status_message
+        } else if (error.request) {
+            /**
+             * The request was made but no response was received.
+             */
+            throw error.request
+        } else {
+            /**
+             * Something went wrong in setting up the request.
+             */
+            throw error.message
+        }
+    }
+}
