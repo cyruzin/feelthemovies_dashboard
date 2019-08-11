@@ -1,19 +1,19 @@
 import { httpFetch } from '../../util/request'
 
 /**
- * Genres Action Types.
+ * Keywords Action Types.
  */
 
 const types = {
-    FETCH: 'GENRES_LIST/FETCH',
-    SUCCESS: 'GENRES_LIST/SUCCESS',
-    FAILURE: 'GENRES_LIST/FAILURE',
-    SEARCH: 'GENRES_LIST/SEARCH',
-    REMOVE: 'GENRES_LIST/REMOVE'
+    FETCH: 'kEYWORDS_LIST/FETCH',
+    SUCCESS: 'kEYWORDS_LIST/SUCCESS',
+    FAILURE: 'kEYWORDS_LIST/FAILURE',
+    SEARCH: 'kEYWORDS_LIST/SEARCH',
+    REMOVE: 'kEYWORDS_LIST/REMOVE'
 }
 
 /**
- * Genres State.
+ * Keywords State.
  */
 
 const initialState = {
@@ -25,7 +25,7 @@ const initialState = {
 }
 
 /**
- * Genres Reducer.
+ * Keywords Reducer.
  */
 
 export default (state = initialState, action) => {
@@ -69,55 +69,55 @@ export default (state = initialState, action) => {
 }
 
 /**
- * Genres Action Creators Functions.
+ * Keywords Action Creators Functions.
  */
 
-export const fetchGenres = () => ({
+export const fetchKeywords = () => ({
     type: types.FETCH
 })
 
-export const successGenres = payload => ({
+export const successKeywords = payload => ({
     type: types.SUCCESS, payload
 })
 
-export const failureGenres = payload => ({
+export const failureKeywords = payload => ({
     type: types.FAILURE, payload
 })
 
-export const searchGenres = payload => ({
+export const searchKeywords = payload => ({
     type: types.SEARCH, payload
 })
 
-export const removeGenres = payload => ({
+export const removeKeywords = payload => ({
     type: types.REMOVE, payload
 })
 
 /**
- * Genres Side Effects Types and Functions.
+ * Keywords Side Effects Types and Functions.
  */
 
-export const getGenres = () => dispatch => {
-    dispatch(fetchGenres())
-    return httpFetch({ method: 'GET', url: '/genres' })
-        .then(response => dispatch(successGenres(response.data)))
-        .catch(error => dispatch(failureGenres(error.message)))
+export const getKeywords = () => dispatch => {
+    dispatch(fetchKeywords())
+    return httpFetch({ method: 'GET', url: '/keywords' })
+        .then(response => dispatch(successKeywords(response.data)))
+        .catch(error => dispatch(failureKeywords(error.message)))
 }
 
-export const getSearchGenres = query => dispatch => {
-    dispatch(fetchGenres())
+export const getSearchKeywords = query => dispatch => {
+    dispatch(fetchKeywords())
     return httpFetch({
         method: 'GET',
-        url: `/search_genre?query=${query}`
+        url: `/search_keyword?query=${query}`
     }).then(response => dispatch(
-        searchGenres(response.data !== null ? response.data : []))
-    ).catch(error => dispatch(failureGenres(error.message)))
+        searchKeywords(response.data !== null ? response.data : []))
+    ).catch(error => dispatch(failureKeywords(error.message)))
 }
 
-export const deleteGenres = id => dispatch => {
-    dispatch(fetchGenres())
-    return httpFetch({ method: 'DELETE', url: `/genre/${id}` })
+export const deleteKeywords = id => dispatch => {
+    dispatch(fetchKeywords())
+    return httpFetch({ method: 'DELETE', url: `/keyword/${id}` })
         .then(response => {
-            dispatch(getGenres())
-            dispatch(removeGenres(response.message))
-        }).catch(error => dispatch(failureGenres(error.message)))
+            dispatch(getKeywords())
+            dispatch(removeKeywords(response.message))
+        }).catch(error => dispatch(failureKeywords(error.message)))
 }

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 import distanceInWordsStrict from 'date-fns/distance_in_words_strict'
 
-import { deleteGenres } from '../../redux/ducks/genres'
+import { deleteKeywords } from '../../redux/ducks/keywords'
 
 import {
     Button,
@@ -21,7 +21,7 @@ type Props = {
     data: Object
 }
 
-function GenresList (props: Props) {
+function KeywordsList (props: Props) {
     const dispatch = useDispatch()
     const { data } = props
 
@@ -34,10 +34,10 @@ function GenresList (props: Props) {
     ]
 
     const [modalShow, setModal] = useState(false)
-    const [genre, setGenre] = useState({})
+    const [keyword, setKeyword] = useState({})
 
-    function modalOpenHandler (genre: Object) {
-        setGenre(genre)
+    function modalOpenHandler (keyword: Object) {
+        setKeyword(keyword)
         setModal(true)
     }
 
@@ -45,8 +45,8 @@ function GenresList (props: Props) {
         setModal(false)
     }
 
-    function deleteGenre () {
-        dispatch(deleteGenres(genre.id))
+    function deleteKeyword () {
+        dispatch(deleteKeywords(keyword.id))
         setModal(false)
     }
 
@@ -54,40 +54,40 @@ function GenresList (props: Props) {
         <Section>
             <Modal
                 show={modalShow}
-                title="Delete Genre"
+                title="Delete Keyword"
                 okBtnName="Yes"
-                onClick={deleteGenre}
+                onClick={deleteKeyword}
                 onClose={modalCloseHandler}>
                 <p>
                     Are you sure that you want to
-                    delete <strong>{genre && genre.name}</strong>?
+                    delete <strong>{keyword && keyword.name}</strong>?
                 </p>
             </Modal>
             <Link
                 className="btn btn-primary mb-3 float-right"
-                to='/dashboard/create_genre'>
+                to='/dashboard/create_keyword'>
                 New
             </Link>
             <SearchInput
-                path='/dashboard/search_genre'
+                path='/dashboard/search_keyword'
                 placeholder="Search"
             />
             <Table columns={tableColumns}>
-                {data.map(genre => (
-                    <TR key={genre.id}>
-                        <TD>{genre.id}</TD>
-                        <TD>{genre.name}</TD>
-                        <TD>{distanceInWordsStrict(genre.created_at, Date.now())}</TD>
-                        <TD>{distanceInWordsStrict(genre.updated_at, Date.now())}</TD>
+                {data.map(keyword => (
+                    <TR key={keyword.id}>
+                        <TD>{keyword.id}</TD>
+                        <TD>{keyword.name}</TD>
+                        <TD>{distanceInWordsStrict(keyword.created_at, Date.now())}</TD>
+                        <TD>{distanceInWordsStrict(keyword.updated_at, Date.now())}</TD>
                         <TD>
                             <Link
                                 className="btn btn-sm btn-primary mr-2"
-                                to={`/dashboard/edit_genre/${genre.id}`}>
+                                to={`/dashboard/edit_keyword/${keyword.id}`}>
                                 <i className="fa fa-edit"></i>
                             </Link>
                             <Button
                                 className="btn btn-sm btn-primary"
-                                onClick={() => modalOpenHandler(genre)}>
+                                onClick={() => modalOpenHandler(keyword)}>
                                 <i className="fa fa-trash"></i>
                             </Button>
                         </TD>
@@ -98,4 +98,4 @@ function GenresList (props: Props) {
     )
 }
 
-export default GenresList
+export default KeywordsList

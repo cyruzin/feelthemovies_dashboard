@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import distanceInWordsStrict from 'date-fns/distance_in_words_strict'
 
-import { getSearchGenres, deleteGenres } from '../../redux/ducks/genres'
+import { getSearchKeywords, deleteKeywords } from '../../redux/ducks/keywords'
 
 import {
     Button,
@@ -25,12 +25,12 @@ type Props = {
     history: Object
 }
 
-function GenresSearch (props: Props) {
+function KeywordsSearch (props: Props) {
     const dispatch = useDispatch()
     const [modalShow, setModal] = useState(false)
-    const [genre, setGenre] = useState({})
-    const genres = useSelector(state => state.genres)
-    const { fetch, searchData } = genres
+    const [keyword, setKeyword] = useState({})
+    const keywords = useSelector(state => state.keywords)
+    const { fetch, searchData } = keywords
     const tableColumns = [
         { key: 1, name: '#' },
         { key: 2, name: 'Name' },
@@ -41,12 +41,12 @@ function GenresSearch (props: Props) {
 
     useEffect(() => {
         const { query } = props.location.state
-        dispatch(getSearchGenres(query))
+        dispatch(getSearchKeywords(query))
     }, [dispatch, props.location.state])
 
 
-    function modalOpenHandler (genres: Object) {
-        setGenre(genres)
+    function modalOpenHandler (keywords: Object) {
+        setKeyword(keywords)
         setModal(true)
     }
 
@@ -54,11 +54,11 @@ function GenresSearch (props: Props) {
         setModal(false)
     }
 
-    function deleteGenre () {
-        dispatch(deleteGenres(genre.id))
+    function deleteKeyword () {
+        dispatch(deleteKeywords(keyword.id))
         setModal(false)
         const { push } = props.history
-        return push('/dashboard/genres')
+        return push('/dashboard/keywords')
     }
 
     return (
@@ -67,8 +67,8 @@ function GenresSearch (props: Props) {
                 activeName="Search"
                 breadCrumbs={[{
                     key: 1,
-                    path: '/dashboard/genres',
-                    name: 'Genres'
+                    path: '/dashboard/keywords',
+                    name: 'Keywords'
                 }]} />
 
             {fetch && <Spinner />}
@@ -76,7 +76,7 @@ function GenresSearch (props: Props) {
             {!fetch && searchData.length === 0 &&
                 <Section>
                     <SearchInput
-                        path='/dashboard/search_genre'
+                        path='/dashboard/search_keyword'
                         placeholder="Search"
                     />
                     <NoResults message="No Results" />
@@ -86,40 +86,40 @@ function GenresSearch (props: Props) {
                 <Section>
                     <Modal
                         show={modalShow}
-                        title="Delete Genre"
+                        title="Delete Keyword"
                         okBtnName="Yes"
-                        onClick={deleteGenre}
+                        onClick={deleteKeyword}
                         onClose={modalCloseHandler}>
                         <p>
                             Are you sure that you want to
-                        delete <strong>{genre && genre.title}</strong>?
+                        delete keyword <strong>{keyword && keyword.title}</strong>?
                         </p>
                     </Modal>
                     <Link
                         className="btn btn-primary mb-3 float-right"
-                        to='/dashboard/create_genre'>
+                        to='/dashboard/create_keyword'>
                         New
                     </Link>
                     <SearchInput
-                        path='/dashboard/search_genre'
+                        path='/dashboard/search_keyword'
                         placeholder="Search"
                     />
                     <Table columns={tableColumns}>
-                        {searchData.map(genre => (
-                            <TR key={genre.id}>
-                                <TD>{genre.id}</TD>
-                                <TD>{genre.name}</TD>
-                                <TD>{distanceInWordsStrict(genre.created_at, Date.now())}</TD>
-                                <TD>{distanceInWordsStrict(genre.updated_at, Date.now())}</TD>
+                        {searchData.map(keyword => (
+                            <TR key={keyword.id}>
+                                <TD>{keyword.id}</TD>
+                                <TD>{keyword.name}</TD>
+                                <TD>{distanceInWordsStrict(keyword.created_at, Date.now())}</TD>
+                                <TD>{distanceInWordsStrict(keyword.updated_at, Date.now())}</TD>
                                 <TD>
                                     <Link
                                         className="btn btn-sm btn-primary mr-2"
-                                        to={`/dashboard/edit_genre/${genre.id}`}>
+                                        to={`/dashboard/edit_keyword/${keyword.id}`}>
                                         <i className="fa fa-edit"></i>
                                     </Link>
                                     <Button
                                         className="btn btn-sm btn-primary"
-                                        onClick={() => modalOpenHandler(genre)}>
+                                        onClick={() => modalOpenHandler(keyword)}>
                                         <i className="fa fa-trash"></i>
                                     </Button>
                                 </TD>
@@ -131,4 +131,4 @@ function GenresSearch (props: Props) {
     )
 }
 
-export default GenresSearch
+export default KeywordsSearch

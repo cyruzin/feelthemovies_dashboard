@@ -25,10 +25,10 @@ import GenresCreate from '../Genres/GenresCreate'
 import GenresEdit from '../Genres/GenresEdit'
 import GenresSearch from '../Genres/GenresSearch'
 
-// import Keywords from '../Keywords/Keywords'
-// import KeywordsCreate from '../Keywords/KeywordsCreate'
-// import KeywordsEdit from '../Keywords/KeywordsEdit'
-// import KeywordsSearch from '../Keywords/KeywordsSearch'
+import Keywords from '../Keywords/Keywords'
+import KeywordsCreate from '../Keywords/KeywordsCreate'
+import KeywordsEdit from '../Keywords/KeywordsEdit'
+import KeywordsSearch from '../Keywords/KeywordsSearch'
 
 // import Sources from '../Sources/Sources'
 // import SourcesCreate from '../Sources/SourcesCreate'
@@ -66,12 +66,12 @@ function Dashboard () {
                     <Route path='/dashboard/edit_genre/:id' component={GenresEdit} />
                     <Route path='/dashboard/search_genre' component={GenresSearch} />
 
-                    {/* <Route path='/dashboard/keywords' component={Keywords} />
+                    <Route path='/dashboard/keywords' component={Keywords} />
                     <Route path='/dashboard/create_keyword' component={KeywordsCreate} />
                     <Route path='/dashboard/edit_keyword/:id' component={KeywordsEdit} />
                     <Route path='/dashboard/search_keyword' component={KeywordsSearch} />
 
-                    <Route path='/dashboard/sources' component={Sources} />
+                    {/*<Route path='/dashboard/sources' component={Sources} />
                     <Route path='/dashboard/create_source' component={SourcesCreate} />
                     <Route path='/dashboard/edit_source/:id' component={SourcesEdit} />
                     <Route path='/dashboard/search_source' component={SourcesSearch} /> */}
