@@ -25,12 +25,12 @@ export async function httpFetchAuthentication (credentials) {
             /**
             * The request was made but no response was received.
             */
-            throw error.request
+            throw Error('No response from the server')
         } else {
             /**
              * Something went wrong in setting up the request.
              */
-            throw error.message
+            throw Error('Network error')
         }
     }
 }
@@ -43,21 +43,17 @@ const feelTheMovies = axios.create({
     baseURL: baseURL
 })
 
-feelTheMovies.interceptors.request.use(async (req) => {
-    try {
-        const newReq = req
+feelTheMovies.interceptors.request.use(req => {
+    const newReq = req
 
-        const store = await localStorage.getItem('state')
-        const state = JSON.parse(store)
+    const store = localStorage.getItem('state')
+    const state = JSON.parse(store)
 
-        const { token } = state.authentication.user
+    const { token } = state.authentication.user
 
-        newReq.headers.common['Authorization'] = `Bearer ${token}`
+    newReq.headers.common['Authorization'] = `Bearer ${token}`
 
-        return newReq
-    } catch (error) {
-        throw error
-    }
+    return newReq
 })
 
 export async function httpFetch ({ url, method, data, params }) {
@@ -75,12 +71,12 @@ export async function httpFetch ({ url, method, data, params }) {
             /**
              * The request was made but no response was received.
              */
-            throw error.request
+            throw Error('No response from the server')
         } else {
             /**
              * Something went wrong in setting up the request.
              */
-            throw error.message
+            throw Error('Network error')
         }
     }
 }
@@ -112,12 +108,12 @@ export async function httpFetchTMDb ({ url }) {
             /**
              * The request was made but no response was received.
              */
-            throw error.request
+            throw Error('No response from the server')
         } else {
             /**
              * Something went wrong in setting up the request.
              */
-            throw error.message
+            throw Error('Network error')
         }
     }
 }
