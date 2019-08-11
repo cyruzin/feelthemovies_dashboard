@@ -60,7 +60,7 @@ function GenresList (props: Props) {
                 onClose={modalCloseHandler}>
                 <p>
                     Are you sure that you want to
-                    delete <strong>{genre && genre.name}</strong>?
+                    delete <strong>{genre && genre.name}</strong> genre?
                 </p>
             </Modal>
             <Link

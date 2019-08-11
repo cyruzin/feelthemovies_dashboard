@@ -60,7 +60,7 @@ function KeywordsList (props: Props) {
                 onClose={modalCloseHandler}>
                 <p>
                     Are you sure that you want to
-                    delete <strong>{keyword && keyword.name}</strong>?
+                    delete <strong>{keyword && keyword.name}</strong> keyword?
                 </p>
             </Modal>
             <Link

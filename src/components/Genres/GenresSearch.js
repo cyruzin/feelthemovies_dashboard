@@ -92,7 +92,7 @@ function GenresSearch (props: Props) {
                         onClose={modalCloseHandler}>
                         <p>
                             Are you sure that you want to
-                        delete <strong>{genre && genre.title}</strong>?
+                        delete <strong>{genre && genre.title}</strong> genre?
                         </p>
                     </Modal>
                     <Link
