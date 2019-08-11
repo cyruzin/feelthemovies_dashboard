@@ -20,10 +20,10 @@ import RecommendationItemsEdit from '../RecommendationItems/RecommendationItemsE
 // import UserEdit from '../Users/UserEdit';
 // import UserSearch from '../Users/UserSearch'
 
-// import Genres from '../Genres/Genres'
-// import GenresCreate from '../Genres/GenresCreate'
-// import GenresEdit from '../Genres/GenresEdit'
-// import GenresSearch from '../Genres/GenresSearch'
+import Genres from '../Genres/Genres'
+import GenresCreate from '../Genres/GenresCreate'
+import GenresEdit from '../Genres/GenresEdit'
+import GenresSearch from '../Genres/GenresSearch'
 
 // import Keywords from '../Keywords/Keywords'
 // import KeywordsCreate from '../Keywords/KeywordsCreate'
@@ -59,14 +59,14 @@ function Dashboard () {
                     {/* <Route path='/dashboard/users' component={Users} />
                     <Route path='/dashboard/create_user' component={UserRegistration} />
                     <Route path='/dashboard/edit_user/:id' component={UserEdit} />
-                    <Route path='/dashboard/search_user' component={UserSearch} /> 
+                    <Route path='/dashboard/search_user' component={UserSearch} /> */}
 
                     <Route path='/dashboard/genres' component={Genres} />
                     <Route path='/dashboard/create_genre' component={GenresCreate} />
                     <Route path='/dashboard/edit_genre/:id' component={GenresEdit} />
                     <Route path='/dashboard/search_genre' component={GenresSearch} />
 
-                    <Route path='/dashboard/keywords' component={Keywords} />
+                    {/* <Route path='/dashboard/keywords' component={Keywords} />
                     <Route path='/dashboard/create_keyword' component={KeywordsCreate} />
                     <Route path='/dashboard/edit_keyword/:id' component={KeywordsEdit} />
                     <Route path='/dashboard/search_keyword' component={KeywordsSearch} />

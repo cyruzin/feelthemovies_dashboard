@@ -79,8 +79,6 @@ function RecommendationsEdit (props: Props) {
      */
     useEffect(() => {
         fetchRecommendation()
-
-        return () => dispatch({ type: types.RESET }) // Unmounting.
     }, [fetchRecommendation])
 
     /**
