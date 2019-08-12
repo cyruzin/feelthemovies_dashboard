@@ -1,125 +1,68 @@
-import React, { Component } from 'react'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
-import Alert from '../Layout/Alert'
-import * as actions from '../../store/actions/SourcesActions'
+// @flow
+import React, { useReducer } from 'react'
 
-class SourcesCreate extends Component {
+import { types, initialState, reducer } from './duck'
+import { httpFetch } from '../../util/request'
 
-    constructor(props) {
-        super(props)
-        this.nameRef = React.createRef()
+import {
+    Alert,
+    BreadCrumbs,
+    Button,
+    Input,
+    FormGroup,
+    Section,
+    SectionTitle
+} from '../Common'
+
+function SourcesCreate () {
+    const [sources, dispatch] = useReducer(reducer, initialState)
+
+    /**
+     * Create the source.
+     */
+    function createSource () {
+        const { name } = sources
+        const newSource = { name: name.trim() }
+
+        httpFetch({
+            url: '/source',
+            method: 'POST',
+            data: newSource
+        }).then(() => {
+            dispatch({ type: types.RESET })
+            dispatch({ type: types.MESSAGE, payload: "Source created successfully" })
+        }).catch(error => dispatch({ type: types.FAILURE, payload: error.message || error.errors[0].message }))
     }
 
-    componentDidMount() {
-        this.reset()
-    }
+    const {
+        name, error, message
+    } = sources
 
-    reset = () => {
-        const { error, created } = this.props.sources
-        const { setError, setCreateSource } = this.props.actions
-
-        if (created) {
-            setCreateSource(false)
-        }
-
-        if (error !== '') {
-            setError('')
-        }
-    }
-
-    createSource = () => {
-        let name = this.nameRef.current.value
-
-        this.props.actions.setCreateSource(false)
-
-        let source = {
-            name: name
-        }
-
-        if (name === '') {
-            this.props.actions.setError('Please, fill name field')
-            return false
-        }
-
-        this.props.actions.createSource(source)
-
-        name = this.nameRef.current.value = ''
-        this.nameRef.current.focus()
-    }
-
-    render() {
-        return (
-            <div>
-                <div className="container-fluid">
-                    <ul className="breadcrumb">
-                        <li className="breadcrumb-item">
-                            <Link to='/dashboard/sources'>
-                                Sources
-                            </Link>
-                        </li>
-                        <li className="breadcrumb-item active">Create</li>
-                    </ul>
-                </div>
-                <section className="no-padding-top">
-                    <div className="container-fluid">
-                        <div className="row">
-                            <div className="col-lg-12">
-
-                                <div className="block">
-                                    <div className="title">
-                                        <strong>Create source</strong>
-                                    </div>
-                                    <div className="block-body">
-                                        {this.props.sources.error !== '' ?
-                                            <Alert message={this.props.sources.error} type='primary' />
-                                            : null
-                                        }
-                                        {this.props.sources.created ?
-                                            <Alert message="Genre created successfully" type='success' />
-                                            : null
-                                        }
-                                        <div className="form-group row">
-                                            <label className="col-lg-3 form-control-label">Name</label>
-                                            <div className="col-lg-9">
-                                                <input ref={this.nameRef}
-                                                    type="text"
-                                                    className="form-control" />
-                                            </div>
-                                        </div>
-                                        <div className="line"></div>
-
-                                        <div className="form-group row">
-                                            <div className="col-sm-9 ml-auto">
-                                                <button
-                                                    onClick={this.createSource}
-                                                    className="btn btn-primary">
-                                                    Save
-                                                </button>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-        )
-    }
+    return (
+        <>
+            <Alert message={error} variant="error" showAlert={error !== ''} />
+            <Alert message={message} variant="success" showAlert={message !== ''} />
+            <BreadCrumbs
+                activeName="Create"
+                breadCrumbs={[{
+                    key: 1,
+                    path: '/dashboard/sources',
+                    name: 'Sources'
+                }]} />
+            <Section>
+                <SectionTitle title="Create Source" />
+                <FormGroup label="Name">
+                    <Input
+                        className="form-control"
+                        value={name}
+                        onChange={event => dispatch({ type: types.NAME, payload: event.target.value })} />
+                </FormGroup>
+                <FormGroup>
+                    <Button onClick={createSource}>Create</Button>
+                </FormGroup>
+            </Section>
+        </>
+    )
 }
 
-const mapStateToProps = state => {
-    return {
-        sources: state.sources
-    }
-}
-
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(actions, dispatch)
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(SourcesCreate)
+export default SourcesCreate

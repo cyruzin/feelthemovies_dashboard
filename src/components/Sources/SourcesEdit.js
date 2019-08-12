@@ -1,104 +1,99 @@
-import React, { Component } from 'react'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import * as actions from '../../store/actions/SourcesActions'
-import { Link } from 'react-router-dom'
-import Alert from '../Layout/Alert'
+// @flow
+import React, { useReducer, useEffect, useCallback } from 'react'
 
-class SourcesEdit extends Component {
+import { types, initialState, reducer } from './duck'
+import { httpFetch } from '../../util/request'
 
-    constructor(props) {
-        super(props)
-        this.nameRef = React.createRef()
-    }
+import {
+    Alert,
+    BreadCrumbs,
+    Button,
+    Input,
+    FormGroup,
+    Section,
+    SectionTitle,
+    Spinner
+} from '../Common'
 
-    componentDidMount() {
-        this.reset()
-        this.fetchSingleSource()
-    }
-
-    fetchSingleSource = () => {
-        this.props.actions.fetchSingleSource(this.props.match.params.id)
-    }
-
-    editSource = () => {
-        let source = { name: this.nameRef.current.value }
-        this.props.actions.editSource(this.props.match.params.id, source)
-    }
-
-    reset = () => {
-        this.props.actions.setError('')
-        this.props.actions.setEdited('')
-    }
-
-    render() {
-        return (
-            <div>
-                <div className="container-fluid">
-                    <ul className="breadcrumb">
-                        <li className="breadcrumb-item">
-                            <Link to='/dashboard/sources'>Sources</Link>
-                        </li>
-                        <li className="breadcrumb-item active">Edit</li>
-                    </ul>
-                </div>
-                <section className="no-padding-top">
-                    <div className="container-fluid">
-                        <div className="row">
-                            <div className="col-lg-12">
-
-                                {this.props.sources.editLoaded ?
-                                    <div className="block">
-                                        <div className="title">
-                                            <strong>Source edit</strong>
-                                        </div>
-                                        <div className="block-body">
-                                            {this.props.sources.error !== '' ?
-                                                <Alert message={this.props.sources.error} type='primary' />
-                                                : null
-                                            }
-                                            {this.props.sources.edited !== false ?
-                                                <Alert message={this.props.sources.edited} type='success' />
-                                                : null
-                                            }
-                                            <div className="form-group row">
-                                                <label className="col-sm-3 form-control-label">Name</label>
-                                                <div className="col-sm-9">
-                                                    <input ref={this.nameRef} type="text" className="form-control"
-                                                        defaultValue={this.props.sources.sourceData.name} />
-                                                </div>
-                                            </div>
-                                            <div className="line"></div>
-
-                                            <div className="form-group row">
-                                                <div className="col-sm-9 ml-auto">
-                                                    <button className="btn btn-primary"
-                                                        onClick={this.editSource}>
-                                                        Save
-                                                </button>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    : null}
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-        )
-    }
+type Props = {
+    history: Object,
+    match: Object,
+    location: Object
 }
 
-const mapStateToProps = state => {
-    return {
-        sources: state.sources
+function SourcesEdit (props: Props) {
+    const [sources, dispatch] = useReducer(reducer, initialState)
+    const { id } = props.match.params
+
+    /**
+    * Fetch source by a given ID. 
+    */
+    const fetchSource = useCallback(() => {
+        dispatch({ type: types.FETCH })
+        httpFetch({
+            url: `/source/${id}`,
+            method: 'GET'
+        }).then(response => dispatch({ type: types.NAME, payload: response.name }))
+            .catch(error => dispatch({ type: types.FAILURE, payload: error.message }))
+    }, [id])
+
+    /**
+     * On mount.
+     */
+    useEffect(() => {
+        fetchSource()
+    }, [fetchSource])
+
+    /**
+     * Edit the source.
+     */
+    function editSource () {
+        const { name } = sources
+        const newSource = { name: name.trim() }
+
+        httpFetch({
+            url: `/source/${id}`,
+            method: 'PUT',
+            data: newSource
+        }).then(() => {
+            dispatch({ type: types.FAILURE, payload: '' })
+            dispatch({ type: types.MESSAGE, payload: "Source edited successfully" })
+        }).catch(error => dispatch({ type: types.FAILURE, payload: error.message || error.errors[0].message }))
     }
+
+    const {
+        fetch, name, error, message
+    } = sources
+
+    return (
+        <>
+            <Alert message={error} variant="error" showAlert={error !== ''} />
+            <Alert message={message} variant="success" showAlert={message !== ''} />
+            <BreadCrumbs
+                activeName="Edit"
+                breadCrumbs={[{
+                    key: 1,
+                    path: '/dashboard/sources',
+                    name: 'Sources'
+                }]} />
+
+            {fetch && <Spinner />}
+
+            {!fetch &&
+                <Section>
+                    <SectionTitle title="Edit Source" />
+                    <FormGroup label="Name">
+                        <Input
+                            className="form-control"
+                            value={name}
+                            onChange={event => dispatch({ type: types.NAME, payload: event.target.value })} />
+                    </FormGroup>
+                    <FormGroup>
+                        <Button onClick={editSource}>Edit</Button>
+                    </FormGroup>
+                </Section>}
+        </>
+    )
 }
 
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(actions, dispatch)
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(SourcesEdit)
+export default SourcesEdit

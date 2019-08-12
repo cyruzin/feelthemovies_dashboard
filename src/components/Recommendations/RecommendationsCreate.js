@@ -1,344 +1,256 @@
-import React, { Component } from 'react'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
+// @flow
+import React, { useReducer } from 'react'
+import { useSelector } from 'react-redux'
+
+import format from 'date-fns/format'
 import debounce from 'lodash/debounce'
-import Alert from '../Layout/Alert'
-import Select from 'antd/lib/select'
-import Spin from 'antd/lib/spin'
+
+import { types, initialState, reducer } from './duck'
+import { httpFetch, httpFetchTMDb } from '../../util/request'
+
+import AntSelect from 'antd/lib/select'
+import AntSpin from 'antd/lib/spin'
 import 'antd/lib/select/style/css'
 import 'antd/lib/spin/style/css'
-import * as actions from '../../store/actions/RecommendationsActions'
-import * as keywordsActions from '../../store/actions/KeywordsActions'
-import * as genresActions from '../../store/actions/GenresActions'
-import { getYear } from '../../util/helpers'
 
-const Option = Select.Option;
+import {
+    Alert,
+    BreadCrumbs,
+    Button,
+    Input,
+    FormGroup,
+    Section,
+    SectionTitle,
+    Select,
+    TextArea,
+    Option
+} from '../Common'
 
-class RecommendationsCreate extends Component {
+function RecommendationsCreate () {
+    const [recommendations, dispatch] = useReducer(reducer, initialState)
+    const userData = useSelector(state => state.authentication.user)
 
-    constructor(props) {
-        super(props)
+    /**
+     * Fetch the Poster/Backdrop from TMDb.
+     * 
+     * @param {string} query - Search query
+     */
+    const fetchImages = debounce((query: string) => {
+        if (query === '') return
 
-        this.titleRef = React.createRef()
-        this.editorRef = React.createRef()
-        this.typeRef = React.createRef()
+        dispatch({ type: types.FETCH })
+        httpFetchTMDb({
+            url: `/search/multi?language=en-US&query=${encodeURIComponent(query)}&page=1&include_adult=false`
+        }).then(response => {
+            const payload = response.results && response.results
+                .filter(img => img.media_type !== 'person' && img.backdrop_path !== null)
+            dispatch({ type: types.IMAGES, payload })
+        }).catch(error => dispatch({ type: types.FAILURE, payload: error }))
+    }, 800)
 
-        this.searchKeywords = debounce(this.searchKeywords, 800)
-        this.searchGenres = debounce(this.searchGenres, 800)
-        this.fetchRecommendationImages = debounce(this.fetchRecommendationImages, 800)
-    }
-
-    componentDidMount() {
-        if (this.props.recommendations.created) {
-            this.props.actions.setCreateRecommendation(false)
+    /** 
+     * Set the selected image in the input.
+     * 
+     * @param {string} selectedImage - Selected image 
+     */
+    function imageChangeHandler (selectedImage: string) {
+        const { images } = recommendations
+        const image = images.find(img => img.id === selectedImage)
+        const payload = {
+            imageValue: image.original_name ?
+                `${image.original_name} (${format(image.first_air_date, 'YYYY')})`
+                : `${image.original_title} (${format(image.release_date, 'YYYY')})`,
+            poster: image.poster_path,
+            backdrop: image.backdrop_path
         }
+        dispatch({ type: types.IMAGE_CHANGE, payload })
     }
 
-    componentWillUnmount() {
-        this.reset()
+    /**
+     * Fetch the genres.
+     * 
+     * @param {string} query - Search query
+     */
+    const fetchGenres = debounce((query: string) => {
+        if (query === '') return
+        dispatch({ type: types.FETCH })
+
+        httpFetch({
+            url: `/search_genre?query=${encodeURIComponent(query)}`,
+            method: 'GET'
+        }).then(response => dispatch({ type: types.GENRES, payload: response.data }))
+            .catch(error => dispatch({ type: types.FAILURE, payload: error.message }))
+    }, 800)
+
+    /**
+     * Set the selected genre in the input.
+     * 
+     * @param {string} selectedGenre - Selected genre 
+     */
+    function genresChangeHandler (selectedGenre: string) {
+        dispatch({ type: types.GENRES_CHANGE, payload: selectedGenre })
     }
 
-    createRecommendation = () => {
-        let title = this.titleRef.current.value
-        let genres = this.props.genres.genresValue.map(v => parseInt(v.key))
-        let keywords = this.props.keywords.keywordsValue.map(v => parseInt(v.key))
+    /**
+     * Fetch the keywords.
+     * 
+     * @param {string} query - Search query
+     */
+    const fetchKeywords = debounce((query: string) => {
+        if (query === '') return
+        dispatch({ type: types.FETCH })
 
-        this.props.actions.setCreateRecommendation('')
+        httpFetch({
+            url: `/search_keyword?query=${encodeURIComponent(query)}`,
+            method: 'GET'
+        }).then(response => dispatch({ type: types.KEYWORDS, payload: response.data }))
+            .catch(error => dispatch({ type: types.FAILURE, payload: error.message }))
+    }, 800)
 
-        let recommendation = {
+    /**
+     * Set the selected keyword in the input.
+     * 
+     * @param {string} selectedKeyword - Selected keyword 
+     */
+    function keywordsChangeHandler (selectedKeyword: string) {
+        dispatch({ type: types.KEYWORDS_CHANGE, payload: selectedKeyword })
+    }
+
+    /**
+     * Create the recommendation.
+     */
+    function createRecommendation () {
+        const {
+            title, body, type, poster, backdrop,
+            genresValue, keywordsValue
+        } = recommendations
+
+        const recommendation = {
             title: title,
-            body: this.editorRef.current.value,
-            type: parseFloat(this.typeRef.current.value),
-            genres: genres,
-            poster: this.props.recommendations.poster,
-            backdrop: this.props.recommendations.backdrop,
-            keywords: keywords,
-            user_id: parseInt(this.props.auth.id)
+            body: body,
+            type: +type,
+            genres: genresValue.map(genre => genre.key),
+            keywords: keywordsValue.map(keywords => keywords.key),
+            poster: poster,
+            backdrop: backdrop,
+            user_id: +userData.id
         }
 
-        if (
-            title === ''
-            || genres.length === 0
-            || keywords.length === 0
-            || this.editorRef.current.value === ''
-            || this.typeRef.current.value === ''
-            || this.props.recommendations.poster === ''
-            || this.props.recommendations.backdrop === ''
-        ) {
-            this.props.actions.setRecommendationError('Fill all fields')
-            return false
-        }
-        this.props.actions.createRecommendation(recommendation)
-        this.reset()
+        httpFetch({
+            url: '/recommendation',
+            method: 'POST',
+            data: recommendation
+        }).then(() => {
+            dispatch({ type: types.RESET })
+            dispatch({ type: types.MESSAGE, payload: "Recommendation created successfully" })
+        }).catch(error => dispatch({ type: types.FAILURE, payload: error.message || error.errors[0].message }))
     }
 
-    handleRecommendationImage = value => {
+    const {
+        fetch, title, body, type, images, imageValue,
+        genres, genresValue, keywords, keywordsValue,
+        error, message
+    } = recommendations
 
-        let image = this.props.recommendations.images
-            .filter(v => v.id === value)
-
-        this.props.actions
-            .setRecommendationImages(image[0].poster_path, image[0].backdrop_path)
-
-        if (image[0].hasOwnProperty('name')) {
-            value = `${image[0].name} ${getYear(image[0].first_air_date)}`
-        } else {
-            value = `${image[0].title} ${getYear(image[0].release_date)}`
-        }
-
-        this.props.actions.setRecommendationImagesChange(value)
-    }
-
-    reset = () => {
-        this.props.actions.setRecommendationError('')
-        this.props.actions.setGenresReset()
-        this.props.actions.setKeywordsReset()
-        this.props.actions.setRecommendationImages('', '')
-        this.props.actions.setRecommendationImagesChange('')
-        this.titleRef.current.value = ''
-        this.editorRef.current.value = ''
-        this.typeRef.current.value = 0
-    }
-
-    handleEditorChange = (e) => {
-        this.props.actions.setRecommendationItemCommentary(e.target.getContent())
-    }
-
-    searchKeywords = value => {
-        if (value !== '') {
-            this.props.actions.searchKeywords(value)
-        }
-    }
-
-    keywordsChange = value => this.props.actions.keywordsChange(value)
-
-    searchGenres = value => {
-        if (value !== '') {
-            this.props.actions.searchGenres(value)
-        }
-    }
-
-    genresChange = value => this.props.actions.genresChange(value)
-
-    fetchRecommendationImages = value => {
-        if (value !== '') {
-            this.props.actions.fetchRecommendationImages(value)
-        }
-    }
-
-    render() {
-        const { created, error, images, imagesValue, fetching } = this.props.recommendations
-        return (
-            <div>
-                <div className="container-fluid">
-                    <ul className="breadcrumb">
-                        <li className="breadcrumb-item">
-                            <Link to='/dashboard/recommendations'>
-                                Recommendations
-                            </Link>
-                        </li>
-                        <li className="breadcrumb-item active">Create</li>
-                    </ul>
-                </div>
-                <section className="no-padding-top">
-                    <div className="container-fluid">
-                        <div className="row">
-                            <div className="col-lg-12">
-
-                                <div className="block">
-                                    <div className="title">
-                                        <strong>Create recommendation</strong>
-                                    </div>
-                                    <div className="block-body">
-                                        {error !== '' ?
-                                            <Alert
-                                                message={error}
-                                                type='primary' />
-                                            : null
-                                        }
-                                        {created && error === '' ?
-                                            <Alert
-                                                message="Recommendation created successfully"
-                                                type='success' />
-                                            : null
-                                        }
-                                        <div className="form-group row">
-                                            <label className="col-lg-3 form-control-label">
-                                                Title
-                                            </label>
-                                            <div className="col-lg-9">
-                                                <input ref={this.titleRef}
-                                                    type="text"
-                                                    className="form-control" />
-                                            </div>
-                                        </div>
-                                        <div className="line"></div>
-
-                                        <div className="form-group row">
-                                            <label className="col-lg-3 form-control-label">
-                                                Body
-                                            </label>
-                                            <div className="col-lg-9">
-                                                <textarea
-                                                    className="form-control"
-                                                    rows="4"
-                                                    ref={this.editorRef}>
-                                                </textarea>
-                                            </div>
-                                        </div>
-                                        <div className="line"></div>
-
-                                        <div className="form-group row">
-                                            <label className="col-lg-3 form-control-label">
-                                                Type
-                                            </label>
-                                            <div className="col-lg-9">
-                                                <select
-                                                    onChange={this.handleType}
-                                                    ref={this.typeRef}
-                                                    className="form-control mb-3">
-                                                    <option value="0" defaultValue>
-                                                        Movie
-                                                    </option>
-                                                    <option value="1">TV Show</option>
-                                                    <option value="2">Mixed</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div className="line"></div>
-
-                                        <div className="form-group row">
-                                            <label className="col-lg-3 form-control-label">
-                                                Image
-                                            </label>
-                                            <div className="col-lg-9">
-                                                <Select
-                                                    showSearch
-                                                    size='large'
-                                                    value={imagesValue}
-                                                    style={{ width: '100%' }}
-                                                    defaultActiveFirstOption={false}
-                                                    notFoundContent={
-                                                        fetching ? <Spin size="small" /> : null
-                                                    }
-                                                    showArrow={false}
-                                                    filterOption={false}
-                                                    onSearch={this.fetchRecommendationImages}
-                                                    onChange={this.handleRecommendationImage}
-                                                >
-                                                    {images.map(v =>
-                                                        <Option key={v.id} value={v.id}>
-                                                            {v.hasOwnProperty('name') ?
-                                                                `${v.name} ${getYear(v.first_air_date)}`
-                                                                :
-                                                                `${v.title} ${getYear(v.release_date)}`
-                                                            }
-                                                        </Option>)
-                                                    }
-                                                </Select>
-                                            </div>
-                                        </div>
-                                        <div className="line"></div>
-
-                                        <div className="form-group row">
-                                            <label className="col-lg-3 form-control-label">
-                                                Genres
-                                            </label>
-                                            <div className="col-lg-9">
-                                                <Select
-                                                    mode="multiple"
-                                                    labelInValue
-                                                    value={this.props.genres.genresValue}
-                                                    size="large"
-                                                    notFoundContent={
-                                                        this.props.genres.loadingSearch ?
-                                                            <Spin size="small" />
-                                                            : null
-                                                    }
-                                                    filterOption={false}
-                                                    onSearch={this.searchGenres}
-                                                    onChange={this.genresChange}
-                                                    style={{ width: '100%' }}
-                                                >
-                                                    {this.props.genres.genres.map(k =>
-                                                        <Option key={k.id} value={k.id}>
-                                                            {k.name}
-                                                        </Option>)
-                                                    }
-                                                </Select>
-                                            </div>
-                                        </div>
-                                        <div className="line"></div>
-
-                                        <div className="form-group row">
-                                            <label className="col-lg-3 form-control-label">
-                                                Keywords
-                                            </label>
-                                            <div className="col-lg-9">
-                                                <Select
-                                                    mode="multiple"
-                                                    labelInValue
-                                                    value={this.props.keywords.keywordsValue}
-                                                    size="large"
-                                                    notFoundContent={
-                                                        this.props.keywords.loadingSearch
-                                                            ? <Spin size="small" />
-                                                            : null
-                                                    }
-                                                    filterOption={false}
-                                                    onSearch={this.searchKeywords}
-                                                    onChange={this.keywordsChange}
-                                                    style={{ width: '100%' }}
-                                                >
-                                                    {this.props.keywords.keywords.map(k =>
-                                                        <Option key={k.id} value={k.id}>
-                                                            {k.name}
-                                                        </Option>)
-                                                    }
-                                                </Select>
-                                            </div>
-                                        </div>
-                                        <div className="line"></div>
-
-
-                                        <div className="form-group row">
-                                            <div className="col-sm-9 ml-auto">
-                                                <button
-                                                    onClick={this.createRecommendation}
-                                                    className="btn btn-outline-success">
-                                                    Save
-                                                </button>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div >
-        )
-    }
+    return (
+        <>
+            <Alert message={error} variant="error" showAlert={error !== ''} />
+            <Alert message={message} variant="success" showAlert={message !== ''} />
+            <BreadCrumbs
+                activeName="Create"
+                breadCrumbs={[{
+                    key: 1,
+                    path: '/dashboard/recommendations',
+                    name: 'Recommendations'
+                }]} />
+            <Section>
+                <SectionTitle title="Create Recommendation" />
+                <FormGroup label="Title">
+                    <Input
+                        className="form-control"
+                        value={title}
+                        onChange={event => dispatch({ type: types.TITLE, payload: event.target.value })} />
+                </FormGroup>
+                <FormGroup label="Body">
+                    <TextArea
+                        className="form-control"
+                        value={body}
+                        onChange={event => dispatch({ type: types.BODY, payload: event.target.value })} />
+                </FormGroup>
+                <FormGroup label="Type">
+                    <Select
+                        className="form-control mb-3"
+                        value={type}
+                        onChange={event => dispatch({ type: types.TYPE, payload: event.target.value })}>
+                        <Option value="0" defaultValue>Movie</Option>
+                        <Option value="1">TV Show</Option>
+                        <Option value="2">Mixed</Option>
+                    </Select>
+                </FormGroup>
+                <FormGroup label="Poster/Backdrop">
+                    <AntSelect
+                        showSearch
+                        size="large"
+                        value={imageValue}
+                        style={{ width: '100%' }}
+                        defaultActiveFirstOption={false}
+                        notFoundContent={fetch && <AntSpin size="small" />}
+                        showArrow={false}
+                        filterOption={false}
+                        onSearch={query => fetchImages(query)}
+                        onChange={selectedImage => imageChangeHandler(selectedImage)}>
+                        {images && images.map(img =>
+                            <AntSelect.Option key={img.id} value={img.id}>
+                                {img.original_name && `${img.original_name} (${format(img.first_air_date, 'YYYY')})`}
+                                {img.original_title && `${img.original_title} (${format(img.release_date, 'YYYY')})`}
+                            </AntSelect.Option>
+                        )}
+                    </AntSelect>
+                </FormGroup>
+                <FormGroup label="Genres">
+                    <AntSelect
+                        mode="multiple"
+                        labelInValue
+                        size='large'
+                        value={genresValue}
+                        style={{ width: '100%' }}
+                        notFoundContent={fetch && <AntSpin size="small" />}
+                        showArrow={false}
+                        filterOption={false}
+                        onSearch={query => fetchGenres(query)}
+                        onChange={selectedGenre => genresChangeHandler(selectedGenre)}>
+                        {genres && genres.map(genre =>
+                            <AntSelect.Option key={genre.id} value={genre.id}>
+                                {genre.name}
+                            </AntSelect.Option>
+                        )}
+                    </AntSelect>
+                </FormGroup>
+                <FormGroup label="Keywords">
+                    <AntSelect
+                        mode="multiple"
+                        labelInValue
+                        size='large'
+                        value={keywordsValue}
+                        style={{ width: '100%' }}
+                        notFoundContent={fetch && <AntSpin size="small" />}
+                        showArrow={false}
+                        filterOption={false}
+                        onSearch={query => fetchKeywords(query)}
+                        onChange={selectedKeyword => keywordsChangeHandler(selectedKeyword)}>
+                        {keywords && keywords.map(keyword =>
+                            <AntSelect.Option key={keyword.id} value={keyword.id}>
+                                {keyword.name}
+                            </AntSelect.Option>
+                        )}
+                    </AntSelect>
+                </FormGroup>
+                <FormGroup>
+                    <Button onClick={createRecommendation}>Create</Button>
+                </FormGroup>
+            </Section>
+        </>
+    )
 }
 
-const mapStateToProps = state => {
-    return {
-        recommendations: state.recommendations,
-        keywords: state.keywords,
-        genres: state.genres,
-        auth: state.auth
-    }
-}
-
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators({
-        ...actions, ...keywordsActions, ...genresActions
-    }, dispatch)
-})
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps)(RecommendationsCreate)
+export default RecommendationsCreate

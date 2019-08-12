@@ -1,287 +1,216 @@
-import React, { Component } from 'react'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
-import * as actions from '../../store/actions/RecommendationItemsActions'
-import Select from 'antd/lib/select'
-import Spin from 'antd/lib/spin'
+// @flow
+import React, { useReducer } from 'react'
+
+import format from 'date-fns/format'
+import debounce from 'lodash/debounce'
+
+import { types, initialState, reducer } from './duck'
+import { httpFetch, httpFetchTMDb } from '../../util/request'
+
+import AntSelect from 'antd/lib/select'
+import AntSpin from 'antd/lib/spin'
 import 'antd/lib/select/style/css'
 import 'antd/lib/spin/style/css'
-import Alert from '../Layout/Alert'
-import debounce from 'lodash/debounce'
-import { getYear } from '../../util/helpers'
 
-const Option = Select.Option;
+import {
+    Alert,
+    BreadCrumbs,
+    Button,
+    TextArea,
+    FormGroup,
+    Section,
+    SectionTitle
+} from '../Common'
 
-class RecommendationItemsCreate extends Component {
+type Props = {
+    match: Object
+}
 
-    constructor(props) {
-        super(props)
+function RecommendationItemsCreate (props: Props) {
+    const { id } = props.match.params
+    const [recommendationItem, dispatch] = useReducer(reducer, initialState)
 
-        this.searchItemData = debounce(this.searchItemData, 800)
-        this.searchSources = debounce(this.searchSources, 800)
+    /**
+    * Fetch for a Movie or TV Show.
+    * 
+    * @param {string} query - Search query
+    */
+    const fetchTmdbSearch = debounce((query: string) => {
+        if (query === '') return
 
-        this.editorRef = React.createRef()
-    }
+        dispatch({ type: types.FETCH })
 
-    componentDidMount() {
-        this.props.actions.setRecommendationItemCreate(false)
-    }
+        httpFetchTMDb({
+            url: `/search/multi?language=en-US&query=${encodeURIComponent(query)}&page=1&include_adult=false`
+        }).then(response => {
+            const payload = response.results && response.results
+                .filter(search => search.media_type !== 'person' && search.backdrop_path !== null)
+            dispatch({ type: types.SEARCH, payload })
+        }).catch(error => dispatch({ type: types.FAILURE, payload: error }))
+    }, 800)
 
-    componentWillUnmount() {
-        this.reset()
-    }
-
-    ItemDataChange = value => {
-        let item = this.props.recommendationItems.tmdb
-            .filter(v => v.id === value)
-
-        this.getItemTrailer(item[0].id, item[0].media_type)
-
-        this.props.actions
-            .setRecommendationItemData(item[0])
-
-        if (item[0].hasOwnProperty('name')) {
-            value = `${item[0].name} ${getYear(item[0].first_air_date)}`
-        } else {
-            value = `${item[0].title} ${getYear(item[0].release_date)}`
+    /** 
+     * Set the selected title in the input.
+     * 
+     * @param {string} selectedTitle - Selected title 
+     */
+    function tmdbSearchChangeHandler (selectedTitle: string) {
+        const { search } = recommendationItem
+        const item = search.find(item => item.id === selectedTitle)
+        const payload = {
+            searchValue: item.original_name ?
+                `${item.original_name} (${format(item.first_air_date, 'YYYY')})`
+                : `${item.original_title} (${format(item.release_date, 'YYYY')})`,
+            item
         }
 
-        this.props.actions.recommendationItemDataChange(value)
+        dispatch({ type: types.SEARCH_CHANGE, payload })
+
+        const { media_type, id } = item
+
+        // Fetching the trailer of the current title.
+        httpFetchTMDb({
+            url: `/${media_type}/${id}?language=en-US&append_to_response=videos`
+        }).then(response => dispatch({ type: types.TRAILER, payload: response.videos.results[0].key }))
+            .catch(error => dispatch({ type: types.FAILURE, payload: error }))
     }
 
-    createRecommendationItem = () => {
+    /**
+     * Fetch the sources.
+     * 
+     * @param {string} query - Search query
+     */
+    const fetchSources = debounce((query: string) => {
+        if (query === '') return
+        dispatch({ type: types.FETCH })
+
+        httpFetch({
+            url: `/search_source?query=${encodeURIComponent(query)}`,
+            method: 'GET'
+        }).then(response => dispatch({ type: types.SOURCES, payload: response.data }))
+            .catch(error => dispatch({ type: types.FAILURE, payload: error.message }))
+    }, 800)
+
+    /**
+     * Set the selected source in the input.
+     * 
+     * @param {string} selectedSource - Selected source 
+     */
+    function sourcesChangeHandler (selectedSource: string) {
+        dispatch({ type: types.SOURCES_CHANGE, payload: selectedSource })
+    }
+
+    /**
+     * Create the recommendation item.
+     */
+    function createRecommendationItem () {
         const {
-            name, year, overview, poster,
-            backdrop, trailer, tmdb_id,
-            sourcesValue, commentary, mediaType
-        } = this.props.recommendationItems
+            item, trailer, commentary, sourcesValue
+        } = recommendationItem
 
-        const { id } = this.props.match.params
-
-        const {
-            setRecommendationItemError,
-            createRecommendationItem
-        } = this.props.actions
-
-        let sources = sourcesValue.map(v => v.key)
-
-        let recommendationItem = {
-            name: name,
-            tmdb_id: parseInt(tmdb_id),
-            year: year,
-            overview: overview,
-            poster: poster,
-            backdrop: backdrop,
-            media_type: mediaType,
+        const newItem = {
+            name: item.original_name || item.original_title,
+            tmdb_id: +item.id,
+            year: item.first_air_date || item.release_date,
+            overview: item.overview,
+            poster: item.poster_path,
+            backdrop: item.backdrop_path,
+            media_type: item.media_type,
             trailer: trailer,
             commentary: commentary,
-            sources: sources,
-            recommendation_id: parseInt(id),
+            sources: sourcesValue.map(source => source.key),
+            recommendation_id: +id,
         }
 
-        if (name === '') {
-            setRecommendationItemError('Please, fill search field')
-            return false
-        }
-
-        createRecommendationItem(recommendationItem)
-
-        this.reset()
+        httpFetch({
+            url: '/recommendation_item',
+            method: 'POST',
+            data: newItem
+        }).then(() => {
+            dispatch({ type: types.RESET })
+            dispatch({ type: types.MESSAGE, payload: "Item created successfully" })
+        }).catch(error => dispatch({ type: types.FAILURE, payload: error.message || error.errors[0].message }))
     }
 
-    reset = () => {
-        this.props.actions.recommedationItemReset()
-        this.editorRef.current.value = ''
-    }
+    const {
+        fetch, search, searchValue, commentary,
+        sources, sourcesValue, error, message
+    } = recommendationItem
 
-    searchItemData = value => {
-        if (value !== '') {
-            this.props.actions.fetchRecommendationItemData(value)
-        }
-    }
-
-    getItemTrailer = (id, type) => {
-        this.props.actions.fetchRecommendationItemTrailer(id, type)
-    }
-
-    handleEditorChange = e => {
-        this.props.actions.setRecommendationItemCommentary(e.target.value)
-    }
-
-    searchSources = value => {
-        if (value !== '') {
-            this.props.actions.recommedationItemSource(value)
-        }
-    }
-
-    sourcesChange = value => {
-        this.props.actions.recommendationItemSourceChange(value)
-    }
-
-    render() {
-        const {
-            error, created, tmdb, tmdbValue,
-            sources, sourcesValue, fetching
-        } = this.props.recommendationItems
-        const { id } = this.props.match.params
-
-        return (
-            <div>
-                <div className="container-fluid">
-                    <ul className="breadcrumb">
-                        <li className="breadcrumb-item">
-                            <Link to='/dashboard/recommendations'>
-                                Recommendation
-                            </Link>
-                        </li>
-                        <li className="breadcrumb-item">
-                            <Link to={`/dashboard/items/${id}`}>
-                                Recommendation Item
-                            </Link>
-                        </li>
-                        <li className="breadcrumb-item active">
-                            Create
-                        </li>
-                    </ul>
-                    <section className="no-padding-top">
-                        <div className="container-fluid">
-                            <div className="row">
-                                <div className="col-lg-12">
-
-                                    <div className="block">
-                                        <div className="title">
-                                            <strong>New Item</strong>
-                                        </div>
-                                        <div className="block-body">
-                                            {error !== '' ?
-                                                <Alert
-                                                    message={error}
-                                                    type='primary' />
-                                                : null
-                                            }
-                                            {created ?
-                                                <Alert
-                                                    message="Item created successfully"
-                                                    type='success' />
-                                                : null
-                                            }
-
-                                            <div className="form-group row">
-                                                <label className="col-lg-3 form-control-label">
-                                                    Search
-                                                </label>
-                                                <div className="col-lg-9">
-                                                    <Select
-                                                        placeholder="Search for a Movie or TV Show"
-                                                        showSearch
-                                                        notFoundContent={
-                                                            fetching ? <Spin size="small" /> : null
-                                                        }
-                                                        showArrow={false}
-                                                        value={tmdbValue}
-                                                        size="large"
-                                                        filterOption={false}
-                                                        onSearch={this.searchItemData}
-                                                        onChange={this.ItemDataChange}
-                                                        style={{ width: '100%' }}
-                                                    >
-                                                        {tmdb.map(v =>
-                                                            <Option key={v.id} value={v.id}>
-                                                                {v.hasOwnProperty('name') ?
-                                                                    `${v.name} 
-                                                                    ${getYear(v.first_air_date)}`
-                                                                    :
-                                                                    `${v.title} 
-                                                                    ${getYear(v.release_date)}`
-                                                                }
-                                                            </Option>)
-                                                        }
-                                                    </Select>
-                                                </div>
-                                            </div>
-                                            <div className="line"></div>
-
-                                            <div className="form-group row">
-                                                <label className="col-lg-3 form-control-label">
-                                                    Commentary
-                                                </label>
-                                                <div className="col-lg-9">
-                                                    <textarea
-                                                        className="form-control"
-                                                        rows="4"
-                                                        onBlur={this.handleEditorChange}
-                                                        onChange={this.handleEditorChange}
-                                                        ref={this.editorRef}>
-                                                    </textarea>
-                                                </div>
-                                            </div>
-                                            <div className="line"></div>
-
-                                            <div className="form-group row">
-                                                <label className="col-lg-3 form-control-label">
-                                                    Sources
-                                                </label>
-                                                <div className="col-lg-9">
-                                                    <Select
-
-                                                        mode="multiple"
-                                                        labelInValue
-                                                        value={sourcesValue}
-                                                        size="large"
-                                                        notFoundContent={
-                                                            fetching ?
-                                                                <Spin size="small" />
-                                                                : null
-                                                        }
-                                                        filterOption={false}
-                                                        onSearch={this.searchSources}
-                                                        onChange={this.sourcesChange}
-                                                        style={{ width: '100%' }}
-                                                    >
-                                                        {sources.map(k =>
-                                                            <Option key={k.id} value={k.id}>
-                                                                {k.name}
-                                                            </Option>)
-                                                        }
-                                                    </Select>
-                                                </div>
-                                            </div>
-                                            <div className="line"></div>
-
-                                            <div className="form-group row">
-                                                <div className="col-sm-9 ml-auto">
-                                                    <button
-                                                        onClick={this.createRecommendationItem}
-                                                        className="btn btn-outline-success">
-                                                        Save
-                                                </button>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-            </div>
-        )
-    }
+    return (
+        <>
+            <Alert message={error} variant="error" showAlert={error !== ''} />
+            <Alert message={message} variant="success" showAlert={message !== ''} />
+            <BreadCrumbs
+                breadCrumbs={[
+                    {
+                        key: 1,
+                        path: '/dashboard/recommendations',
+                        name: 'Recommendations'
+                    },
+                    {
+                        key: 2,
+                        path: `/dashboard/items/${id}`,
+                        name: 'Recommendation Item'
+                    }
+                ]}
+                activeName="Create"
+            />
+            <Section>
+                <SectionTitle title="New Item" />
+                <FormGroup label="Search">
+                    <AntSelect
+                        showSearch
+                        placeholder="Search for a Movie or TV Show"
+                        size="large"
+                        value={searchValue}
+                        style={{ width: '100%' }}
+                        defaultActiveFirstOption={false}
+                        notFoundContent={fetch && <AntSpin size="small" />}
+                        showArrow={false}
+                        filterOption={false}
+                        onSearch={query => fetchTmdbSearch(query)}
+                        onChange={selectedTitle => tmdbSearchChangeHandler(selectedTitle)}>
+                        {search && search.map(item =>
+                            <AntSelect.Option key={item.id} value={item.id}>
+                                {item.original_name && `${item.original_name} (${format(item.first_air_date, 'YYYY')})`}
+                                {item.original_title && `${item.original_title} (${format(item.release_date, 'YYYY')})`}
+                            </AntSelect.Option>
+                        )}
+                    </AntSelect>
+                </FormGroup>
+                <FormGroup label="Commentary">
+                    <TextArea
+                        className="form-control"
+                        value={commentary}
+                        onChange={event => dispatch({ type: types.COMMENTARY, payload: event.target.value })} />
+                </FormGroup>
+                <FormGroup label="Sources">
+                    <AntSelect
+                        mode="multiple"
+                        labelInValue
+                        size="large"
+                        value={sourcesValue}
+                        style={{ width: '100%' }}
+                        defaultActiveFirstOption={false}
+                        notFoundContent={fetch && <AntSpin size="small" />}
+                        showArrow={false}
+                        filterOption={false}
+                        onSearch={query => fetchSources(query)}
+                        onChange={selectedSource => sourcesChangeHandler(selectedSource)}>
+                        {sources && sources.map(source =>
+                            <AntSelect.Option key={source.id} value={source.id}>
+                                {source.name}
+                            </AntSelect.Option>
+                        )}
+                    </AntSelect>
+                </FormGroup>
+                <FormGroup>
+                    <Button onClick={createRecommendationItem}>Save</Button>
+                </FormGroup>
+            </Section>
+        </>
+    )
 }
 
-const mapStateToProps = state => {
-    return {
-        recommendationItems: state.recommendationItems
-    }
-}
-
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(actions, dispatch)
-})
-
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps)(RecommendationItemsCreate)
+export default RecommendationItemsCreate

@@ -1,125 +1,68 @@
-import React, { Component } from 'react'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
-import Alert from '../Layout/Alert'
-import * as actions from '../../store/actions/KeywordsActions'
+// @flow
+import React, { useReducer } from 'react'
 
-class KeywordsCreate extends Component {
+import { types, initialState, reducer } from './duck'
+import { httpFetch } from '../../util/request'
 
-    constructor(props) {
-        super(props)
-        this.nameRef = React.createRef()
+import {
+    Alert,
+    BreadCrumbs,
+    Button,
+    Input,
+    FormGroup,
+    Section,
+    SectionTitle
+} from '../Common'
+
+function KeywordsCreate () {
+    const [keywords, dispatch] = useReducer(reducer, initialState)
+
+    /**
+     * Create the keyword.
+     */
+    function createKeyword () {
+        const { name } = keywords
+        const newKeyword = { name: name.trim() }
+
+        httpFetch({
+            url: '/keyword',
+            method: 'POST',
+            data: newKeyword
+        }).then(() => {
+            dispatch({ type: types.RESET })
+            dispatch({ type: types.MESSAGE, payload: "Keyword created successfully" })
+        }).catch(error => dispatch({ type: types.FAILURE, payload: error.message || error.errors[0].message }))
     }
 
-    componentDidMount() {
-        this.reset()
-    }
+    const {
+        name, error, message
+    } = keywords
 
-    reset = () => {
-        const { error, created } = this.props.keywords
-        const { setError, setCreateKeyword } = this.props.actions
-
-        if (created) {
-            setCreateKeyword(false)
-        }
-
-        if (error !== '') {
-            setError('')
-        }
-    }
-
-    createKeyword = () => {
-        let name = this.nameRef.current.value
-
-        this.props.actions.setCreateKeyword(false)
-
-        let keyword = {
-            name: name
-        }
-
-        if (name === '') {
-            this.props.actions.setError('Please, fill name field')
-            return false
-        }
-
-        this.props.actions.createKeyword(keyword)
-
-        name = this.nameRef.current.value = ''
-        this.nameRef.current.focus()
-    }
-
-    render() {
-        return (
-            <div>
-                <div className="container-fluid">
-                    <ul className="breadcrumb">
-                        <li className="breadcrumb-item">
-                            <Link to='/dashboard/keywords'>
-                                Keywords
-                            </Link>
-                        </li>
-                        <li className="breadcrumb-item active">Create</li>
-                    </ul>
-                </div>
-                <section className="no-padding-top">
-                    <div className="container-fluid">
-                        <div className="row">
-                            <div className="col-lg-12">
-
-                                <div className="block">
-                                    <div className="title">
-                                        <strong>Create keyword</strong>
-                                    </div>
-                                    <div className="block-body">
-                                        {this.props.keywords.error !== '' ?
-                                            <Alert message={this.props.keywords.error} type='primary' />
-                                            : null
-                                        }
-                                        {this.props.keywords.created ?
-                                            <Alert message="Keyword created successfully" type='success' />
-                                            : null
-                                        }
-                                        <div className="form-group row">
-                                            <label className="col-lg-3 form-control-label">Name</label>
-                                            <div className="col-lg-9">
-                                                <input ref={this.nameRef}
-                                                    type="text"
-                                                    className="form-control" />
-                                            </div>
-                                        </div>
-                                        <div className="line"></div>
-
-                                        <div className="form-group row">
-                                            <div className="col-sm-9 ml-auto">
-                                                <button
-                                                    onClick={this.createKeyword}
-                                                    className="btn btn-primary">
-                                                    Save
-                                                </button>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-        )
-    }
+    return (
+        <>
+            <Alert message={error} variant="error" showAlert={error !== ''} />
+            <Alert message={message} variant="success" showAlert={message !== ''} />
+            <BreadCrumbs
+                activeName="Create"
+                breadCrumbs={[{
+                    key: 1,
+                    path: '/dashboard/keywords',
+                    name: 'Keywords'
+                }]} />
+            <Section>
+                <SectionTitle title="Create Keyword" />
+                <FormGroup label="Name">
+                    <Input
+                        className="form-control"
+                        value={name}
+                        onChange={event => dispatch({ type: types.NAME, payload: event.target.value })} />
+                </FormGroup>
+                <FormGroup>
+                    <Button onClick={createKeyword}>Create</Button>
+                </FormGroup>
+            </Section>
+        </>
+    )
 }
 
-const mapStateToProps = state => {
-    return {
-        keywords: state.keywords
-    }
-}
-
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(actions, dispatch)
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(KeywordsCreate)
+export default KeywordsCreate

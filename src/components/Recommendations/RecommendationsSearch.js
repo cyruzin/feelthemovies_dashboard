@@ -1,133 +1,147 @@
-import React, { Component } from 'react'
+// @flow
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import * as actions from '../../store/actions/RecommendationsActions'
-import NoResults from '../Layout/NoResults';
-import Spinner from '../Layout/Spinner'
-import moment from 'moment'
+import { useDispatch, useSelector } from 'react-redux'
+
+import distanceInWordsStrict from 'date-fns/distance_in_words_strict'
+
+import {
+    getSearchRecommendations,
+    deleteRecommendations
+} from '../../redux/ducks/recommendations'
 import { checkType, checkStatus } from '../../util/helpers'
 
-class RecommendationsSearch extends Component {
+import {
+    Button,
+    BreadCrumbs,
+    Modal,
+    Section,
+    SearchInput,
+    Spinner,
+    NoResults,
+    Table,
+    TR,
+    TD
+} from '../Common'
 
-    componentDidMount() {
-        this.searchRecommendation()
+type Props = {
+    location: Object,
+    history: Object
+}
+
+function RecommendationsSearch (props: Props) {
+    const dispatch = useDispatch()
+    const [modalShow, setModal] = useState(false)
+    const [recommendation, setRecommendation] = useState({})
+    const recommendations = useSelector(state => state.recommendations)
+    const { fetch, searchData } = recommendations
+    const tableColumns = [
+        { key: 1, name: '#' },
+        { key: 2, name: 'Title' },
+        { key: 3, name: 'Type' },
+        { key: 4, name: 'Status' },
+        { key: 5, name: 'Created at' },
+        { key: 6, name: 'Updated at' },
+        { key: 7, name: 'Actions' }
+    ]
+
+    useEffect(() => {
+        const { query } = props.location.state
+        dispatch(getSearchRecommendations(query))
+    }, [dispatch, props.location.state])
+
+
+    function modalOpenHandler (recommendation: Object) {
+        setRecommendation(recommendation)
+        setModal(true)
     }
 
-    searchRecommendation = () => {
-        const params = new URLSearchParams(this.props.location.search);
-        const query = params.get('query')
-        this.props.actions.searchRecommendation(query)
+    function modalCloseHandler () {
+        setModal(false)
     }
 
-    render() {
-        const { search, searchLoaded } = this.props.recommendations
+    function deleteRecommendation () {
+        dispatch(deleteRecommendations(recommendation.id))
+        setModal(false)
+        const { push } = props.history
+        return push('/dashboard/recommendations')
+    }
 
-        return (
-            <div>
-                <div className="container-fluid">
-                    <ul className="breadcrumb">
-                        <li className="breadcrumb-item">
-                            <Link to='/dashboard/recommendations'>
-                                Recommendations
-                            </Link>
-                        </li>
-                        <li className="breadcrumb-item active">Search</li>
-                    </ul>
-                </div>
-                {searchLoaded ? <Spinner /> : null}
+    return (
+        <>
+            <BreadCrumbs
+                activeName="Search"
+                breadCrumbs={[{
+                    key: 1,
+                    path: '/dashboard/recommendations',
+                    name: 'Recommendations'
+                }]} />
 
-                {!searchLoaded && search.total === 0 ?
+            {fetch && <Spinner />}
+
+            {!fetch && searchData.length === 0 &&
+                <Section>
+                    <SearchInput
+                        path='/dashboard/search_recommendation'
+                        placeholder="Search for a title, keyword or genre"
+                    />
                     <NoResults message="No Results" />
-                    :
-                    null
-                }
+                </Section>}
 
-                {!searchLoaded && search.total > 0 ?
-                    <section className="no-padding-top">
-                        <div className="container-fluid">
-                            <div className="row">
-                                <div className="col-lg-12">
-                                    <div className="block">
-                                        <div className="table-responsive">
-                                            <table className="table table-striped table-sm">
-                                                <thead>
-                                                    <tr>
-                                                        <th>#</th>
-                                                        <th>Title</th>
-                                                        <th>Type</th>
-                                                        <th>Status</th>
-                                                        <th>Created at</th>
-                                                        <th>Updated at</th>
-                                                        <th>Actions</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {search.data.map(r => (
-                                                        <tr key={r.id}>
-                                                            <th scope="row">{r.id}</th>
-                                                            <td>{r.title}</td>
-                                                            <td>{checkType(r.type)}</td>
-                                                            <td>
-                                                                {checkStatus(r.status)}
-                                                            </td>
-                                                            <td>
-                                                                {moment(r.created_at).fromNow()}
-                                                            </td>
-                                                            <td>
-                                                                {moment(r.updated_at).fromNow()}
-                                                            </td>
-                                                            <td>
-                                                                <Link
-                                                                    className="btn btn-sm btn-outline-success mr-2"
-                                                                    to={`/dashboard/items/${r.id}`}
-                                                                >
-                                                                    <i className="fa fa-plus"></i>
-                                                                </Link>
-                                                                <Link
-                                                                    className="btn btn-sm btn-outline-secondary mr-2"
-                                                                    to={`/dashboard/edit_recommendation/${r.id}`}
-                                                                >
-                                                                    <i className="fa fa-edit"></i>
-                                                                </Link>
-
-                                                                <Link
-                                                                    className="btn btn-sm btn-outline-danger"
-                                                                    to={`/dashboard/delete_recommendation/${r.id}`}
-                                                                    onClick={() => this.props.actions.setDeleted(false)}
-                                                                >
-                                                                    <i className="fa fa-trash"></i>
-                                                                </Link>
-                                                            </td>
-                                                        </tr>
-                                                    ))
-                                                    }
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                    :
-                    null
-                }
-            </div>
-        )
-    }
+            {!fetch && searchData.length > 0 &&
+                <Section>
+                    <Modal
+                        show={modalShow}
+                        title="Delete Recommendation"
+                        okBtnName="Yes"
+                        onClick={deleteRecommendation}
+                        onClose={modalCloseHandler}>
+                        <p>
+                            Are you sure that you want to
+                        delete recommendation <strong>{recommendation && recommendation.title} recommendation</strong>?
+                        </p>
+                    </Modal>
+                    <Link
+                        className="btn btn-primary mb-3 float-right"
+                        to='/dashboard/create_recommendation'>
+                        New
+                    </Link>
+                    <SearchInput
+                        path='/dashboard/search_recommendation'
+                        placeholder="Search for a title, keyword or genre"
+                    />
+                    <Table columns={tableColumns}>
+                        {searchData.map(recommendation => (
+                            <TR key={recommendation.id}>
+                                <TD>{recommendation.id}</TD>
+                                <TD>{recommendation.title}</TD>
+                                <TD>{checkType(recommendation.type)}</TD>
+                                <TD>{checkStatus(recommendation.status)}</TD>
+                                <TD>{distanceInWordsStrict(recommendation.created_at, Date.now())}</TD>
+                                <TD>{distanceInWordsStrict(recommendation.updated_at, Date.now())}</TD>
+                                <TD>
+                                    <Link
+                                        className="btn btn-sm btn-primary mr-2"
+                                        to={`/dashboard/items/${recommendation.id}`}>
+                                        <i className="fa fa-plus"></i>
+                                    </Link>
+                                    <Link
+                                        className="btn btn-sm btn-primary mr-2"
+                                        to={`/dashboard/edit_recommendation/${recommendation.id}`}>
+                                        <i className="fa fa-edit"></i>
+                                    </Link>
+                                    <Button
+                                        className="btn btn-sm btn-primary"
+                                        onClick={() => modalOpenHandler(recommendation)}>
+                                        <i className="fa fa-trash"></i>
+                                    </Button>
+                                </TD>
+                            </TR>
+                        ))}
+                    </Table>
+                </Section>}
+        </>
+    )
 }
 
-const mapStateToProps = state => {
-    return {
-        recommendations: state.recommendations
-    }
-}
-
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(actions, dispatch)
-})
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps)(RecommendationsSearch)
+export default RecommendationsSearch

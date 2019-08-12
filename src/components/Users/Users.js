@@ -1,37 +1,43 @@
-import React, { Component } from 'react'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import * as actions from '../../store/actions/UsersActions'
-import UserList from './UserList'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
-class Users extends Component {
+import { getUsers } from '../../redux/ducks/users'
 
-    componentDidMount() {
-        this.props.actions.fetchUsers()
-    }
+import UsersList from './UsersList'
 
-    render() {
-        return (
-            <div>
-                <div className="page-header">
-                    <div className="container-fluid">
-                        <h2 className="h5 no-margin-bottom">Users</h2>
-                    </div>
-                </div>
-                <UserList />
-            </div>
-        )
-    }
+import {
+    Alert,
+    NoResults,
+    SectionHeader,
+    Spinner,
+} from '../Common'
+
+function Users () {
+    const users = useSelector(state => state.users)
+    const dispatch = useDispatch()
+    const { fetch, data, error, message } = users
+
+    useEffect(() => {
+        dispatch(getUsers())
+    }, [dispatch])
+
+    return (
+        <>
+            <Alert message={error} variant="error" showAlert={error !== ''} />
+            <Alert message={message} variant="success" showAlert={message !== ''} />
+            <SectionHeader title="Users" />
+            {fetch && <Spinner />}
+
+            {!fetch && data.length === 0 &&
+                <NoResults
+                    message="No Results"
+                    withButton
+                    path="/dashboard/create_user" />
+            }
+
+            {!fetch && data.length > 0 && <UsersList data={data} />}
+        </>
+    )
 }
 
-const mapStateToProps = state => {
-    return {
-        users: state.users
-    }
-}
-
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(actions, dispatch)
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(Users)
+export default Users

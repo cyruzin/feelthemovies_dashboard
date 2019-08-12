@@ -1,38 +1,43 @@
-import React, { Component } from 'react'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import * as actions from '../../store/actions/KeywordsActions'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { getKeywords } from '../../redux/ducks/keywords'
+
 import KeywordsList from './KeywordsList'
 
-class Keywords extends Component {
+import {
+    Alert,
+    NoResults,
+    SectionHeader,
+    Spinner,
+} from '../Common'
 
-    componentDidMount() {
-        this.props.actions.fetchKeywords()
-    }
+function Keywords () {
+    const keywords = useSelector(state => state.keywords)
+    const dispatch = useDispatch()
+    const { fetch, data, error, message } = keywords
 
-    render() {
-        return (
-            <div>
-                <div className="page-header">
-                    <div className="container-fluid">
-                        <h2 className="h5 no-margin-bottom">Keywords</h2>
-                    </div>
-                </div>
-                <KeywordsList />
-            </div >
-        )
-    }
+    useEffect(() => {
+        dispatch(getKeywords())
+    }, [dispatch])
+
+    return (
+        <>
+            <Alert message={error} variant="error" showAlert={error !== ''} />
+            <Alert message={message} variant="success" showAlert={message !== ''} />
+            <SectionHeader title="Keywords" />
+            {fetch && <Spinner />}
+
+            {!fetch && data.length === 0 &&
+                <NoResults
+                    message="No Results"
+                    withButton
+                    path="/dashboard/create_keyword" />
+            }
+
+            {!fetch && data.length > 0 && <KeywordsList data={data} />}
+        </>
+    )
 }
 
-
-const mapStateToProps = state => {
-    return {
-        keywords: state.keywords
-    }
-}
-
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(actions, dispatch)
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(Keywords)
+export default Keywords

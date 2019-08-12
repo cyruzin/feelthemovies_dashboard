@@ -1,154 +1,101 @@
-import React, { Component } from 'react'
-import { bindActionCreators, compose } from 'redux'
-import { connect } from 'react-redux'
-import { Link, withRouter } from 'react-router-dom'
-import * as actions from '../../store/actions/KeywordsActions'
-import Alert from '../Layout/Alert'
-import debounce from 'lodash/debounce'
-import moment from 'moment'
-import NoResults from '../Layout/NoResults'
-import Spinner from '../Layout/Spinner'
+// @flow
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom'
 
-class KeywordsList extends Component {
+import distanceInWordsStrict from 'date-fns/distance_in_words_strict'
 
-    constructor(props) {
-        super(props)
+import { deleteKeywords } from '../../redux/ducks/keywords'
 
-        this.deleteMessage = debounce(this.deleteMessage, 2000)
-        this.searchKeywordRef = React.createRef()
-    }
+import {
+    Button,
+    SearchInput,
+    Modal,
+    Section,
+    Table,
+    TR,
+    TD
+} from '../Common'
 
-    componentDidMount() {
-        this.deleteMessage()
-        window.addEventListener('keypress', this.isEnterPressed)
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('keypress', this.isEnterPressed)
-    }
-
-    deleteMessage = () => {
-        if (this.props.keywords.deleted) {
-            this.props.actions.setDeleted('')
-        }
-    }
-
-    isEnterPressed = e => {
-        const { current } = this.searchKeywordRef
-        if (e.keyCode === 13) {
-            if (document.activeElement === current && current.value !== '') {
-                this.props.history.push(`/dashboard/search_keyword?query=${current.value}`)
-            }
-        }
-    }
-
-
-    render() {
-        const { data, deleted, loaded } = this.props.keywords
-        return (
-            <div>
-                {loaded ? <Spinner /> : null}
-
-                {!loaded && data.length > 0 ?
-                    <section className="no-padding-top">
-                        <div className="container-fluid">
-                            <div className="row">
-                                <div className="col-lg-12">
-                                    <div className="block">
-                                        {deleted ?
-                                            <Alert type='success' message="Keyword removed successfully" />
-                                            :
-                                            null
-                                        }
-                                        <div className="table-responsive">
-                                            <Link
-                                                className="btn btn btn-outline-success mb-3 float-right"
-                                                to='/dashboard/create_keyword'>
-                                                New
-                                        </Link>
-                                            <div className="form-group row">
-                                                <div className="col-lg-6">
-                                                    <input
-                                                        ref={this.searchKeywordRef}
-                                                        type="text"
-                                                        placeholder="Search"
-                                                        className="form-control" />
-                                                </div>
-                                            </div>
-                                            <div className="line"></div>
-                                            <table className="table table-striped table-sm">
-                                                <thead>
-                                                    <tr>
-                                                        <th>#</th>
-                                                        <th>Name</th>
-                                                        <th>Created at</th>
-                                                        <th>Updated at</th>
-                                                        <th>Actions</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {data.map(keyword => (
-                                                        <tr key={keyword.id}>
-                                                            <th scope="row">{keyword.id}</th>
-                                                            <td>{keyword.name}</td>
-                                                            <td>
-                                                                {moment(keyword.created_at).fromNow()}
-                                                            </td>
-                                                            <td>
-                                                                {moment(keyword.updated_at).fromNow()}
-                                                            </td>
-                                                            <td>
-                                                                <Link
-                                                                    className="btn btn-sm btn-outline-secondary mr-2"
-                                                                    to={`/dashboard/edit_keyword/${keyword.id}`}
-                                                                >
-                                                                    <i className="fa fa-edit"></i>
-                                                                </Link>
-
-                                                                <Link
-                                                                    className="btn btn-sm btn-outline-danger"
-                                                                    to={`/dashboard/delete_keyword/${keyword.id}`}
-                                                                    onClick={() => this.props.actions.setDeleted(false)}
-                                                                >
-                                                                    <i className="fa fa-trash"></i>
-                                                                </Link>
-                                                            </td>
-                                                        </tr>
-                                                    ))
-                                                    }
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                    :
-                    null
-                }
-                {!loaded && data.length === 0 ?
-                    <NoResults
-                        message="No keywords were created yet"
-                        withButton
-                        path='/dashboard/create_keyword' />
-                    :
-                    null}
-            </div>
-        )
-    }
+type Props = {
+    data: Object
 }
 
-const mapStateToProps = state => {
-    return {
-        keywords: state.keywords
+function KeywordsList (props: Props) {
+    const dispatch = useDispatch()
+    const { data } = props
+
+    const tableColumns = [
+        { key: 1, name: '#' },
+        { key: 2, name: 'Name' },
+        { key: 3, name: 'Created at' },
+        { key: 4, name: 'Updated at' },
+        { key: 5, name: 'Actions' }
+    ]
+
+    const [modalShow, setModal] = useState(false)
+    const [keyword, setKeyword] = useState({})
+
+    function modalOpenHandler (keyword: Object) {
+        setKeyword(keyword)
+        setModal(true)
     }
+
+    function modalCloseHandler () {
+        setModal(false)
+    }
+
+    function deleteKeyword () {
+        dispatch(deleteKeywords(keyword.id))
+        setModal(false)
+    }
+
+    return (
+        <Section>
+            <Modal
+                show={modalShow}
+                title="Delete Keyword"
+                okBtnName="Yes"
+                onClick={deleteKeyword}
+                onClose={modalCloseHandler}>
+                <p>
+                    Are you sure that you want to
+                    delete <strong>{keyword && keyword.name}</strong> keyword?
+                </p>
+            </Modal>
+            <Link
+                className="btn btn-primary mb-3 float-right"
+                to='/dashboard/create_keyword'>
+                New
+            </Link>
+            <SearchInput
+                path='/dashboard/search_keyword'
+                placeholder="Search"
+            />
+            <Table columns={tableColumns}>
+                {data.map(keyword => (
+                    <TR key={keyword.id}>
+                        <TD>{keyword.id}</TD>
+                        <TD>{keyword.name}</TD>
+                        <TD>{distanceInWordsStrict(keyword.created_at, Date.now())}</TD>
+                        <TD>{distanceInWordsStrict(keyword.updated_at, Date.now())}</TD>
+                        <TD>
+                            <Link
+                                className="btn btn-sm btn-primary mr-2"
+                                to={`/dashboard/edit_keyword/${keyword.id}`}>
+                                <i className="fa fa-edit"></i>
+                            </Link>
+                            <Button
+                                className="btn btn-sm btn-primary"
+                                onClick={() => modalOpenHandler(keyword)}>
+                                <i className="fa fa-trash"></i>
+                            </Button>
+                        </TD>
+                    </TR>
+                ))}
+            </Table>
+        </Section >
+    )
 }
 
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(actions, dispatch)
-})
-
-export default compose(
-    withRouter,
-    connect(mapStateToProps, mapDispatchToProps))(KeywordsList)
+export default KeywordsList

@@ -1,151 +1,115 @@
-import React, { Component } from 'react'
-import { bindActionCreators, compose } from 'redux'
-import { connect } from 'react-redux'
-import { withRouter, Link } from 'react-router-dom'
-import * as actions from '../../store/actions/RecommendationItemsActions'
-import Alert from '../Layout/Alert'
-import debounce from 'lodash/debounce'
-import moment from 'moment'
-import NoResults from '../Layout/NoResults';
-import Spinner from '../Layout/Spinner';
-import { getYear } from '../../util/helpers'
+// @flow
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom'
 
-class RecommendationItemsList extends Component {
+import distanceInWordsStrict from 'date-fns/distance_in_words_strict'
+import format from 'date-fns/format'
 
-    constructor(props) {
-        super(props)
-        this.deleteMessage = debounce(this.deleteMessage, 2000)
-    }
+import { deleteRecommendationItems } from '../../redux/ducks/recommendationItems'
+import { capitalizeFirstLetter } from '../../util/helpers'
 
-    componentDidMount() {
-        this.fetchRecommendationItems()
-        this.deleteMessage()
-    }
+import {
+    Section,
+    BreadCrumbs,
+    Button,
+    Modal,
+    Table,
+    TR,
+    TD
+} from '../Common'
 
-    deleteMessage = () => {
-        if (this.props.recommendationItems.deleted) {
-            this.props.actions.setDeleteRecommendationItem(false)
-        }
-    }
-
-    fetchRecommendationItems = () => {
-        const { id } = this.props.match.params
-        const { fetchRecommendationItems } = this.props.actions
-
-        fetchRecommendationItems(id)
-    }
-
-    render() {
-        const { loaded, items, deleted } = this.props.recommendationItems
-        const { id } = this.props.match.params
-        return (
-            <div>
-                <div className="container-fluid">
-                    <ul className="breadcrumb">
-                        <li className="breadcrumb-item">
-                            <Link to='/dashboard/recommendations'>
-                                Recommendations
-                            </Link>
-                        </li>
-                        <li className="breadcrumb-item active">Items</li>
-                    </ul>
-                </div>
-
-                {loaded ? <Spinner /> : null}
-
-                {!loaded && items.length > 0 ?
-                    <section className="no-padding-top">
-                        <div className="container-fluid">
-                            <div className="row">
-                                <div className="col-lg-12">
-                                    <div className="block">
-                                        {deleted ?
-                                            <Alert
-                                                type='success'
-                                                message="Item removed successfully" />
-                                            :
-                                            null
-                                        }
-                                        <div className="table-responsive">
-                                            <Link
-                                                className="btn btn btn-outline-success mb-3 float-right"
-                                                to={`/dashboard/create_item/${id}`}>
-                                                New
-                                            </Link>
-                                            <table className="table table-striped table-sm">
-                                                <thead>
-                                                    <tr>
-                                                        <th>#</th>
-                                                        <th>Name</th>
-                                                        <th>Year</th>
-                                                        <th>Created at</th>
-                                                        <th>Updated at</th>
-                                                        <th>Actions</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-
-                                                    {items.map(v => (
-                                                        <tr key={v.id}>
-                                                            <th scope="row">{v.id}</th>
-                                                            <td>{v.name}</td>
-                                                            <td>{getYear(v.year, false)}</td>
-                                                            <td>{moment(v.created_at).fromNow()}</td>
-                                                            <td>{moment(v.updated_at).fromNow()}</td>
-                                                            <td>
-                                                                <Link
-                                                                    className="btn btn-sm btn-outline-secondary mr-2"
-                                                                    to={`/dashboard/edit_item/${v.id}`}
-                                                                >
-                                                                    <i className="fa fa-edit"></i>
-                                                                </Link>
-
-                                                                <Link
-                                                                    className="btn btn-sm btn-outline-danger"
-                                                                    to={`/dashboard/delete_item/${v.id}`}
-                                                                >
-                                                                    <i className="fa fa-trash"></i>
-                                                                </Link>
-                                                            </td>
-                                                        </tr>
-                                                    ))
-                                                    }
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                    :
-                    null
-                }
-                {!loaded && items.length === 0 ?
-                    <NoResults
-                        message="No items were created yet"
-                        withButton
-                        path={`/dashboard/create_item/${id}`} />
-                    :
-                    null}
-            </div>
-        )
-    }
+type Props = {
+    data: Object,
+    id: number | string
 }
 
-const mapStateToProps = state => {
-    return {
-        recommendationItems: state.recommendationItems
+function RecommendationItemsList (props: Props) {
+    const { id, data } = props
+    const dispatch = useDispatch()
+
+    const [modalShow, setModal] = useState(false)
+    const [item, setRecommendationItem] = useState({})
+
+    const tableColumns = [
+        { key: 1, name: '#' },
+        { key: 2, name: 'TMDb ID' },
+        { key: 3, name: 'Name' },
+        { key: 4, name: 'Year' },
+        { key: 5, name: 'Type' },
+        { key: 6, name: 'Created at' },
+        { key: 7, name: 'Updated at' },
+        { key: 8, name: 'Actions' }
+    ]
+
+    function modalOpenHandler (item: Object) {
+        setRecommendationItem(item)
+        setModal(true)
     }
+
+    function modalCloseHandler () {
+        setModal(false)
+    }
+
+    function deleteRecommendationItem () {
+        dispatch(deleteRecommendationItems(item.id, id))
+        setModal(false)
+    }
+
+    return (
+        <>
+            <BreadCrumbs
+                breadCrumbs={[{
+                    key: 1,
+                    path: '/dashboard/recommendations',
+                    name: 'Recommendations'
+                }]}
+                activeName="Items" />
+            <Section>
+                <Modal
+                    show={modalShow}
+                    title="Delete Recommendation"
+                    okBtnName="Yes"
+                    onClick={deleteRecommendationItem}
+                    onClose={modalCloseHandler}>
+                    <p>
+                        Are you sure that you want to
+                        delete <strong>{item && item.name}</strong> item?
+                    </p>
+                </Modal>
+                <Link
+                    className="btn btn-primary mb-3 float-right"
+                    to={`/dashboard/create_item/${id}`}>
+                    New
+            </Link>
+                <Table columns={tableColumns}>
+                    {data.map(item => (
+                        <TR key={item.id}>
+                            <TD>{item.id}</TD>
+                            <TD>{item.tmdb_id}</TD>
+                            <TD>{item.name}</TD>
+                            <TD>{format(item.year, 'YYYY')}</TD>
+                            <TD>{capitalizeFirstLetter(item.media_type)}</TD>
+                            <TD>{distanceInWordsStrict(item.created_at, Date.now())}</TD>
+                            <TD>{distanceInWordsStrict(item.updated_at, Date.now())}</TD>
+                            <TD>
+                                <Link
+                                    className="btn btn-sm btn-primary mr-2"
+                                    to={`/dashboard/edit_item/${item.id}`}>
+                                    <i className="fa fa-edit"></i>
+                                </Link>
+                                <Button
+                                    className="btn btn-sm btn-primary"
+                                    onClick={() => modalOpenHandler(item)}>
+                                    <i className="fa fa-trash"></i>
+                                </Button>
+                            </TD>
+                        </TR>
+                    ))}
+                </Table>
+            </Section>
+        </>
+    )
 }
 
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(actions, dispatch)
-})
-
-
-export default compose(
-    withRouter,
-    connect(
-        mapStateToProps,
-        mapDispatchToProps))(RecommendationItemsList)
+export default RecommendationItemsList

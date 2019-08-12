@@ -95,3 +95,7 @@
 .table {
   color: #8a8d93!important;
 }
+
+a {
+  text-decoration: none!important;
+}

@@ -1,38 +1,43 @@
-import React, { Component } from 'react'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import * as actions from '../../store/actions/SourcesActions'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { getSources } from '../../redux/ducks/sources'
+
 import SourcesList from './SourcesList'
 
-class Sources extends Component {
+import {
+    Alert,
+    NoResults,
+    SectionHeader,
+    Spinner,
+} from '../Common'
 
-    componentDidMount() {
-        this.props.actions.fetchSources()
-    }
+function Sources () {
+    const sources = useSelector(state => state.sources)
+    const dispatch = useDispatch()
+    const { fetch, data, error, message } = sources
 
-    render() {
-        return (
-            <div>
-                <div className="page-header">
-                    <div className="container-fluid">
-                        <h2 className="h5 no-margin-bottom">Sources</h2>
-                    </div>
-                </div>
-                <SourcesList />
-            </div >
-        )
-    }
+    useEffect(() => {
+        dispatch(getSources())
+    }, [dispatch])
+
+    return (
+        <>
+            <Alert message={error} variant="error" showAlert={error !== ''} />
+            <Alert message={message} variant="success" showAlert={message !== ''} />
+            <SectionHeader title="Sources" />
+            {fetch && <Spinner />}
+
+            {!fetch && data.length === 0 &&
+                <NoResults
+                    message="No Results"
+                    withButton
+                    path="/dashboard/create_source" />
+            }
+
+            {!fetch && data.length > 0 && <SourcesList data={data} />}
+        </>
+    )
 }
 
-
-const mapStateToProps = state => {
-    return {
-        sources: state.sources
-    }
-}
-
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(actions, dispatch)
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(Sources)
+export default Sources

@@ -1,40 +1,60 @@
-import React, { Component } from 'react'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import * as actions from '../../store/actions/RecommendationItemsActions'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { getRecommendationItems } from '../../redux/ducks/recommendationItems'
+
 import RecommendationItemsList from './RecommendationItemsList'
 
-class RecommendationItems extends Component {
+import {
+    Alert,
+    BreadCrumbs,
+    NoResults,
+    SectionHeader,
+    Spinner
+} from '../Common'
 
-    render() {
-        const { id } = this.props.match.params
-
-        return (
-            <div>
-                <div className="page-header">
-                    <div className="container-fluid">
-                        <h2 className="h5 no-margin-bottom">
-                            Recommendation {id} - Items
-                        </h2>
-                    </div>
-                </div>
-                <RecommendationItemsList />
-            </div>
-        )
-    }
+type Props = {
+    match: Object
 }
 
-const mapStateToProps = state => {
-    return {
-        recommendationItems: state.recommendationItems
-    }
+function RecommendationItems (props: Props) {
+    const recommendationItems = useSelector(state => state.recommendationItems)
+    const dispatch = useDispatch()
+    const { id } = props.match.params
+    const { fetch, data, error, message } = recommendationItems
+
+
+    useEffect(() => {
+        dispatch(getRecommendationItems(id))
+    }, [dispatch, id])
+
+    return (
+        <>
+            <Alert message={error} variant="error" showAlert={error !== ''} />
+            <Alert message={message} variant="success" showAlert={message !== ''} />
+            <SectionHeader title={`Recommendation ${id} - Items`} />
+
+            {fetch && <Spinner />}
+
+            {!fetch && data.length === 0 &&
+                <>
+                    <BreadCrumbs
+                        breadCrumbs={[{
+                            key: 1,
+                            path: '/dashboard/recommendations',
+                            name: 'Recommendations'
+                        }]}
+                        activeName="Items" />
+                    <NoResults
+                        message="Empty Recommendation"
+                        withButton
+                        path={`/dashboard/create_item/${id}`} />
+                </>
+            }
+
+            {!fetch && data.length > 0 && <RecommendationItemsList data={data} id={id} />}
+        </>
+    )
 }
 
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(actions, dispatch)
-})
-
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps)(RecommendationItems)
+export default RecommendationItems

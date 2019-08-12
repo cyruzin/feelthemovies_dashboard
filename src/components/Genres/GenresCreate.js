@@ -1,125 +1,68 @@
-import React, { Component } from 'react'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
-import Alert from '../Layout/Alert'
-import * as actions from '../../store/actions/GenresActions'
+// @flow
+import React, { useReducer } from 'react'
 
-class GenresCreate extends Component {
+import { types, initialState, reducer } from './duck'
+import { httpFetch } from '../../util/request'
 
-    constructor(props) {
-        super(props)
-        this.nameRef = React.createRef()
+import {
+    Alert,
+    BreadCrumbs,
+    Button,
+    Input,
+    FormGroup,
+    Section,
+    SectionTitle
+} from '../Common'
+
+function GenresCreate () {
+    const [genres, dispatch] = useReducer(reducer, initialState)
+
+    /**
+     * Create the genre.
+     */
+    function createGenre () {
+        const { name } = genres
+        const newGenre = { name: name.trim() }
+
+        httpFetch({
+            url: '/genre',
+            method: 'POST',
+            data: newGenre
+        }).then(() => {
+            dispatch({ type: types.RESET })
+            dispatch({ type: types.MESSAGE, payload: "Genre created successfully" })
+        }).catch(error => dispatch({ type: types.FAILURE, payload: error.message || error.errors[0].message }))
     }
 
-    componentDidMount() {
-        this.reset()
-    }
+    const {
+        name, error, message
+    } = genres
 
-    reset = () => {
-        const { error, created } = this.props.genres
-        const { setError, setCreateGenre } = this.props.actions
-
-        if (created !== '') {
-            setCreateGenre('')
-        }
-
-        if (error !== '') {
-            setError('')
-        }
-    }
-
-    createGenre = () => {
-        let name = this.nameRef.current.value
-
-        this.props.actions.setCreateGenre(false)
-
-        let genre = {
-            name: name
-        }
-
-        if (name === '') {
-            this.props.actions.setError('Please, fill name field')
-            return false
-        }
-
-        this.props.actions.createGenre(genre)
-
-        name = this.nameRef.current.value = ''
-        this.nameRef.current.focus()
-    }
-
-    render() {
-        return (
-            <div>
-                <div className="container-fluid">
-                    <ul className="breadcrumb">
-                        <li className="breadcrumb-item">
-                            <Link to='/dashboard/genres'>
-                                Genres
-                            </Link>
-                        </li>
-                        <li className="breadcrumb-item active">Create</li>
-                    </ul>
-                </div>
-                <section className="no-padding-top">
-                    <div className="container-fluid">
-                        <div className="row">
-                            <div className="col-lg-12">
-
-                                <div className="block">
-                                    <div className="title">
-                                        <strong>Create genre</strong>
-                                    </div>
-                                    <div className="block-body">
-                                        {this.props.genres.error !== '' ?
-                                            <Alert message={this.props.genres.error} type='primary' />
-                                            : null
-                                        }
-                                        {this.props.genres.created ?
-                                            <Alert message="Genre created successfully" type='success' />
-                                            : null
-                                        }
-                                        <div className="form-group row">
-                                            <label className="col-lg-3 form-control-label">Name</label>
-                                            <div className="col-lg-9">
-                                                <input ref={this.nameRef}
-                                                    type="text"
-                                                    className="form-control" />
-                                            </div>
-                                        </div>
-                                        <div className="line"></div>
-
-                                        <div className="form-group row">
-                                            <div className="col-sm-9 ml-auto">
-                                                <button
-                                                    onClick={this.createGenre}
-                                                    className="btn btn-primary">
-                                                    Save
-                                                </button>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-        )
-    }
+    return (
+        <>
+            <Alert message={error} variant="error" showAlert={error !== ''} />
+            <Alert message={message} variant="success" showAlert={message !== ''} />
+            <BreadCrumbs
+                activeName="Create"
+                breadCrumbs={[{
+                    key: 1,
+                    path: '/dashboard/genres',
+                    name: 'Genres'
+                }]} />
+            <Section>
+                <SectionTitle title="Create Genre" />
+                <FormGroup label="Name">
+                    <Input
+                        className="form-control"
+                        value={name}
+                        onChange={event => dispatch({ type: types.NAME, payload: event.target.value })} />
+                </FormGroup>
+                <FormGroup>
+                    <Button onClick={createGenre}>Create</Button>
+                </FormGroup>
+            </Section>
+        </>
+    )
 }
 
-const mapStateToProps = state => {
-    return {
-        genres: state.genres
-    }
-}
-
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(actions, dispatch)
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(GenresCreate)
+export default GenresCreate

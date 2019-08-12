@@ -1,119 +1,134 @@
-import React, { Component } from 'react'
+// @flow
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import * as actions from '../../store/actions/GenresActions'
-import NoResults from '../Layout/NoResults'
-import Spinner from '../Layout/Spinner'
-import moment from 'moment'
+import { useDispatch, useSelector } from 'react-redux'
 
-class GenresSearch extends Component {
+import distanceInWordsStrict from 'date-fns/distance_in_words_strict'
 
-    componentDidMount() {
-        this.searchGenres()
+import { getSearchGenres, deleteGenres } from '../../redux/ducks/genres'
+
+import {
+    Button,
+    BreadCrumbs,
+    Modal,
+    Section,
+    SearchInput,
+    Spinner,
+    NoResults,
+    Table,
+    TR,
+    TD
+} from '../Common'
+
+type Props = {
+    location: Object,
+    history: Object
+}
+
+function GenresSearch (props: Props) {
+    const dispatch = useDispatch()
+    const [modalShow, setModal] = useState(false)
+    const [genre, setGenre] = useState({})
+    const genres = useSelector(state => state.genres)
+    const { fetch, searchData } = genres
+    const tableColumns = [
+        { key: 1, name: '#' },
+        { key: 2, name: 'Name' },
+        { key: 3, name: 'Created at' },
+        { key: 4, name: 'Updated at' },
+        { key: 5, name: 'Actions' }
+    ]
+
+    useEffect(() => {
+        const { query } = props.location.state
+        dispatch(getSearchGenres(query))
+    }, [dispatch, props.location.state])
+
+
+    function modalOpenHandler (genres: Object) {
+        setGenre(genres)
+        setModal(true)
     }
 
-    searchGenres = () => {
-        const params = new URLSearchParams(this.props.location.search);
-        const query = params.get('query')
-        this.props.actions.searchGenres(query)
+    function modalCloseHandler () {
+        setModal(false)
     }
 
-    render() {
-        const { searchLoaded, genres } = this.props.genres
-        return (
-            <div>
-                <div className="container-fluid">
-                    <ul className="breadcrumb">
-                        <li className="breadcrumb-item">
-                            <Link to='/dashboard/genres'>
-                                Genres
-                            </Link>
-                        </li>
-                        <li className="breadcrumb-item active">Search</li>
-                    </ul>
-                </div>
-                {searchLoaded ? <Spinner /> : null}
+    function deleteGenre () {
+        dispatch(deleteGenres(genre.id))
+        setModal(false)
+        const { push } = props.history
+        return push('/dashboard/genres')
+    }
 
-                {!searchLoaded && genres.length === 0 ?
+    return (
+        <>
+            <BreadCrumbs
+                activeName="Search"
+                breadCrumbs={[{
+                    key: 1,
+                    path: '/dashboard/genres',
+                    name: 'Genres'
+                }]} />
+
+            {fetch && <Spinner />}
+
+            {!fetch && searchData.length === 0 &&
+                <Section>
+                    <SearchInput
+                        path='/dashboard/search_genre'
+                        placeholder="Search"
+                    />
                     <NoResults message="No Results" />
-                    :
-                    null
-                }
+                </Section>}
 
-                {!searchLoaded && genres.length > 0 ?
-                    <section className="no-padding-top">
-                        <div className="container-fluid">
-                            <div className="row">
-                                <div className="col-lg-12">
-                                    <div className="block">
-                                        <div className="table-responsive">
-                                            <table className="table table-striped table-sm">
-                                                <thead>
-                                                    <tr>
-                                                        <th>#</th>
-                                                        <th>Name</th>
-                                                        <th>Created at</th>
-                                                        <th>Updated at</th>
-                                                        <th>Actions</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {genres.map(g => (
-                                                        <tr key={g.id}>
-                                                            <th scope="row">{g.id}</th>
-                                                            <td>{g.name}</td>
-                                                            <td>
-                                                                {moment(g.created_at).fromNow()}
-                                                            </td>
-                                                            <td>
-                                                                {moment(g.updated_at).fromNow()}
-                                                            </td>
-                                                            <td>
-                                                                <Link
-                                                                    className="btn btn-sm btn-outline-secondary mr-2"
-                                                                    to={`/dashboard/edit_genre/${g.id}`}
-                                                                >
-                                                                    <i className="fa fa-edit"></i>
-                                                                </Link>
-
-                                                                <Link
-                                                                    className="btn btn-sm btn-outline-danger"
-                                                                    to={`/dashboard/delete_genre/${g.id}`}
-                                                                    onClick={() => this.props.actions.setDeleted(false)}
-                                                                >
-                                                                    <i className="fa fa-trash"></i>
-                                                                </Link>
-                                                            </td>
-                                                        </tr>
-                                                    ))
-                                                    }
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                    :
-                    null
-                }
-            </div>
-        )
-    }
+            {!fetch && searchData.length > 0 &&
+                <Section>
+                    <Modal
+                        show={modalShow}
+                        title="Delete Genre"
+                        okBtnName="Yes"
+                        onClick={deleteGenre}
+                        onClose={modalCloseHandler}>
+                        <p>
+                            Are you sure that you want to
+                        delete <strong>{genre && genre.title}</strong> genre?
+                        </p>
+                    </Modal>
+                    <Link
+                        className="btn btn-primary mb-3 float-right"
+                        to='/dashboard/create_genre'>
+                        New
+                    </Link>
+                    <SearchInput
+                        path='/dashboard/search_genre'
+                        placeholder="Search"
+                    />
+                    <Table columns={tableColumns}>
+                        {searchData.map(genre => (
+                            <TR key={genre.id}>
+                                <TD>{genre.id}</TD>
+                                <TD>{genre.name}</TD>
+                                <TD>{distanceInWordsStrict(genre.created_at, Date.now())}</TD>
+                                <TD>{distanceInWordsStrict(genre.updated_at, Date.now())}</TD>
+                                <TD>
+                                    <Link
+                                        className="btn btn-sm btn-primary mr-2"
+                                        to={`/dashboard/edit_genre/${genre.id}`}>
+                                        <i className="fa fa-edit"></i>
+                                    </Link>
+                                    <Button
+                                        className="btn btn-sm btn-primary"
+                                        onClick={() => modalOpenHandler(genre)}>
+                                        <i className="fa fa-trash"></i>
+                                    </Button>
+                                </TD>
+                            </TR>
+                        ))}
+                    </Table>
+                </Section>}
+        </>
+    )
 }
 
-const mapStateToProps = state => {
-    return {
-        genres: state.genres
-    }
-}
-
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(actions, dispatch)
-})
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps)(GenresSearch)
+export default GenresSearch

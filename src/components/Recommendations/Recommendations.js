@@ -1,43 +1,42 @@
-import React, { PureComponent } from 'react'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import * as actions from '../../store/actions/RecommendationsActions'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { getRecommendations } from '../../redux/ducks/recommendations'
+
 import RecommendationsList from './RecommendationsList'
+import {
+    Alert,
+    NoResults,
+    SectionHeader,
+    Spinner,
+} from '../Common'
 
-class Recommendations extends PureComponent {
+function Recommendations () {
+    const recommendations = useSelector(state => state.recommendations)
+    const dispatch = useDispatch()
+    const { fetch, data, error, message } = recommendations
 
-    componentDidMount() {
-        this.props.actions.fetchRecommendations()
-    }
+    useEffect(() => {
+        dispatch(getRecommendations())
+    }, [dispatch])
 
-    render() {
-        return (
-            <div>
-                <div className="page-header">
-                    <div className="container-fluid">
-                        <h2 className="h5 no-margin-bottom">
-                            Recommendations
-                        </h2>
-                    </div>
-                </div>
-                <RecommendationsList />
-            </div>
-        )
-    }
+    return (
+        <>
+            <Alert message={error} variant="error" showAlert={error !== ''} />
+            <Alert message={message} variant="success" showAlert={message !== ''} />
+            <SectionHeader title="Recommendations" />
+            {fetch && <Spinner />}
+
+            {!fetch && data.length === 0 &&
+                <NoResults
+                    message="No Results"
+                    withButton
+                    path="/dashboard/create_recommendation" />
+            }
+
+            {!fetch && data.length > 0 && <RecommendationsList data={data} />}
+        </>
+    )
 }
 
-
-const mapStateToProps = state => {
-    return {
-        recommendations: state.recommendations,
-        auth: state.auth
-    }
-}
-
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(actions, dispatch)
-})
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps)(Recommendations)
+export default Recommendations
