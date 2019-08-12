@@ -1,5 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
+
 import Table from '../../../components/Common/Table'
 
 it('renders without crashing', () => {

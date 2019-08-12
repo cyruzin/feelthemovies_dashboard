@@ -1,5 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
+
 import FormGroup from '../../../components/Common/FormGroup'
 import Input from '../../../components/Common/Input'
 

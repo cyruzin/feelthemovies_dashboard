@@ -1,6 +1,7 @@
 import React from 'react'
 import sinon from 'sinon'
 import { shallow, mount } from 'enzyme'
+
 import Button from '../../../components/Common/Button'
 
 it('renders without crashing', () => {
