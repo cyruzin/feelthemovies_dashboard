@@ -15,10 +15,10 @@ import RecommendationItems from '../RecommendationItems/RecommendationItems'
 import RecommendationItemsCreate from '../RecommendationItems/RecommendationItemsCreate'
 import RecommendationItemsEdit from '../RecommendationItems/RecommendationItemsEdit'
 
-// import Users from '../Users/Users'
-// import UserRegistration from '../Users/UserRegistration';
-// import UserEdit from '../Users/UserEdit';
-// import UserSearch from '../Users/UserSearch'
+import Users from '../Users/Users'
+import UsersCreate from '../Users/UsersCreate'
+import UsersEdit from '../Users/UsersEdit'
+import UsersSearch from '../Users/UsersSearch'
 
 import Genres from '../Genres/Genres'
 import GenresCreate from '../Genres/GenresCreate'
@@ -56,10 +56,10 @@ function Dashboard () {
                     <Route path='/dashboard/create_item/:id' component={RecommendationItemsCreate} />
                     <Route path='/dashboard/edit_item/:id' component={RecommendationItemsEdit} />
 
-                    {/* <Route path='/dashboard/users' component={Users} />
-                    <Route path='/dashboard/create_user' component={UserRegistration} />
-                    <Route path='/dashboard/edit_user/:id' component={UserEdit} />
-                    <Route path='/dashboard/search_user' component={UserSearch} /> */}
+                    <Route path='/dashboard/users' component={Users} />
+                    <Route path='/dashboard/create_user' component={UsersCreate} />
+                    <Route path='/dashboard/edit_user/:id' component={UsersEdit} />
+                    <Route path='/dashboard/search_user' component={UsersSearch} />
 
                     <Route path='/dashboard/genres' component={Genres} />
                     <Route path='/dashboard/create_genre' component={GenresCreate} />
