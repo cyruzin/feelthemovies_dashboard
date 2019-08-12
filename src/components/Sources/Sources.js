@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { getGenres } from '../../redux/ducks/genres'
+import { getSources } from '../../redux/ducks/sources'
 
-import GenresList from './GenresList'
+import SourcesList from './SourcesList'
 
 import {
     Alert,
@@ -12,32 +12,32 @@ import {
     Spinner,
 } from '../Common'
 
-function Genres () {
-    const genres = useSelector(state => state.genres)
+function Sources () {
+    const sources = useSelector(state => state.sources)
     const dispatch = useDispatch()
-    const { fetch, data, error, message } = genres
+    const { fetch, data, error, message } = sources
 
     useEffect(() => {
-        dispatch(getGenres())
+        dispatch(getSources())
     }, [dispatch])
 
     return (
         <>
             <Alert message={error} variant="error" showAlert={error !== ''} />
             <Alert message={message} variant="success" showAlert={message !== ''} />
-            <SectionHeader title="Genres" />
+            <SectionHeader title="Sources" />
             {fetch && <Spinner />}
 
             {!fetch && data.length === 0 &&
                 <NoResults
                     message="No Results"
                     withButton
-                    path="/dashboard/create_genre" />
+                    path="/dashboard/create_source" />
             }
 
-            {!fetch && data.length > 0 && <GenresList data={data} />}
+            {!fetch && data.length > 0 && <SourcesList data={data} />}
         </>
     )
 }
 
-export default Genres
+export default Sources

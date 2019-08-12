@@ -30,10 +30,10 @@ import KeywordsCreate from '../Keywords/KeywordsCreate'
 import KeywordsEdit from '../Keywords/KeywordsEdit'
 import KeywordsSearch from '../Keywords/KeywordsSearch'
 
-// import Sources from '../Sources/Sources'
-// import SourcesCreate from '../Sources/SourcesCreate'
-// import SourcesEdit from '../Sources/SourcesEdit'
-// import SourcesSearch from '../Sources/SourcesSearch'
+import Sources from '../Sources/Sources'
+import SourcesCreate from '../Sources/SourcesCreate'
+import SourcesEdit from '../Sources/SourcesEdit'
+import SourcesSearch from '../Sources/SourcesSearch'
 
 import Logout from '../Authentication/Logout'
 
@@ -71,10 +71,10 @@ function Dashboard () {
                     <Route path='/dashboard/edit_keyword/:id' component={KeywordsEdit} />
                     <Route path='/dashboard/search_keyword' component={KeywordsSearch} />
 
-                    {/*<Route path='/dashboard/sources' component={Sources} />
+                    <Route path='/dashboard/sources' component={Sources} />
                     <Route path='/dashboard/create_source' component={SourcesCreate} />
                     <Route path='/dashboard/edit_source/:id' component={SourcesEdit} />
-                    <Route path='/dashboard/search_source' component={SourcesSearch} /> */}
+                    <Route path='/dashboard/search_source' component={SourcesSearch} />
 
                     <Route path='/dashboard/logout' component={Logout} />
                 </Switch>
