@@ -5,7 +5,7 @@ import jwtDecode from 'jwt-decode'
  * Authentication Action Types.
  */
 
-const types = {
+export const types = {
     FETCH: 'AUTHORIZATION/FETCH',
     SUCCESS: 'AUTHORIZATION/SUCCESS',
     FAILURE: 'AUTHORIZATION/FAILURE',
@@ -16,7 +16,7 @@ const types = {
  * Authentication State.
  */
 
-const initialState = {
+export const initialState = {
     fetch: false,
     authorized: false,
     user: {},
