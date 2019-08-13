@@ -1,6 +1,16 @@
 import axios from 'axios'
 import { baseURL, authURL, tmdbToken } from './constants'
 
+/**
+ * Request error messages.
+ */
+
+const errorMessages = {
+    default: 'Something went wrong',
+    noResponse: 'No response from the server',
+    network: 'Network error'
+}
+
 /** 
  * For authentication requests 
  */
@@ -20,17 +30,17 @@ export async function httpFetchAuthentication (credentials) {
              * The server responded with a status code
              * that falls out of the range of 2xx.
              */
-            throw error.response.data
+            throw error.response.data || errorMessages.default
         } else if (error.request) {
             /**
-            * The request was made but no response was received.
-            */
-            throw Error('No response from the server')
+             * The request was made but no response was received.
+             */
+            throw error.request.response || errorMessages.noResponse
         } else {
             /**
              * Something went wrong in setting up the request.
              */
-            throw Error('Network error')
+            throw error.message || errorMessages.network
         }
     }
 }
@@ -71,12 +81,12 @@ export async function httpFetch ({ url, method, data, params }) {
             /**
              * The request was made but no response was received.
              */
-            throw Error('No response from the server')
+            throw error.request.response || errorMessages.noResponse
         } else {
             /**
              * Something went wrong in setting up the request.
              */
-            throw Error('Network error')
+            throw error.message || errorMessages.network
         }
     }
 }
@@ -108,12 +118,12 @@ export async function httpFetchTMDb ({ url }) {
             /**
              * The request was made but no response was received.
              */
-            throw Error('No response from the server')
+            throw error.request.response || errorMessages.noResponse
         } else {
             /**
              * Something went wrong in setting up the request.
              */
-            throw Error('Network error')
+            throw error.message || errorMessages.network
         }
     }
 }

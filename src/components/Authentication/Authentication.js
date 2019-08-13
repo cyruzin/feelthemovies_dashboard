@@ -2,7 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 
-import { checkAuthentication } from '../../redux/ducks/authentication'
+import {
+    checkAuthentication,
+    failureAuthentication
+} from '../../redux/ducks/authentication'
 import { loadJs } from '../../util/helpers'
 
 import { InputLabel, Button } from '../Common'
@@ -29,6 +32,7 @@ function Authentication () {
             setError('Please, fill all fields')
             return
         }
+        dispatch(failureAuthentication(''))
         setError('')
     }
 
