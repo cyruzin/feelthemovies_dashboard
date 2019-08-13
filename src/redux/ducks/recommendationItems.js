@@ -1,30 +1,18 @@
 import { httpFetch } from '../../util/request'
 
-/**
- * Recommendation Items Action Types.
- */
-
-const types = {
+export const types = {
     FETCH: 'RECOMMENDATIONS_ITEMS_LIST/FETCH',
     SUCCESS: 'RECOMMENDATIONS_ITEMS_LIST/SUCCESS',
     FAILURE: 'RECOMMENDATIONS_ITEMS_LIST/FAILURE',
     REMOVE: 'RECOMMENDATIONS_ITEMS_LIST/REMOVE'
 }
 
-/**
- * Recommendation Items State.
- */
-
-const initialState = {
+export const initialState = {
     fetch: false,
     data: [],
     message: '',
     error: ''
 }
-
-/**
- * Recommendation Items Reducer.
- */
 
 export default (state = initialState, action) => {
     switch (action.type) {
@@ -59,10 +47,6 @@ export default (state = initialState, action) => {
     }
 }
 
-/**
- * Recommendation Items Action Creators Functions.
- */
-
 export const fetchRecommendationItems = () => ({
     type: types.FETCH
 })
@@ -78,10 +62,6 @@ export const failureRecommendationItems = payload => ({
 export const removeRecommendationItems = payload => ({
     type: types.REMOVE, payload
 })
-
-/**
- * Recommendation Items Side Effects Types and Functions.
- */
 
 export const getRecommendationItems = id => dispatch => {
     dispatch(fetchRecommendationItems())

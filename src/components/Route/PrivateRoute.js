@@ -9,10 +9,7 @@ function PrivateRoute ({ component: Component, ...rest }) {
   const authentication = useSelector(state => state.authentication)
   const { authorized } = authentication
 
-  /** 
-   * Checking token expiration time.
-   */
-
+  // Checking token expiration time.
   if (authorized) {
     const { exp } = authentication.user
     if (exp < new Date().getTime() / 1000) {

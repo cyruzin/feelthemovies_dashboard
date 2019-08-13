@@ -25,9 +25,6 @@ function KeywordsEdit (props: Props) {
     const [keywords, dispatch] = useReducer(reducer, initialState)
     const { id } = props.match.params
 
-    /**
-    * Fetch keyword by a given ID. 
-    */
     const fetchKeyword = useCallback(() => {
         dispatch({ type: types.FETCH })
         httpFetch({
@@ -37,16 +34,10 @@ function KeywordsEdit (props: Props) {
             .catch(error => dispatch({ type: types.FAILURE, payload: error.message }))
     }, [id])
 
-    /**
-     * On mount.
-     */
     useEffect(() => {
         fetchKeyword()
     }, [fetchKeyword])
 
-    /**
-     * Edit the keyword.
-     */
     function editKeyword () {
         const { name } = keywords
         const newKeyword = { name: name.trim() }

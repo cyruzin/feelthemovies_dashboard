@@ -30,11 +30,6 @@ function RecommendationsCreate () {
     const [recommendations, dispatch] = useReducer(reducer, initialState)
     const userData = useSelector(state => state.authentication.user)
 
-    /**
-     * Fetch the Poster/Backdrop from TMDb.
-     * 
-     * @param {string} query - Search query
-     */
     const fetchImages = debounce((query: string) => {
         if (query === '') return
 
@@ -48,11 +43,6 @@ function RecommendationsCreate () {
         }).catch(error => dispatch({ type: types.FAILURE, payload: error }))
     }, 800)
 
-    /** 
-     * Set the selected image in the input.
-     * 
-     * @param {string} selectedImage - Selected image 
-     */
     function imageChangeHandler (selectedImage: string) {
         const { images } = recommendations
         const image = images.find(img => img.id === selectedImage)
@@ -66,11 +56,6 @@ function RecommendationsCreate () {
         dispatch({ type: types.IMAGE_CHANGE, payload })
     }
 
-    /**
-     * Fetch the genres.
-     * 
-     * @param {string} query - Search query
-     */
     const fetchGenres = debounce((query: string) => {
         if (query === '') return
         dispatch({ type: types.FETCH })
@@ -82,20 +67,10 @@ function RecommendationsCreate () {
             .catch(error => dispatch({ type: types.FAILURE, payload: error.message }))
     }, 800)
 
-    /**
-     * Set the selected genre in the input.
-     * 
-     * @param {string} selectedGenre - Selected genre 
-     */
     function genresChangeHandler (selectedGenre: string) {
         dispatch({ type: types.GENRES_CHANGE, payload: selectedGenre })
     }
 
-    /**
-     * Fetch the keywords.
-     * 
-     * @param {string} query - Search query
-     */
     const fetchKeywords = debounce((query: string) => {
         if (query === '') return
         dispatch({ type: types.FETCH })
@@ -107,18 +82,10 @@ function RecommendationsCreate () {
             .catch(error => dispatch({ type: types.FAILURE, payload: error.message }))
     }, 800)
 
-    /**
-     * Set the selected keyword in the input.
-     * 
-     * @param {string} selectedKeyword - Selected keyword 
-     */
     function keywordsChangeHandler (selectedKeyword: string) {
         dispatch({ type: types.KEYWORDS_CHANGE, payload: selectedKeyword })
     }
 
-    /**
-     * Create the recommendation.
-     */
     function createRecommendation () {
         const {
             title, body, type, poster, backdrop,

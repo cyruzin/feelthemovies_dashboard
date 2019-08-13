@@ -17,9 +17,6 @@ import {
 function GenresCreate () {
     const [genres, dispatch] = useReducer(reducer, initialState)
 
-    /**
-     * Create the genre.
-     */
     function createGenre () {
         const { name } = genres
         const newGenre = { name: name.trim() }

@@ -30,11 +30,6 @@ function RecommendationItemsCreate (props: Props) {
     const { id } = props.match.params
     const [recommendationItem, dispatch] = useReducer(reducer, initialState)
 
-    /**
-    * Fetch for a Movie or TV Show.
-    * 
-    * @param {string} query - Search query
-    */
     const fetchTmdbSearch = debounce((query: string) => {
         if (query === '') return
 
@@ -49,11 +44,6 @@ function RecommendationItemsCreate (props: Props) {
         }).catch(error => dispatch({ type: types.FAILURE, payload: error }))
     }, 800)
 
-    /** 
-     * Set the selected title in the input.
-     * 
-     * @param {string} selectedTitle - Selected title 
-     */
     function tmdbSearchChangeHandler (selectedTitle: string) {
         const { search } = recommendationItem
         const item = search.find(item => item.id === selectedTitle)
@@ -75,11 +65,6 @@ function RecommendationItemsCreate (props: Props) {
             .catch(error => dispatch({ type: types.FAILURE, payload: error }))
     }
 
-    /**
-     * Fetch the sources.
-     * 
-     * @param {string} query - Search query
-     */
     const fetchSources = debounce((query: string) => {
         if (query === '') return
         dispatch({ type: types.FETCH })
@@ -91,18 +76,10 @@ function RecommendationItemsCreate (props: Props) {
             .catch(error => dispatch({ type: types.FAILURE, payload: error.message }))
     }, 800)
 
-    /**
-     * Set the selected source in the input.
-     * 
-     * @param {string} selectedSource - Selected source 
-     */
     function sourcesChangeHandler (selectedSource: string) {
         dispatch({ type: types.SOURCES_CHANGE, payload: selectedSource })
     }
 
-    /**
-     * Create the recommendation item.
-     */
     function createRecommendationItem () {
         const {
             item, trailer, commentary, sourcesValue

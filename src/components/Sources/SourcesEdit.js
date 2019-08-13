@@ -25,9 +25,6 @@ function SourcesEdit (props: Props) {
     const [sources, dispatch] = useReducer(reducer, initialState)
     const { id } = props.match.params
 
-    /**
-    * Fetch source by a given ID. 
-    */
     const fetchSource = useCallback(() => {
         dispatch({ type: types.FETCH })
         httpFetch({
@@ -37,16 +34,10 @@ function SourcesEdit (props: Props) {
             .catch(error => dispatch({ type: types.FAILURE, payload: error.message }))
     }, [id])
 
-    /**
-     * On mount.
-     */
     useEffect(() => {
         fetchSource()
     }, [fetchSource])
 
-    /**
-     * Edit the source.
-     */
     function editSource () {
         const { name } = sources
         const newSource = { name: name.trim() }

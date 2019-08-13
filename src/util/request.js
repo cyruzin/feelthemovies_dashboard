@@ -1,23 +1,40 @@
 import axios from 'axios'
-import { baseURL, authURL, tmdbToken } from './constants'
+import { BASE_URL, AUTH_URL, TMDB_TOKEN } from './constants'
 
-/**
- * Request error messages.
- */
-
+// Default error messages for failing requests.
 const errorMessages = {
     default: 'Something went wrong',
     noResponse: 'No response from the server',
     network: 'Network error'
 }
 
-/** 
- * For authentication requests 
- */
+// This function handles three types of 
+// errors relationed to requests.
+function errorHandler (error) {
+    if (error.response) {
+        /**
+         * The server responded with a status code
+         * that falls out of the range of 2xx.
+         */
+        throw error.response.data || errorMessages.default
+    } else if (error.request) {
+        /**
+         * The request was made but no response was received.
+         */
+        throw error.request.response || errorMessages.noResponse
+    } else {
+        /**
+         * Something went wrong in setting up the request.
+         */
+        throw error.message || errorMessages.network
+    }
+}
 
+// Authentication instance.
+// For authentication requests.
 const feelTheMoviesAuth = axios.create({
     method: 'POST',
-    baseURL: authURL
+    baseURL: AUTH_URL
 })
 
 export async function httpFetchAuthentication (credentials) {
@@ -25,32 +42,14 @@ export async function httpFetchAuthentication (credentials) {
         const response = await feelTheMoviesAuth({ data: credentials })
         return response.data
     } catch (error) {
-        if (error.response) {
-            /**
-             * The server responded with a status code
-             * that falls out of the range of 2xx.
-             */
-            throw error.response.data || errorMessages.default
-        } else if (error.request) {
-            /**
-             * The request was made but no response was received.
-             */
-            throw error.request.response || errorMessages.noResponse
-        } else {
-            /**
-             * Something went wrong in setting up the request.
-             */
-            throw error.message || errorMessages.network
-        }
+        errorHandler(error)
     }
 }
 
-/** 
- * For common requests  
- */
-
+// Common instance.
+// For common requests. 
 const feelTheMovies = axios.create({
-    baseURL: baseURL
+    baseURL: BASE_URL
 })
 
 feelTheMovies.interceptors.request.use(req => {
@@ -71,35 +70,17 @@ export async function httpFetch ({ url, method, data, params }) {
         const response = await feelTheMovies({ url, method, data, params })
         return response.data
     } catch (error) {
-        if (error.response) {
-            /**
-             * The server responded with a status code
-             * that falls out of the range of 2xx.
-             */
-            throw error.response.data || errorMessages.default
-        } else if (error.request) {
-            /**
-             * The request was made but no response was received.
-             */
-            throw error.request.response || errorMessages.noResponse
-        } else {
-            /**
-             * Something went wrong in setting up the request.
-             */
-            throw error.message || errorMessages.network
-        }
+        errorHandler(error)
     }
 }
 
-/** 
- * For TMDb requests 
- */
-
+// TMDb instance.
+// For TMDb requests. 
 const tmdb = axios.create({
     method: 'GET',
     baseURL: 'https://api.themoviedb.org/3',
     params: {
-        'api_key': tmdbToken
+        'api_key': TMDB_TOKEN
     }
 })
 
@@ -108,22 +89,6 @@ export async function httpFetchTMDb ({ url }) {
         const response = await tmdb({ url })
         return response.data
     } catch (error) {
-        if (error.response) {
-            /**
-             * The server responded with a status code
-             * that falls out of the range of 2xx.
-             */
-            throw error.response.data.status_message || errorMessages.default
-        } else if (error.request) {
-            /**
-             * The request was made but no response was received.
-             */
-            throw error.request.response || errorMessages.noResponse
-        } else {
-            /**
-             * Something went wrong in setting up the request.
-             */
-            throw error.message || errorMessages.network
-        }
+        errorHandler(error)
     }
 }

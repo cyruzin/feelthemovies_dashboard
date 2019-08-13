@@ -25,9 +25,6 @@ function GenresEdit (props: Props) {
     const [genres, dispatch] = useReducer(reducer, initialState)
     const { id } = props.match.params
 
-    /**
-    * Fetch genre by a given ID. 
-    */
     const fetchGenre = useCallback(() => {
         dispatch({ type: types.FETCH })
         httpFetch({
@@ -37,16 +34,10 @@ function GenresEdit (props: Props) {
             .catch(error => dispatch({ type: types.FAILURE, payload: error.message }))
     }, [id])
 
-    /**
-     * On mount.
-     */
     useEffect(() => {
         fetchGenre()
     }, [fetchGenre])
 
-    /**
-     * Edit the genre.
-     */
     function editGenre () {
         const { name } = genres
         const newGenre = { name: name.trim() }
