@@ -6,11 +6,12 @@ import AlertContent from './AlertContent'
 type Props = {
     message: string,
     variant: string,
-    showAlert: boolean
+    showAlert: boolean,
+    onClose: () => any
 }
 
 function Alert (props: Props) {
-    const { showAlert, message, variant } = props
+    const { showAlert, message, variant, onClose } = props
     const [open, setOpen] = React.useState(false)
 
     useEffect(() => {
@@ -26,6 +27,7 @@ function Alert (props: Props) {
             return
         }
         setOpen(false)
+        return onClose()
     }
 
     return (
@@ -36,7 +38,7 @@ function Alert (props: Props) {
                     horizontal: 'right',
                 }}
                 open={open}
-                autoHideDuration={6000}
+                autoHideDuration={3000}
                 onClose={handleClose}
             >
                 <AlertContent
