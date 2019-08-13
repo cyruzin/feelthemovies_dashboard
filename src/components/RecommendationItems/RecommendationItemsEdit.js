@@ -181,8 +181,18 @@ function RecommendationItemsEdit (props: Props) {
 
     return (
         <>
-            <Alert message={error} variant="error" showAlert={error !== ''} />
-            <Alert message={message} variant="success" showAlert={message !== ''} />
+            <Alert
+                message={error}
+                variant="error"
+                showAlert={error !== ''}
+                onClose={() => dispatch({ type: types.FAILURE, payload: '' })}
+            />
+            <Alert
+                message={message}
+                variant="success"
+                showAlert={message !== ''}
+                onClose={() => dispatch({ type: types.MESSAGE, payload: '' })}
+            />
 
             {formFilled && <BreadCrumbs
                 breadCrumbs={[
