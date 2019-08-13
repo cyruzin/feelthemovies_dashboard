@@ -76,7 +76,7 @@ export async function httpFetch ({ url, method, data, params }) {
              * The server responded with a status code
              * that falls out of the range of 2xx.
              */
-            throw error.response.data
+            throw error.response.data || errorMessages.default
         } else if (error.request) {
             /**
              * The request was made but no response was received.
@@ -113,7 +113,7 @@ export async function httpFetchTMDb ({ url }) {
              * The server responded with a status code
              * that falls out of the range of 2xx.
              */
-            throw error.response.data.status_message
+            throw error.response.data.status_message || errorMessages.default
         } else if (error.request) {
             /**
              * The request was made but no response was received.

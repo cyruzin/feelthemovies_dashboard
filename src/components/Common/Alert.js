@@ -27,7 +27,7 @@ function Alert (props: Props) {
             return
         }
         setOpen(false)
-        return onClose()
+        return onClose && onClose()
     }
 
     return (
