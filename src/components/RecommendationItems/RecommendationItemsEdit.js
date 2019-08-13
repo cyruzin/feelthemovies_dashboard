@@ -31,9 +31,6 @@ function RecommendationItemsEdit (props: Props) {
     const { id } = props.match.params
     const [recommendationItem, dispatch] = useReducer(reducer, initialState)
 
-    /**
-    * Fill all fields with the info of the given recommendation.
-    */
     const fillFields = useCallback((response) => {
         const { sources } = response
 
@@ -47,9 +44,6 @@ function RecommendationItemsEdit (props: Props) {
         dispatch({ type: types.FORM_FILLED })
     }, [])
 
-    /**
-    * Fetch recommendation item by a given ID. 
-    */
     const fetchRecommendationItem = useCallback(() => {
         dispatch({ type: types.FETCH })
         httpFetch({
@@ -70,11 +64,6 @@ function RecommendationItemsEdit (props: Props) {
         fetchRecommendationItem()
     }, [fetchRecommendationItem, id])
 
-    /**
-    * Fetch for a Movie or TV Show.
-    * 
-    * @param {string} query - Search query
-    */
     const fetchTmdbSearch = debounce((query: string) => {
         if (query === '') return
 
@@ -89,11 +78,6 @@ function RecommendationItemsEdit (props: Props) {
         }).catch(error => dispatch({ type: types.FAILURE, payload: error }))
     }, 800)
 
-    /** 
-     * Set the selected title in the input.
-     * 
-     * @param {string} selectedTitle - Selected title 
-     */
     function tmdbSearchChangeHandler (selectedTitle: string) {
         const { search } = recommendationItem
         const item = search.find(item => item.id === selectedTitle)
@@ -115,11 +99,6 @@ function RecommendationItemsEdit (props: Props) {
             .catch(error => dispatch({ type: types.FAILURE, payload: error }))
     }
 
-    /**
-     * Fetch the sources.
-     * 
-     * @param {string} query - Search query
-     */
     const fetchSources = debounce((query: string) => {
         if (query === '') return
         dispatch({ type: types.FETCH })
@@ -131,18 +110,10 @@ function RecommendationItemsEdit (props: Props) {
             .catch(error => dispatch({ type: types.FAILURE, payload: error.message }))
     }, 800)
 
-    /**
-     * Set the selected source in the input.
-     * 
-     * @param {string} selectedSource - Selected source 
-     */
     function sourcesChangeHandler (selectedSource: string) {
         dispatch({ type: types.SOURCES_CHANGE, payload: selectedSource })
     }
 
-    /**
-     * Edit the recommendation item.
-     */
     function editRecommendationItem () {
         const {
             item, trailer, commentary, sourcesValue

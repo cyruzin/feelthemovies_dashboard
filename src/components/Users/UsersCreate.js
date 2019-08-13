@@ -17,9 +17,6 @@ import {
 function UsersCreate () {
     const [users, dispatch] = useReducer(reducer, initialState)
 
-    /**
-     * Create the user.
-     */
     function createUser () {
         const { name, email, password } = users
         const newUser = {

@@ -1,8 +1,6 @@
 import $ from 'jquery'
 
-/** 
- * Loads a state from localStorage if it exists.  
- */
+// Loads a state from localStorage if it exists.
 export function loadState () {
     try {
         const serializedState = localStorage.getItem('state')
@@ -15,11 +13,7 @@ export function loadState () {
     }
 }
 
-/** 
- * Saves a state to the localStorage.  
- * 
- * @param {Object} state - Redux state.
- */
+// Saves a state to the localStorage.  
 export function saveState (state) {
     try {
         const serializedState = JSON.stringify(state)
@@ -27,12 +21,7 @@ export function saveState (state) {
     } catch (err) { }
 }
 
-/**
- * Receives a raw type and returns a named one.
- * 
- * @param {string} type - Raw recommendation type.
- * @returns {string} Named recommendation type. 
- */
+// Receives a raw type and returns a named one.
 export function checkType (type) {
     switch (parseInt(type)) {
         case 0:
@@ -46,12 +35,7 @@ export function checkType (type) {
     }
 }
 
-/**
- * Receives a raw status and returns a named one.
- * 
- * @param {string} status - Raw recommendation status.
- * @returns {string} Named recommendation status. 
- */
+// Receives a raw status and returns a named one.
 export function checkStatus (status) {
     switch (parseInt(status)) {
         case 0:
@@ -63,31 +47,24 @@ export function checkStatus (status) {
     }
 }
 
-/**
- * Capitalize the first letter of the given string.
- * 
- * @param {string} word - Word to capitalize
- */
+// Capitalize the first letter of the given string.
 export function capitalizeFirstLetter (word) {
     return word.charAt(0).toUpperCase() + word.slice(1)
 }
 
-/** 
- * This function is a workaround to make this theme works properly.
- * This theme was not made for React, this is just a wrapper around
- * Dark Admin theme.
- */
+
+// This function is a workaround to make this theme 
+// works properly. This theme was not made for React, 
+// this is just a wrapper around Dark Admin theme.
 export function loadJs () {
     /**
      * Tooltips init
      */
-
     $('[data-toggle="tooltip"]').tooltip()
 
     /**
      * Material Inputs.
      */
-
     let materialInputs = $('input.input-material')
 
     materialInputs.filter(function () { return $(this).val() !== '' })
@@ -110,7 +87,6 @@ export function loadJs () {
     /**
      * Footer
      */
-
     let pageContent = $('.page-content')
 
     $(document).on('sidebarChanged', function () {
@@ -129,7 +105,6 @@ export function loadJs () {
     /**
     * Adding fade effect to dropdowns.
     */
-
     $('.dropdown').on('show.bs.dropdown', function () {
         $(this).find('.dropdown-menu').first().stop(true, true)
             .fadeIn(100).addClass('active')
@@ -142,7 +117,6 @@ export function loadJs () {
     /**
      * Sidebar Functionality.
      */
-
     $('.sidebar-toggle').on('click', function () {
         $(this).toggleClass('active')
 

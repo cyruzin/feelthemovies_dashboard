@@ -1,10 +1,6 @@
 import { httpFetch } from '../../util/request'
 
-/**
- * Genres Action Types.
- */
-
-const types = {
+export const types = {
     FETCH: 'GENRES_LIST/FETCH',
     SUCCESS: 'GENRES_LIST/SUCCESS',
     FAILURE: 'GENRES_LIST/FAILURE',
@@ -12,21 +8,13 @@ const types = {
     REMOVE: 'GENRES_LIST/REMOVE'
 }
 
-/**
- * Genres State.
- */
-
-const initialState = {
+export const initialState = {
     fetch: false,
     data: [],
     searchData: [],
     message: '',
     error: ''
 }
-
-/**
- * Genres Reducer.
- */
 
 export default (state = initialState, action) => {
     switch (action.type) {
@@ -68,10 +56,6 @@ export default (state = initialState, action) => {
     }
 }
 
-/**
- * Genres Action Creators Functions.
- */
-
 export const fetchGenres = () => ({
     type: types.FETCH
 })
@@ -91,10 +75,6 @@ export const searchGenres = payload => ({
 export const removeGenres = payload => ({
     type: types.REMOVE, payload
 })
-
-/**
- * Genres Side Effects Types and Functions.
- */
 
 export const getGenres = () => dispatch => {
     dispatch(fetchGenres())

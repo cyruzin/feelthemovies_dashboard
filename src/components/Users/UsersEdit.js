@@ -25,9 +25,6 @@ function UsersEdit (props: Props) {
     const [users, dispatch] = useReducer(reducer, initialState)
     const { id } = props.match.params
 
-    /**
-    * Fetch user by a given ID. 
-    */
     const fetchUser = useCallback(() => {
         dispatch({ type: types.FETCH })
         httpFetch({
@@ -37,16 +34,10 @@ function UsersEdit (props: Props) {
             .catch(error => dispatch({ type: types.FAILURE, payload: error.message }))
     }, [id])
 
-    /**
-     * On mount.
-     */
     useEffect(() => {
         fetchUser()
     }, [fetchUser])
 
-    /**
-     * Edit the user.
-     */
     function editUser () {
         const { name, email, password } = users
         const newUser = {

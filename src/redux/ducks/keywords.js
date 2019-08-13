@@ -1,10 +1,6 @@
 import { httpFetch } from '../../util/request'
 
-/**
- * Keywords Action Types.
- */
-
-const types = {
+export const types = {
     FETCH: 'kEYWORDS_LIST/FETCH',
     SUCCESS: 'kEYWORDS_LIST/SUCCESS',
     FAILURE: 'kEYWORDS_LIST/FAILURE',
@@ -12,21 +8,13 @@ const types = {
     REMOVE: 'kEYWORDS_LIST/REMOVE'
 }
 
-/**
- * Keywords State.
- */
-
-const initialState = {
+export const initialState = {
     fetch: false,
     data: [],
     searchData: [],
     message: '',
     error: ''
 }
-
-/**
- * Keywords Reducer.
- */
 
 export default (state = initialState, action) => {
     switch (action.type) {
@@ -67,10 +55,6 @@ export default (state = initialState, action) => {
             return state
     }
 }
-
-/**
- * Keywords Action Creators Functions.
- */
 
 export const fetchKeywords = () => ({
     type: types.FETCH

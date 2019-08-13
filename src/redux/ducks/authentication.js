@@ -1,10 +1,6 @@
 import { httpFetchAuthentication } from '../../util/request'
 import jwtDecode from 'jwt-decode'
 
-/**
- * Authentication Action Types.
- */
-
 export const types = {
     FETCH: 'AUTHORIZATION/FETCH',
     SUCCESS: 'AUTHORIZATION/SUCCESS',
@@ -12,20 +8,12 @@ export const types = {
     RESET: 'AUTHORIZATION/RESET'
 }
 
-/**
- * Authentication State.
- */
-
 export const initialState = {
     fetch: false,
     authorized: false,
     user: {},
     error: ''
 }
-
-/**
- * Authentication Reducer.
- */
 
 export default (state = initialState, action) => {
     switch (action.type) {
@@ -55,10 +43,6 @@ export default (state = initialState, action) => {
     }
 }
 
-/**
- * Authentication Action Creators Functions.
- */
-
 export const fetchAuthentication = () => ({
     type: types.FETCH
 })
@@ -74,10 +58,6 @@ export const failureAuthentication = payload => ({
 export const resetAuthentication = () => ({
     type: types.RESET
 })
-
-/**
- * Authentication Side Effects Types and Functions.
- */
 
 export const checkAuthentication = credentials => dispatch => {
     dispatch(fetchAuthentication())

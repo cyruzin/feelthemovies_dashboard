@@ -94,6 +94,9 @@ function Authentication () {
                     </div>
                 </div>
             </div>
+            <div className="copyrights text-center">
+                <p>Design by <a href="https://bootstrapious.com/p/bootstrap-4-dark-admin" className="external" target="_blank" rel="noopener noreferrer">Bootstrapious</a></p>
+            </div>
         </div>
     )
 }

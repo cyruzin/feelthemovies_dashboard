@@ -1,10 +1,6 @@
 import { httpFetch } from '../../util/request'
 
-/**
- * Sources Action Types.
- */
-
-const types = {
+export const types = {
     FETCH: 'SOURCES_LIST/FETCH',
     SUCCESS: 'SOURCES_LIST/SUCCESS',
     FAILURE: 'SOURCES_LIST/FAILURE',
@@ -12,21 +8,13 @@ const types = {
     REMOVE: 'SOURCES_LIST/REMOVE'
 }
 
-/**
- * Sources State.
- */
-
-const initialState = {
+export const initialState = {
     fetch: false,
     data: [],
     searchData: [],
     message: '',
     error: ''
 }
-
-/**
- * Sources Reducer.
- */
 
 export default (state = initialState, action) => {
     switch (action.type) {
@@ -68,10 +56,6 @@ export default (state = initialState, action) => {
     }
 }
 
-/**
- * Sources Action Creators Functions.
- */
-
 export const fetchSources = () => ({
     type: types.FETCH
 })
@@ -91,10 +75,6 @@ export const searchSources = payload => ({
 export const removeSources = payload => ({
     type: types.REMOVE, payload
 })
-
-/**
- * Sources Side Effects Types and Functions.
- */
 
 export const getSources = () => dispatch => {
     dispatch(fetchSources())

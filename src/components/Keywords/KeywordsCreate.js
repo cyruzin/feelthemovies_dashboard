@@ -17,9 +17,6 @@ import {
 function KeywordsCreate () {
     const [keywords, dispatch] = useReducer(reducer, initialState)
 
-    /**
-     * Create the keyword.
-     */
     function createKeyword () {
         const { name } = keywords
         const newKeyword = { name: name.trim() }

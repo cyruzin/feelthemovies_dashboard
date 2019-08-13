@@ -1,10 +1,6 @@
 import { httpFetch } from '../../util/request'
 
-/**
- * Users Action Types.
- */
-
-const types = {
+export const types = {
     FETCH: 'USERS_LIST/FETCH',
     SUCCESS: 'USERS_LIST/SUCCESS',
     FAILURE: 'USERS_LIST/FAILURE',
@@ -12,21 +8,13 @@ const types = {
     REMOVE: 'USERS_LIST/REMOVE'
 }
 
-/**
- * Users State.
- */
-
-const initialState = {
+export const initialState = {
     fetch: false,
     data: [],
     searchData: [],
     message: '',
     error: ''
 }
-
-/**
- * Users Reducer.
- */
 
 export default (state = initialState, action) => {
     switch (action.type) {
@@ -68,10 +56,6 @@ export default (state = initialState, action) => {
     }
 }
 
-/**
- * Users Action Creators Functions.
- */
-
 export const fetchUsers = () => ({
     type: types.FETCH
 })
@@ -91,10 +75,6 @@ export const searchUsers = payload => ({
 export const removeUsers = payload => ({
     type: types.REMOVE, payload
 })
-
-/**
- * Users Side Effects Types and Functions.
- */
 
 export const getUsers = () => dispatch => {
     dispatch(fetchUsers())

@@ -1,10 +1,6 @@
 import { httpFetch } from '../../util/request'
 
-/**
- * Recommendations Action Types.
- */
-
-const types = {
+export const types = {
     FETCH: 'RECOMMENDATIONS_LIST/FETCH',
     SUCCESS: 'RECOMMENDATIONS_LIST/SUCCESS',
     FAILURE: 'RECOMMENDATIONS_LIST/FAILURE',
@@ -12,21 +8,13 @@ const types = {
     REMOVE: 'RECOMMENDATIONS_LIST/REMOVE'
 }
 
-/**
- * Recommendations State.
- */
-
-const initialState = {
+export const initialState = {
     fetch: false,
     data: [],
     searchData: [],
     message: '',
     error: ''
 }
-
-/**
- * Recommendations Reducer.
- */
 
 export default (state = initialState, action) => {
     switch (action.type) {
@@ -68,10 +56,6 @@ export default (state = initialState, action) => {
     }
 }
 
-/**
- * Recommendations Action Creators Functions.
- */
-
 export const fetchRecommendations = () => ({
     type: types.FETCH
 })
@@ -91,10 +75,6 @@ export const searchRecommendations = payload => ({
 export const removeRecommendations = payload => ({
     type: types.REMOVE, payload
 })
-
-/**
- * Recommendations Side Effects Types and Functions.
- */
 
 export const getRecommendations = () => dispatch => {
     dispatch(fetchRecommendations())

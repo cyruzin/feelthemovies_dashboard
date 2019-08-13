@@ -17,9 +17,6 @@ import {
 function SourcesCreate () {
     const [sources, dispatch] = useReducer(reducer, initialState)
 
-    /**
-     * Create the source.
-     */
     function createSource () {
         const { name } = sources
         const newSource = { name: name.trim() }
