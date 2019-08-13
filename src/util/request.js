@@ -89,6 +89,12 @@ export async function httpFetchTMDb ({ url }) {
         const response = await tmdb({ url })
         return response.data
     } catch (error) {
-        errorHandler(error)
+        if (error.response) {
+            throw error.response.data.status_message || errorMessages.default
+        } else if (error.request) {
+            throw error.request.response || errorMessages.noResponse
+        } else {
+            throw error.message || errorMessages.network
+        }
     }
 }
