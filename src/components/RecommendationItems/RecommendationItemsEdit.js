@@ -54,7 +54,8 @@ function RecommendationItemsEdit (props: Props) {
             const payload = {
                 commentary: response.commentary,
                 searchValue: `${response.name} (${format(response.year, ('YYYY'))})`,
-                item: response
+                item: response,
+                recommendationID: response.recommendation_id
             }
             dispatch({ type: types.RECOMMENDATION_ITEM, payload })
         }).catch(error => dispatch({ type: types.FAILURE, payload: error.message }))
@@ -78,7 +79,7 @@ function RecommendationItemsEdit (props: Props) {
         }).catch(error => dispatch({ type: types.FAILURE, payload: error }))
     }, 800)
 
-    function tmdbSearchChangeHandler (selectedTitle: string) {
+    function tmdbSearchChangeHandler (selectedTitle: string): Promise<any> {
         const { search } = recommendationItem
         const item = search.find(item => item.id === selectedTitle)
         const payload = {
@@ -122,7 +123,7 @@ function RecommendationItemsEdit (props: Props) {
         const newItem = {
             name: item.name || item.original_name || item.original_title,
             tmdb_id: +item.id,
-            year: format(item.year, 'YYYY-MM-DD') || item.first_air_date || item.release_date,
+            year: format(item.year || item.first_air_date || item.release_date, 'YYYY-MM-DD'),
             overview: item.overview,
             poster: item.poster || item.poster_path,
             backdrop: item.backdrop || item.backdrop_path,
@@ -130,7 +131,7 @@ function RecommendationItemsEdit (props: Props) {
             trailer: item.trailer || trailer,
             commentary: item.commentary || commentary,
             sources: sourcesValue.map(source => +source.key),
-            recommendation_id: +item.recommendation_id,
+            recommendation_id: +item.recommendation_id || +item.id,
         }
 
         httpFetch({
@@ -145,10 +146,8 @@ function RecommendationItemsEdit (props: Props) {
     const {
         fetch, search, searchValue, commentary,
         sources, sourcesValue, error, message,
-        formFilled, item
+        formFilled, recommendationID
     } = recommendationItem
-
-    const { recommendation_id } = item
 
     return (
         <>
@@ -174,7 +173,7 @@ function RecommendationItemsEdit (props: Props) {
                     },
                     {
                         key: 2,
-                        path: `/dashboard/items/${recommendation_id}`,
+                        path: `/dashboard/items/${recommendationID}`,
                         name: 'Recommendation Item'
                     }
                 ]}

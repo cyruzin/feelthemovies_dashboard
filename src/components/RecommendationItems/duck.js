@@ -24,7 +24,8 @@ export const initialState = {
     search: [],
     searchValue: [],
     sources: [],
-    sourcesValue: []
+    sourcesValue: [],
+    recommendationID: ''
 }
 
 export function reducer (state, action) {
@@ -41,6 +42,7 @@ export function reducer (state, action) {
                 item: action.payload.item,
                 commentary: action.payload.commentary,
                 searchValue: action.payload.searchValue,
+                recommendationID: action.payload.recommendationID,
                 fetch: false,
                 error: ''
             }
