@@ -35,7 +35,7 @@ function RecommendationItemsEdit (props: Props) {
         const { sources } = response
 
         const newSources = sources.map(value => ({
-            key: value.id,
+            key: +value.id,
             label: value.name
         }))
 
@@ -51,13 +51,26 @@ function RecommendationItemsEdit (props: Props) {
             method: 'GET'
         }).then(response => {
             fillFields(response)
+
+            const {
+                recommendation_id, tmdb_id, year, name, media_type,
+                overview, poster, backdrop, trailer, commentary
+            } = response
+
             const payload = {
-                commentary: response.commentary,
-                searchValue: `${response.name} (${format(response.year, ('YYYY'))})`,
-                item: response,
-                recommendationID: response.recommendation_id
+                searchValue: `${name} (${format(year, ('YYYY'))})`,
+                tmdb_id: tmdb_id,
+                year: format(year, 'YYYY-MM-DD'),
+                name: name,
+                media_type: media_type,
+                overview: overview,
+                poster: poster,
+                backdrop: backdrop,
+                trailer: trailer,
+                commentary: commentary,
+                recommendation_id: +recommendation_id
             }
-            dispatch({ type: types.RECOMMENDATION_ITEM, payload })
+            dispatch({ type: types.ITEM, payload })
         }).catch(error => dispatch({ type: types.FAILURE, payload: error.message }))
     }, [fillFields, id])
 
@@ -71,7 +84,7 @@ function RecommendationItemsEdit (props: Props) {
         dispatch({ type: types.FETCH })
 
         httpFetchTMDb({
-            url: `/search/multi?language=en-US&query=${encodeURIComponent(query)}&page=1&include_adult=false`
+            url: `/search/multi?language=en-US&query=${encodeURIComponent(query.trim())}&page=1&include_adult=false`
         }).then(response => {
             const payload = response.results && response.results
                 .filter(search => search.media_type !== 'person' && search.backdrop_path !== null)
@@ -86,7 +99,13 @@ function RecommendationItemsEdit (props: Props) {
             searchValue: item.original_name ?
                 `${item.original_name} (${format(item.first_air_date, 'YYYY')})`
                 : `${item.original_title} (${format(item.release_date, 'YYYY')})`,
-            item
+            tmdb_id: +item.id,
+            year: item.release_date || item.first_air_date,
+            name: item.original_title || item.original_name,
+            media_type: item.media_type,
+            overview: item.overview,
+            poster: item.poster_path,
+            backdrop: item.backdrop_path
         }
 
         dispatch({ type: types.SEARCH_CHANGE, payload })
@@ -96,8 +115,10 @@ function RecommendationItemsEdit (props: Props) {
         // Fetching the trailer of the current title.
         httpFetchTMDb({
             url: `/${media_type}/${id}?language=en-US&append_to_response=videos`
-        }).then(response => dispatch({ type: types.TRAILER, payload: response.videos.results[0].key }))
-            .catch(error => dispatch({ type: types.FAILURE, payload: error }))
+        }).then(response => dispatch({
+            type: types.TRAILER,
+            payload: response.videos.results.length > 0 ? response.videos.results[0].key : ''
+        })).catch(error => dispatch({ type: types.FAILURE, payload: error }))
     }
 
     const fetchSources = debounce((query: string) => {
@@ -117,21 +138,23 @@ function RecommendationItemsEdit (props: Props) {
 
     function editRecommendationItem () {
         const {
-            item, trailer, commentary, sourcesValue
+            recommendation_id, tmdb_id, year, name, media_type,
+            overview, poster, backdrop, trailer, commentary,
+            sourcesValue
         } = recommendationItem
 
         const newItem = {
-            name: item.name || item.original_name || item.original_title,
-            tmdb_id: +item.id,
-            year: format(item.year || item.first_air_date || item.release_date, 'YYYY-MM-DD'),
-            overview: item.overview,
-            poster: item.poster || item.poster_path,
-            backdrop: item.backdrop || item.backdrop_path,
-            media_type: item.media_type,
-            trailer: item.trailer || trailer,
-            commentary: item.commentary || commentary,
-            sources: sourcesValue.map(source => +source.key),
-            recommendation_id: +item.recommendation_id || +item.id,
+            name: name,
+            tmdb_id: tmdb_id,
+            year: year,
+            overview: overview,
+            poster: poster,
+            backdrop: backdrop,
+            media_type: media_type,
+            trailer: trailer,
+            commentary: commentary,
+            sources: sourcesValue.map(source => source.key),
+            recommendation_id: recommendation_id,
         }
 
         httpFetch({
@@ -146,7 +169,7 @@ function RecommendationItemsEdit (props: Props) {
     const {
         fetch, search, searchValue, commentary,
         sources, sourcesValue, error, message,
-        formFilled, recommendationID
+        formFilled, recommendation_id
     } = recommendationItem
 
     return (
@@ -173,7 +196,7 @@ function RecommendationItemsEdit (props: Props) {
                     },
                     {
                         key: 2,
-                        path: `/dashboard/items/${recommendationID}`,
+                        path: `/dashboard/items/${recommendation_id}`,
                         name: 'Recommendation Item'
                     }
                 ]}

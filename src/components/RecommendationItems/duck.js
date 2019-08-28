@@ -9,7 +9,7 @@ export const types = {
     SEARCH_CHANGE: 'RECOMMENDATION_ITEMS/SEARCH_CHANGE',
     SOURCES: 'RECOMMENDATION_ITEMS/SOURCES',
     SOURCES_CHANGE: 'RECOMMENDATION_ITEMS/SOURCES_CHANGE',
-    RECOMMENDATION_ITEM: 'RECOMMENDATION_ITEMS/RECOMMENDATION_ITEM',
+    ITEM: 'RECOMMENDATION_ITEMS/ITEM',
     FORM_FILLED: 'RECOMMENDATION_ITEMS/FORM_FILLED'
 }
 
@@ -18,14 +18,20 @@ export const initialState = {
     formFilled: false,
     error: '',
     message: '',
-    commentary: '',
-    item: {},
+    name: '',
+    tmdb_id: '',
+    year: '',
+    overview: '',
+    poster: '',
+    backdrop: '',
+    media_type: '',
     trailer: '',
+    recommendation_id: '',
+    commentary: '',
     search: [],
     searchValue: [],
     sources: [],
-    sourcesValue: [],
-    recommendationID: ''
+    sourcesValue: []
 }
 
 export function reducer (state, action) {
@@ -36,13 +42,19 @@ export function reducer (state, action) {
                 fetch: true,
                 error: ''
             }
-        case types.RECOMMENDATION_ITEM:
+        case types.ITEM:
             return {
                 ...state,
-                item: action.payload.item,
-                commentary: action.payload.commentary,
                 searchValue: action.payload.searchValue,
-                recommendationID: action.payload.recommendationID,
+                name: action.payload.name,
+                tmdb_id: action.payload.tmdb_id,
+                year: action.payload.year,
+                overview: action.payload.overview,
+                poster: action.payload.poster,
+                backdrop: action.payload.backdrop,
+                media_type: action.payload.media_type,
+                commentary: action.payload.commentary,
+                recommendation_id: action.payload.recommendation_id,
                 fetch: false,
                 error: ''
             }
@@ -79,9 +91,15 @@ export function reducer (state, action) {
         case types.SEARCH_CHANGE:
             return {
                 ...state,
+                search: [],
                 searchValue: action.payload.searchValue,
-                item: action.payload.item,
-                search: []
+                name: action.payload.name,
+                tmdb_id: action.payload.tmdb_id,
+                year: action.payload.year,
+                overview: action.payload.overview,
+                poster: action.payload.poster,
+                backdrop: action.payload.backdrop,
+                media_type: action.payload.media_type
             }
         case types.TRAILER:
             return {
