@@ -8,7 +8,7 @@ import {
     Alert,
     NoResults,
     SectionHeader,
-    Spinner,
+    Spinner
 } from '../Common'
 
 function Recommendations () {

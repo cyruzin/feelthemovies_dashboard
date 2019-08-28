@@ -36,7 +36,7 @@ function RecommendationItemsCreate (props: Props) {
         dispatch({ type: types.FETCH })
 
         httpFetchTMDb({
-            url: `/search/multi?language=en-US&query=${encodeURIComponent(query)}&page=1&include_adult=false`
+            url: `/search/multi?language=en-US&query=${encodeURIComponent(query.trim())}&page=1&include_adult=false`
         }).then(response => {
             const payload = response.results && response.results
                 .filter(search => search.media_type !== 'person' && search.backdrop_path !== null)
