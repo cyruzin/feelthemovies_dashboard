@@ -47,11 +47,18 @@ function RecommendationItemsCreate (props: Props) {
     function tmdbSearchChangeHandler (selectedTitle: string) {
         const { search } = recommendationItem
         const item = search.find(item => item.id === selectedTitle)
+
         const payload = {
             searchValue: item.original_name ?
                 `${item.original_name} (${format(item.first_air_date, 'YYYY')})`
                 : `${item.original_title} (${format(item.release_date, 'YYYY')})`,
-            item
+            tmdb_id: +item.id,
+            year: item.release_date || item.first_air_date,
+            name: item.original_title || item.original_name,
+            media_type: item.media_type,
+            overview: item.overview,
+            poster: item.poster_path,
+            backdrop: item.backdrop_path,
         }
 
         dispatch({ type: types.SEARCH_CHANGE, payload })
@@ -61,8 +68,10 @@ function RecommendationItemsCreate (props: Props) {
         // Fetching the trailer of the current title.
         httpFetchTMDb({
             url: `/${media_type}/${id}?language=en-US&append_to_response=videos`
-        }).then(response => dispatch({ type: types.TRAILER, payload: response.videos.results[0].key }))
-            .catch(error => dispatch({ type: types.FAILURE, payload: error }))
+        }).then(response => dispatch({
+            type: types.TRAILER,
+            payload: response.videos.results.length > 0 ? response.videos.results[0].key : ''
+        })).catch(error => dispatch({ type: types.FAILURE, payload: error }))
     }
 
     const fetchSources = debounce((query: string) => {
@@ -82,20 +91,21 @@ function RecommendationItemsCreate (props: Props) {
 
     function createRecommendationItem () {
         const {
-            item, trailer, commentary, sourcesValue
+            name, tmdb_id, year, overview, poster, backdrop,
+            media_type, trailer, commentary, sourcesValue
         } = recommendationItem
 
         const newItem = {
-            name: item.original_name || item.original_title,
-            tmdb_id: +item.id,
-            year: item.first_air_date || item.release_date,
-            overview: item.overview,
-            poster: item.poster_path,
-            backdrop: item.backdrop_path,
-            media_type: item.media_type,
+            name: name,
+            tmdb_id: tmdb_id,
+            year: year,
+            overview: overview,
+            poster: poster,
+            backdrop: backdrop,
+            media_type: media_type,
             trailer: trailer,
             commentary: commentary,
-            sources: sourcesValue.map(source => source.key),
+            sources: sourcesValue.map(source => +source.key),
             recommendation_id: +id,
         }
 
