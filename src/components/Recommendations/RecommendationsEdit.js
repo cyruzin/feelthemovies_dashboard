@@ -38,9 +38,7 @@ function RecommendationsEdit (props: Props) {
     const userData = useSelector(state => state.authentication.user)
     const { id } = props.match.params
 
-    const fillFields = useCallback((response) => {
-        const { genres, keywords } = response
-
+    const fillFields = useCallback((genres, keywords): void => {
         const newGenres = genres.map(value => ({
             key: value.id,
             label: value.name
@@ -57,16 +55,48 @@ function RecommendationsEdit (props: Props) {
         dispatch({ type: types.FORM_FILLED })
     }, [])
 
-    const fetchRecommendation = useCallback(() => {
-        dispatch({ type: types.FETCH })
-        httpFetch({
-            url: `/recommendation/${id}`,
-            method: 'GET'
-        }).then(response => {
-            fillFields(response)
+    const fetchRecommendation = useCallback(async () => {
+        try {
+            dispatch({ type: types.FETCH })
+
+            const data = {
+                url: `/recommendation/${id}`,
+                method: 'GET'
+            }
+            const response = await httpFetch(data)
+            const genres = await fetchRecommendationGenres(id)
+            const keywords = await fetchRecommendationKeywords(id)
+
+            fillFields(genres, keywords)
             dispatch({ type: types.RECOMMENDATION, payload: response })
-        }).catch(error => dispatch({ type: types.FAILURE, payload: error.message }))
+        } catch (error) {
+            dispatch({ type: types.FAILURE, payload: error.message })
+        }
     }, [fillFields, id])
+
+    async function fetchRecommendationGenres (id: number | string): Promise<void> {
+        try {
+            const response = await httpFetch({
+                url: `/recommendation_genres/${id}`,
+                method: 'GET'
+            })
+            return response.data
+        } catch (error) {
+            dispatch({ type: types.FAILURE, payload: error })
+        }
+    }
+
+    async function fetchRecommendationKeywords (id: number | string): Promise<void> {
+        try {
+            const response = await httpFetch({
+                url: `/recommendation_keywords/${id}`,
+                method: 'GET'
+            })
+            return response.data
+        } catch (error) {
+            dispatch({ type: types.FAILURE, payload: error })
+        }
+    }
 
     useEffect(() => {
         fetchRecommendation()
