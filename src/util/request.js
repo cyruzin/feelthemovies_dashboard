@@ -65,7 +65,7 @@ feelTheMovies.interceptors.request.use(req => {
     return newReq
 })
 
-export async function httpFetch ({ url, method, data, params }) {
+export async function httpFetch ({ url, method, data, params }): Promise<any> {
     try {
         const response = await feelTheMovies({ url, method, data, params })
         return response.data

@@ -31,9 +31,7 @@ function RecommendationItemsEdit (props: Props) {
     const { id } = props.match.params
     const [recommendationItem, dispatch] = useReducer(reducer, initialState)
 
-    const fillFields = useCallback((response) => {
-        const { sources } = response
-
+    const fillFields = useCallback((sources) => {
         const newSources = sources.map(value => ({
             key: +value.id,
             label: value.name
@@ -44,13 +42,19 @@ function RecommendationItemsEdit (props: Props) {
         dispatch({ type: types.FORM_FILLED })
     }, [])
 
-    const fetchRecommendationItem = useCallback(() => {
-        dispatch({ type: types.FETCH })
-        httpFetch({
-            url: `/recommendation_item/${id}`,
-            method: 'GET'
-        }).then(response => {
-            fillFields(response)
+    const fetchRecommendationItem = useCallback(async () => {
+        try {
+            dispatch({ type: types.FETCH })
+
+            const data = {
+                url: `/recommendation_item/${id}`,
+                method: 'GET'
+            }
+
+            const response = await httpFetch(data)
+            const sources = await fetchRecommendationItemSources(id)
+
+            fillFields(sources)
 
             const {
                 recommendation_id, tmdb_id, year, name, media_type,
@@ -70,9 +74,24 @@ function RecommendationItemsEdit (props: Props) {
                 commentary: commentary,
                 recommendation_id: +recommendation_id
             }
+
             dispatch({ type: types.ITEM, payload })
-        }).catch(error => dispatch({ type: types.FAILURE, payload: error.message }))
+        } catch (error) {
+            dispatch({ type: types.FAILURE, payload: error.message })
+        }
     }, [fillFields, id])
+
+    async function fetchRecommendationItemSources (id: number | string): Promise<void> {
+        try {
+            const response = await httpFetch({
+                url: `/recommendation_item_sources/${id}`,
+                method: 'GET'
+            })
+            return response.data
+        } catch (error) {
+            dispatch({ type: types.FAILURE, payload: error })
+        }
+    }
 
     useEffect(() => {
         fetchRecommendationItem()
@@ -92,7 +111,7 @@ function RecommendationItemsEdit (props: Props) {
         }).catch(error => dispatch({ type: types.FAILURE, payload: error }))
     }, 800)
 
-    function tmdbSearchChangeHandler (selectedTitle: string): Promise<any> {
+    function tmdbSearchChangeHandler (selectedTitle: string): void {
         const { search } = recommendationItem
         const item = search.find(item => item.id === selectedTitle)
         const payload = {

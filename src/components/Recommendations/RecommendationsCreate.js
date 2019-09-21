@@ -35,7 +35,7 @@ function RecommendationsCreate () {
 
         dispatch({ type: types.FETCH })
         httpFetchTMDb({
-            url: `/search/multi?language=en-US&query=${encodeURIComponent(query)}&page=1&include_adult=false`
+            url: `/search/multi?language=en-US&query=${encodeURIComponent(query.trim())}&page=1&include_adult=false`
         }).then(response => {
             const payload = response.results && response.results
                 .filter(img => img.media_type !== 'person' && img.backdrop_path !== null)
