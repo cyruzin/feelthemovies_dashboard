@@ -66,7 +66,7 @@ export const removeRecommendationItems = payload => ({
 export const getRecommendationItems = id => dispatch => {
     dispatch(fetchRecommendationItems())
     return httpFetch({ method: 'GET', url: `/recommendation_items/${id}` })
-        .then(response => dispatch(successRecommendationItems(response.data)))
+        .then(response => dispatch(successRecommendationItems(response.data || [])))
         .catch(error => dispatch(failureRecommendationItems(error.message)))
 }
 
