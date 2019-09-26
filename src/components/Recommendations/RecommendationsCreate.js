@@ -2,6 +2,11 @@
 import React, { useReducer } from 'react'
 import { useSelector } from 'react-redux'
 
+import type { TRecommendation } from '../../types/Recommendation'
+import type { 
+    TRequestResponse,
+    } from '../../types/Request'
+
 import format from 'date-fns/format'
 import debounce from 'lodash/debounce'
 
@@ -30,20 +35,27 @@ function RecommendationsCreate () {
     const [recommendations, dispatch] = useReducer(reducer, initialState)
     const userData = useSelector(state => state.authentication.user)
 
-    const fetchImages = debounce((query: string) => {
+    const fetchImages = debounce(async (query: string) => {
         if (query === '') return
 
-        dispatch({ type: types.FETCH })
-        httpFetchTMDb({
-            url: `/search/multi?language=en-US&query=${encodeURIComponent(query.trim())}&page=1&include_adult=false`
-        }).then(response => {
-            const payload = response.results && response.results
-                .filter(img => img.media_type !== 'person' && img.backdrop_path !== null)
+        try {
+            dispatch({ type: types.FETCH })
+
+            const response = await httpFetchTMDb({
+                url: `/search/multi?language=en-US&query=${encodeURIComponent(query.trim())}&page=1&include_adult=false`
+            })
+
+            const payload =
+                response.results && response.results
+                    .filter(img => img.media_type !== 'person' && img.backdrop_path !== null)
+
             dispatch({ type: types.IMAGES, payload })
-        }).catch(error => dispatch({ type: types.FAILURE, payload: error }))
+        } catch (error) {
+            dispatch({ type: types.FAILURE, payload: error })
+        }
     }, 800)
 
-    function imageChangeHandler (selectedImage: string) {
+    function imageChangeHandler (selectedImage: string): void {
         const { images } = recommendations
         const image = images.find(img => img.id === selectedImage)
         const payload = {
@@ -56,43 +68,55 @@ function RecommendationsCreate () {
         dispatch({ type: types.IMAGE_CHANGE, payload })
     }
 
-    const fetchGenres = debounce((query: string) => {
+    const fetchGenres = debounce(async (query: string) => {
         if (query === '') return
-        dispatch({ type: types.FETCH })
 
-        httpFetch({
-            url: `/search_genre?query=${encodeURIComponent(query)}`,
-            method: 'GET'
-        }).then(response => dispatch({ type: types.GENRES, payload: response.data }))
-            .catch(error => dispatch({ type: types.FAILURE, payload: error.message }))
+        try {
+            dispatch({ type: types.FETCH })
+
+            const response = await httpFetch({
+                url: `/search_genre?query=${encodeURIComponent(query)}`,
+                method: 'GET'
+            })
+
+            dispatch({ type: types.GENRES, payload: response.data })
+        } catch (error) {
+            dispatch({ type: types.FAILURE, payload: error.message })
+        }
     }, 800)
 
-    function genresChangeHandler (selectedGenre: string) {
+    function genresChangeHandler (selectedGenre: string): void {
         dispatch({ type: types.GENRES_CHANGE, payload: selectedGenre })
     }
 
-    const fetchKeywords = debounce((query: string) => {
+    const fetchKeywords = debounce(async (query: string) => {
         if (query === '') return
-        dispatch({ type: types.FETCH })
 
-        httpFetch({
-            url: `/search_keyword?query=${encodeURIComponent(query)}`,
-            method: 'GET'
-        }).then(response => dispatch({ type: types.KEYWORDS, payload: response.data }))
-            .catch(error => dispatch({ type: types.FAILURE, payload: error.message }))
+        try {
+            dispatch({ type: types.FETCH })
+
+            const response = await httpFetch({
+                url: `/search_keyword?query=${encodeURIComponent(query)}`,
+                method: 'GET'
+            })
+
+            dispatch({ type: types.KEYWORDS, payload: response.data })
+        } catch (error) {
+            dispatch({ type: types.FAILURE, payload: error.message })
+        }
     }, 800)
 
-    function keywordsChangeHandler (selectedKeyword: string) {
+    function keywordsChangeHandler (selectedKeyword: string): void {
         dispatch({ type: types.KEYWORDS_CHANGE, payload: selectedKeyword })
     }
 
-    function createRecommendation () {
+    async function createRecommendation () {
         const {
             title, body, type, poster, backdrop,
             genresValue, keywordsValue
         } = recommendations
 
-        const recommendation = {
+        const recommendation: TRecommendation = {
             title: title,
             body: body,
             type: +type,
@@ -103,14 +127,18 @@ function RecommendationsCreate () {
             user_id: +userData.id
         }
 
-        httpFetch({
-            url: '/recommendation',
-            method: 'POST',
-            data: recommendation
-        }).then(() => {
+        try {
+            const response: TRequestResponse = await httpFetch({
+                url: '/recommendation',
+                method: 'POST',
+                data: recommendation
+            })
+
             dispatch({ type: types.RESET })
-            dispatch({ type: types.MESSAGE, payload: "Recommendation created successfully" })
-        }).catch(error => dispatch({ type: types.FAILURE, payload: error.message || error.errors[0].message }))
+            dispatch({ type: types.MESSAGE, payload: response.message })
+        } catch (error) {
+            dispatch({ type: types.FAILURE, payload: error.message || error.errors[0].message })
+        }
     }
 
     const {

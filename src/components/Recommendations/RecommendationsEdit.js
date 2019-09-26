@@ -74,7 +74,7 @@ function RecommendationsEdit (props: Props) {
         }
     }, [fillFields, id])
 
-    async function fetchRecommendationGenres (id: number | string): Promise<void> {
+    async function fetchRecommendationGenres (id: number | string): Promise<any> {
         try {
             const response = await httpFetch({
                 url: `/recommendation_genres/${id}`,
@@ -86,7 +86,7 @@ function RecommendationsEdit (props: Props) {
         }
     }
 
-    async function fetchRecommendationKeywords (id: number | string): Promise<void> {
+    async function fetchRecommendationKeywords (id: number | string): Promise<any> {
         try {
             const response = await httpFetch({
                 url: `/recommendation_keywords/${id}`,

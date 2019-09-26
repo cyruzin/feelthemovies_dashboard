@@ -81,7 +81,7 @@ function RecommendationItemsEdit (props: Props) {
         }
     }, [fillFields, id])
 
-    async function fetchRecommendationItemSources (id: number | string): Promise<void> {
+    async function fetchRecommendationItemSources (id: number | string): Promise<any> {
         try {
             const response = await httpFetch({
                 url: `/recommendation_item_sources/${id}`,
