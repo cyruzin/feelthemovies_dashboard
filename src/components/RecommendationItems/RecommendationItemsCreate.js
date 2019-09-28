@@ -49,12 +49,12 @@ function RecommendationItemsCreate (props: Props) {
         const item = search.find(item => item.id === selectedTitle)
 
         const payload = {
-            searchValue: item.original_name ?
-                `${item.original_name} (${format(item.first_air_date, 'YYYY')})`
-                : `${item.original_title} (${format(item.release_date, 'YYYY')})`,
+            searchValue: item.name ?
+                `${item.name} (${format(item.first_air_date, 'YYYY')})`
+                : `${item.title} (${format(item.release_date, 'YYYY')})`,
             tmdb_id: +item.id,
             year: item.release_date || item.first_air_date,
-            name: item.original_title || item.original_name,
+            name: item.title || item.name,
             media_type: item.media_type,
             overview: item.overview,
             poster: item.poster_path,
@@ -171,8 +171,8 @@ function RecommendationItemsCreate (props: Props) {
                         onChange={selectedTitle => tmdbSearchChangeHandler(selectedTitle)}>
                         {search && search.map(item =>
                             <AntSelect.Option key={item.id} value={item.id}>
-                                {item.original_name && `${item.original_name} (${format(item.first_air_date, 'YYYY')})`}
-                                {item.original_title && `${item.original_title} (${format(item.release_date, 'YYYY')})`}
+                                {item.name && `${item.name} (${format(item.first_air_date, 'YYYY')})`}
+                                {item.title && `${item.title} (${format(item.release_date, 'YYYY')})`}
                             </AntSelect.Option>
                         )}
                     </AntSelect>
