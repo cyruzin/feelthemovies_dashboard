@@ -3,7 +3,8 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-import distanceInWordsStrict from 'date-fns/distance_in_words_strict'
+import distanceInWordsStrict from 'date-fns/formatDistanceStrict'
+import parseISO from 'date-fns/parseISO'
 
 import { deleteGenres } from '../../redux/ducks/genres'
 
@@ -77,8 +78,18 @@ function GenresList (props: Props) {
                     <TR key={genre.id}>
                         <TD>{genre.id}</TD>
                         <TD>{genre.name}</TD>
-                        <TD>{distanceInWordsStrict(genre.created_at, Date.now())}</TD>
-                        <TD>{distanceInWordsStrict(genre.updated_at, Date.now())}</TD>
+                        <TD>
+                            {distanceInWordsStrict(
+                                parseISO(genre.created_at),
+                                Date.now())
+                            }
+                        </TD>
+                        <TD>
+                            {distanceInWordsStrict(
+                                parseISO(genre.updated_at),
+                                Date.now())
+                            }
+                        </TD>
                         <TD>
                             <Link
                                 className="btn btn-sm btn-primary mr-2"

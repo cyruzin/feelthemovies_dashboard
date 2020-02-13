@@ -1,5 +1,5 @@
 # Stage 1 - the build process
-FROM node:10.16 as build-stage
+FROM node:lts-alpine as build-stage
 ENV HOME /etc/app
 ADD . $HOME/
 WORKDIR $HOME

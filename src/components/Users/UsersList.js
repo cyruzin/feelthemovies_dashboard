@@ -3,7 +3,8 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-import distanceInWordsStrict from 'date-fns/distance_in_words_strict'
+import distanceInWordsStrict from 'date-fns/formatDistanceStrict'
+import parseISO from 'date-fns/parseISO'
 
 import { deleteUsers } from '../../redux/ducks/users'
 
@@ -79,8 +80,18 @@ function UsersList (props: Props) {
                         <TD>{user.id}</TD>
                         <TD>{user.name}</TD>
                         <TD>{user.email}</TD>
-                        <TD>{distanceInWordsStrict(user.created_at, Date.now())}</TD>
-                        <TD>{distanceInWordsStrict(user.updated_at, Date.now())}</TD>
+                        <TD>
+                            {distanceInWordsStrict(
+                                parseISO(user.created_at),
+                                Date.now()
+                            )}
+                        </TD>
+                        <TD>
+                            {distanceInWordsStrict(
+                                parseISO(user.updated_at),
+                                Date.now()
+                            )}
+                        </TD>
                         <TD>
                             <Link
                                 className="btn btn-sm btn-primary mr-2"

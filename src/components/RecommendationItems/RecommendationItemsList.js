@@ -3,8 +3,9 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-import distanceInWordsStrict from 'date-fns/distance_in_words_strict'
+import distanceInWordsStrict from 'date-fns/formatDistanceStrict'
 import format from 'date-fns/format'
+import parseISO from 'date-fns/parseISO'
 
 import { deleteRecommendationItems } from '../../redux/ducks/recommendationItems'
 import { capitalizeFirstLetter } from '../../util/helpers'
@@ -90,8 +91,18 @@ function RecommendationItemsList (props: Props) {
                             <TD>{item.name}</TD>
                             <TD>{format(item.year, 'YYYY')}</TD>
                             <TD>{capitalizeFirstLetter(item.media_type)}</TD>
-                            <TD>{distanceInWordsStrict(item.created_at, Date.now())}</TD>
-                            <TD>{distanceInWordsStrict(item.updated_at, Date.now())}</TD>
+                            <TD>
+                                {distanceInWordsStrict(
+                                    parseISO(item.created_at),
+                                    Date.now()
+                                )}
+                            </TD>
+                            <TD>
+                                {distanceInWordsStrict(
+                                    parseISO(item.updated_at),
+                                    Date.now())
+                                }
+                            </TD>
                             <TD>
                                 <Link
                                     className="btn btn-sm btn-primary mr-2"

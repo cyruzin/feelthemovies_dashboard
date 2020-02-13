@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
-import distanceInWordsStrict from 'date-fns/distance_in_words_strict'
+import distanceInWordsStrict from 'date-fns/formatDistanceStrict'
+import parseISO from 'date-fns/parseISO'
 
 import {
     getSearchRecommendations,
@@ -117,8 +118,17 @@ function RecommendationsSearch (props: Props) {
                                 <TD>{recommendation.title}</TD>
                                 <TD>{checkType(recommendation.type)}</TD>
                                 <TD>{checkStatus(recommendation.status)}</TD>
-                                <TD>{distanceInWordsStrict(recommendation.created_at, Date.now())}</TD>
-                                <TD>{distanceInWordsStrict(recommendation.updated_at, Date.now())}</TD>
+                                <TD>
+                                    {distanceInWordsStrict(
+                                        parseISO(recommendation.created_at),
+                                        Date.now()
+                                    )}
+                                </TD>
+                                <TD>
+                                    {distanceInWordsStrict(
+                                        parseISO(recommendation.updated_at),
+                                        Date.now()
+                                    )}</TD>
                                 <TD>
                                     <Link
                                         className="btn btn-sm btn-primary mr-2"

@@ -3,7 +3,8 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-import distanceInWordsStrict from 'date-fns/distance_in_words_strict'
+import distanceInWordsStrict from 'date-fns/formatDistanceStrict'
+import parseISO from 'date-fns/parseISO'
 
 import { deleteKeywords } from '../../redux/ducks/keywords'
 
@@ -77,8 +78,19 @@ function KeywordsList (props: Props) {
                     <TR key={keyword.id}>
                         <TD>{keyword.id}</TD>
                         <TD>{keyword.name}</TD>
-                        <TD>{distanceInWordsStrict(keyword.created_at, Date.now())}</TD>
-                        <TD>{distanceInWordsStrict(keyword.updated_at, Date.now())}</TD>
+                        <TD>
+                            {distanceInWordsStrict(
+                                parseISO(keyword.created_at),
+                                Date.now()
+                            )
+                            }
+                        </TD>
+                        <TD>
+                            {distanceInWordsStrict(
+                                parseISO(keyword.updated_at),
+                                Date.now())
+                            }
+                        </TD>
                         <TD>
                             <Link
                                 className="btn btn-sm btn-primary mr-2"

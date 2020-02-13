@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
-import distanceInWordsStrict from 'date-fns/distance_in_words_strict'
+import distanceInWordsStrict from 'date-fns/formatDistanceStrict'
+import parseISO from 'date-fns/parseISO'
 
 import { getSearchSources, deleteSources } from '../../redux/ducks/sources'
 
@@ -109,8 +110,17 @@ function SourcesSearch (props: Props) {
                             <TR key={source.id}>
                                 <TD>{source.id}</TD>
                                 <TD>{source.name}</TD>
-                                <TD>{distanceInWordsStrict(source.created_at, Date.now())}</TD>
-                                <TD>{distanceInWordsStrict(source.updated_at, Date.now())}</TD>
+                                <TD>
+                                    {distanceInWordsStrict(
+                                        parseISO(source.created_at),
+                                        Date.now()
+                                    )}
+                                </TD>
+                                <TD>
+                                    {distanceInWordsStrict(
+                                        parseISO(source.updated_at),
+                                        Date.now()
+                                    )}</TD>
                                 <TD>
                                     <Link
                                         className="btn btn-sm btn-primary mr-2"
