@@ -62,9 +62,9 @@ function RecommendationItemsEdit (props: Props) {
             } = response
 
             const payload = {
-                searchValue: `${name} (${format(year, ('YYYY'))})`,
+                searchValue: `${name} (${format(new Date(year), ('yyyy'))})`,
                 tmdb_id: tmdb_id,
-                year: format(year, 'YYYY-MM-DD'),
+                year: format(new Date(year), 'yyyy-MM-dd'),
                 name: name,
                 media_type: media_type,
                 overview: overview,
@@ -116,8 +116,8 @@ function RecommendationItemsEdit (props: Props) {
         const item = search.find(item => item.id === selectedTitle)
         const payload = {
             searchValue: item.name ?
-                `${item.name} (${format(item.first_air_date, 'YYYY')})`
-                : `${item.title} (${format(item.release_date, 'YYYY')})`,
+                `${item.name} (${format(new Date(item.first_air_date), 'yyyy')})`
+                : `${item.title} (${format(new Date(item.release_date), 'yyyy')})`,
             tmdb_id: +item.id,
             year: item.release_date || item.first_air_date,
             name: item.title || item.name,
@@ -242,8 +242,8 @@ function RecommendationItemsEdit (props: Props) {
                             onChange={selectedTitle => tmdbSearchChangeHandler(selectedTitle)}>
                             {search && search.map(item =>
                                 <AntSelect.Option key={item.id} value={item.id}>
-                                    {item.name && `${item.name} (${format(item.first_air_date, 'YYYY')})`}
-                                    {item.title && `${item.title} (${format(item.release_date, 'YYYY')})`}
+                                    {item.name && `${item.name} (${format(new Date(item.first_air_date), 'yyyy')})`}
+                                    {item.title && `${item.title} (${format(new Date(item.release_date), 'yyyy')})`}
                                 </AntSelect.Option>
                             )}
                         </AntSelect>

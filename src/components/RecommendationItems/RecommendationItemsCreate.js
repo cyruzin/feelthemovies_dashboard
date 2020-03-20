@@ -50,8 +50,8 @@ function RecommendationItemsCreate (props: Props) {
 
         const payload = {
             searchValue: item.name ?
-                `${item.name} (${format(item.first_air_date, 'YYYY')})`
-                : `${item.title} (${format(item.release_date, 'YYYY')})`,
+                `${item.name} (${format(new Date(item.first_air_date), 'yyyy')})`
+                : `${item.title} (${format(new Date(item.release_date), 'yyyy')})`,
             tmdb_id: +item.id,
             year: item.release_date || item.first_air_date,
             name: item.title || item.name,
@@ -171,8 +171,8 @@ function RecommendationItemsCreate (props: Props) {
                         onChange={selectedTitle => tmdbSearchChangeHandler(selectedTitle)}>
                         {search && search.map(item =>
                             <AntSelect.Option key={item.id} value={item.id}>
-                                {item.name && `${item.name} (${format(item.first_air_date, 'YYYY')})`}
-                                {item.title && `${item.title} (${format(item.release_date, 'YYYY')})`}
+                                {item.name && `${item.name} (${format(new Date(item.first_air_date), 'yyyy')})`}
+                                {item.title && `${item.title} (${format(new Date(item.release_date), 'yyyy')})`}
                             </AntSelect.Option>
                         )}
                     </AntSelect>

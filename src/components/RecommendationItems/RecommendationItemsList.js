@@ -89,7 +89,7 @@ function RecommendationItemsList (props: Props) {
                             <TD>{item.id}</TD>
                             <TD>{item.tmdb_id}</TD>
                             <TD>{item.name}</TD>
-                            <TD>{format(item.year, 'YYYY')}</TD>
+                            <TD>{format(new Date(item.year), 'yyyy')}</TD>
                             <TD>{capitalizeFirstLetter(item.media_type)}</TD>
                             <TD>
                                 {distanceInWordsStrict(

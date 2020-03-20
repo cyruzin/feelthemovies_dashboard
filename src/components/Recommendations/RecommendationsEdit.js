@@ -120,8 +120,8 @@ function RecommendationsEdit (props: Props) {
         const image = images.find(img => img.id === selectedImage)
         const payload = {
             imageValue: image.original_name ?
-                `${image.original_name} (${format(image.first_air_date, 'YYYY')})`
-                : `${image.original_title} (${format(image.release_date, 'YYYY')})`,
+                `${image.original_name} (${format(new Date(image.first_air_date), 'yyyy')})`
+                : `${image.original_title} (${format(new Date(image.release_date), 'yyyy')})`,
             poster: image.poster_path,
             backdrop: image.backdrop_path
         }
@@ -265,8 +265,8 @@ function RecommendationsEdit (props: Props) {
                             onChange={selectedImage => imageChangeHandler(selectedImage)}>
                             {images && images.map(img =>
                                 <AntSelect.Option key={img.id} value={img.id}>
-                                    {img.original_name && `${img.original_name} (${format(img.first_air_date, 'YYYY')})`}
-                                    {img.original_title && `${img.original_title} (${format(img.release_date, 'YYYY')})`}
+                                    {img.original_name && `${img.original_name} (${format(new Date(img.first_air_date), 'yyyy')})`}
+                                    {img.original_title && `${img.original_title} (${format(new Date(img.release_date), 'yyyy')})`}
                                 </AntSelect.Option>
                             )}
                         </AntSelect>
