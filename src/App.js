@@ -22,7 +22,7 @@ function App() {
           <Switch>
             <Route path="/" exact component={Authentication} />
             <PrivateRoute path="/dashboard" component={Dashboard} />
-            <Route component={<NotFound />} />
+            <Route render={() => <NotFound />} />
           </Switch>
         </Router>
       </Provider>
