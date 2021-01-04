@@ -1,12 +1,11 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
-import InputLabel from "./InputLabel";
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import InputLabel from './InputLabel';
 
 interface Props {
   path: string;
   placeholder?: string;
-};
-
+}
 
 function SearchInput(props: Props) {
   const { placeholder = 'Busca', path } = props;
@@ -17,7 +16,7 @@ function SearchInput(props: Props) {
     if (searchKeyword === '') return false;
 
     return push(`${path}?query=${searchKeyword}`, {
-      query: encodeURIComponent(searchKeyword),
+      query: encodeURIComponent(searchKeyword)
     });
   }
 

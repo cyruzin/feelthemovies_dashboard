@@ -1,18 +1,18 @@
-import React from "react";
-import { Provider } from "react-redux";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import React from 'react';
+import { Provider } from 'react-redux';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-import PrivateRoute from "./components/Route/PrivateRoute";
-import store from "./redux";
+import PrivateRoute from './components/Route/PrivateRoute';
+import store from './redux';
 
-import Authentication from "./components/Authentication/Authentication";
-import Dashboard from "./components/Layout/Dashboard";
+import Authentication from './components/Authentication/Authentication';
+import Dashboard from './components/Layout/Dashboard';
 
-import ErrorBoundary from "./components/ErrorBoundary";
-import NotFound from "./components/NotFound";
+import ErrorBoundary from './components/ErrorBoundary';
+import NotFound from './components/NotFound';
 
-import "bootstrap/dist/js/bootstrap.min";
-import "./App.css";
+import 'bootstrap/dist/js/bootstrap.min';
+import './App.css';
 
 function App() {
   return (

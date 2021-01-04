@@ -1,16 +1,12 @@
-import React from 'react'
+import React from 'react';
 
 interface Props {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }
 
 function TR(props: Props) {
-    const { children } = props
-    return (
-        <tr>
-            {children}
-        </tr>
-    )
+  const { children } = props;
+  return <tr>{children}</tr>;
 }
 
-export default TR
+export default TR;

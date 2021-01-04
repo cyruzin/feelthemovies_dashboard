@@ -1,19 +1,19 @@
-import { httpFetch } from "../../util/request";
+import { httpFetch } from '../../util/request';
 
 export const types = {
-  FETCH: "SOURCES_LIST/FETCH",
-  SUCCESS: "SOURCES_LIST/SUCCESS",
-  FAILURE: "SOURCES_LIST/FAILURE",
-  SEARCH: "SOURCES_LIST/SEARCH",
-  REMOVE: "SOURCES_LIST/REMOVE",
+  FETCH: 'SOURCES_LIST/FETCH',
+  SUCCESS: 'SOURCES_LIST/SUCCESS',
+  FAILURE: 'SOURCES_LIST/FAILURE',
+  SEARCH: 'SOURCES_LIST/SEARCH',
+  REMOVE: 'SOURCES_LIST/REMOVE'
 };
 
 export const initialState = {
   fetch: false,
   data: [],
   searchData: [],
-  message: "",
-  error: "",
+  message: '',
+  error: ''
 };
 
 export default function sourcesReducer(state = initialState, action) {
@@ -22,34 +22,34 @@ export default function sourcesReducer(state = initialState, action) {
       return {
         ...state,
         fetch: true,
-        message: "",
+        message: ''
       };
     case types.SUCCESS:
       return {
         ...state,
         fetch: false,
         data: action.payload,
-        error: "",
+        error: ''
       };
     case types.SEARCH:
       return {
         ...state,
         fetch: false,
         searchData: action.payload,
-        error: "",
+        error: ''
       };
     case types.REMOVE:
       return {
         ...state,
         fetch: false,
         message: action.payload,
-        error: "",
+        error: ''
       };
     case types.FAILURE:
       return {
         ...state,
         fetch: false,
-        error: action.payload,
+        error: action.payload
       };
     default:
       return state;
@@ -57,32 +57,32 @@ export default function sourcesReducer(state = initialState, action) {
 }
 
 export const fetchSources = () => ({
-  type: types.FETCH,
+  type: types.FETCH
 });
 
 export const successSources = (payload) => ({
   type: types.SUCCESS,
-  payload,
+  payload
 });
 
 export const failureSources = (payload) => ({
   type: types.FAILURE,
-  payload,
+  payload
 });
 
 export const searchSources = (payload) => ({
   type: types.SEARCH,
-  payload,
+  payload
 });
 
 export const removeSources = (payload) => ({
   type: types.REMOVE,
-  payload,
+  payload
 });
 
 export const getSources = () => (dispatch) => {
   dispatch(fetchSources());
-  return httpFetch({ method: "GET", url: "/sources" })
+  return httpFetch({ method: 'GET', url: '/sources' })
     .then((response) => dispatch(successSources(response.data)))
     .catch((error) => dispatch(failureSources(error.message)));
 };
@@ -90,8 +90,8 @@ export const getSources = () => (dispatch) => {
 export const getSearchSources = (query) => (dispatch) => {
   dispatch(fetchSources());
   return httpFetch({
-    method: "GET",
-    url: `/search_source?query=${query}`,
+    method: 'GET',
+    url: `/search_source?query=${query}`
   })
     .then((response) =>
       dispatch(searchSources(response.data !== null ? response.data : []))
@@ -101,7 +101,7 @@ export const getSearchSources = (query) => (dispatch) => {
 
 export const deleteSources = (id) => (dispatch) => {
   dispatch(fetchSources());
-  return httpFetch({ method: "DELETE", url: `/source/${id}` })
+  return httpFetch({ method: 'DELETE', url: `/source/${id}` })
     .then((response) => {
       dispatch(getSources());
       dispatch(removeSources(response.message));

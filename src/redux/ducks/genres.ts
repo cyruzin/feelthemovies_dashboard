@@ -1,19 +1,19 @@
-import { httpFetch } from "../../util/request";
+import { httpFetch } from '../../util/request';
 
 export const types = {
-  FETCH: "GENRES_LIST/FETCH",
-  SUCCESS: "GENRES_LIST/SUCCESS",
-  FAILURE: "GENRES_LIST/FAILURE",
-  SEARCH: "GENRES_LIST/SEARCH",
-  REMOVE: "GENRES_LIST/REMOVE",
+  FETCH: 'GENRES_LIST/FETCH',
+  SUCCESS: 'GENRES_LIST/SUCCESS',
+  FAILURE: 'GENRES_LIST/FAILURE',
+  SEARCH: 'GENRES_LIST/SEARCH',
+  REMOVE: 'GENRES_LIST/REMOVE'
 };
 
 export const initialState = {
   fetch: false,
   data: [],
   searchData: [],
-  message: "",
-  error: "",
+  message: '',
+  error: ''
 };
 
 export default function genresReducer(state = initialState, action) {
@@ -22,34 +22,34 @@ export default function genresReducer(state = initialState, action) {
       return {
         ...state,
         fetch: true,
-        message: "",
+        message: ''
       };
     case types.SUCCESS:
       return {
         ...state,
         fetch: false,
         data: action.payload,
-        error: "",
+        error: ''
       };
     case types.SEARCH:
       return {
         ...state,
         fetch: false,
         searchData: action.payload,
-        error: "",
+        error: ''
       };
     case types.REMOVE:
       return {
         ...state,
         fetch: false,
         message: action.payload,
-        error: "",
+        error: ''
       };
     case types.FAILURE:
       return {
         ...state,
         fetch: false,
-        error: action.payload,
+        error: action.payload
       };
     default:
       return state;
@@ -57,32 +57,32 @@ export default function genresReducer(state = initialState, action) {
 }
 
 export const fetchGenres = () => ({
-  type: types.FETCH,
+  type: types.FETCH
 });
 
 export const successGenres = (payload) => ({
   type: types.SUCCESS,
-  payload,
+  payload
 });
 
 export const failureGenres = (payload) => ({
   type: types.FAILURE,
-  payload,
+  payload
 });
 
 export const searchGenres = (payload) => ({
   type: types.SEARCH,
-  payload,
+  payload
 });
 
 export const removeGenres = (payload) => ({
   type: types.REMOVE,
-  payload,
+  payload
 });
 
 export const getGenres = () => (dispatch) => {
   dispatch(fetchGenres());
-  return httpFetch({ method: "GET", url: "/genres" })
+  return httpFetch({ method: 'GET', url: '/genres' })
     .then((response) => dispatch(successGenres(response.data)))
     .catch((error) => dispatch(failureGenres(error.message)));
 };
@@ -90,8 +90,8 @@ export const getGenres = () => (dispatch) => {
 export const getSearchGenres = (query) => (dispatch) => {
   dispatch(fetchGenres());
   return httpFetch({
-    method: "GET",
-    url: `/search_genre?query=${query}`,
+    method: 'GET',
+    url: `/search_genre?query=${query}`
   })
     .then((response) =>
       dispatch(searchGenres(response.data !== null ? response.data : []))
@@ -101,7 +101,7 @@ export const getSearchGenres = (query) => (dispatch) => {
 
 export const deleteGenres = (id) => (dispatch) => {
   dispatch(fetchGenres());
-  return httpFetch({ method: "DELETE", url: `/genre/${id}` })
+  return httpFetch({ method: 'DELETE', url: `/genre/${id}` })
     .then((response) => {
       dispatch(getGenres());
       dispatch(removeGenres(response.message));

@@ -1,17 +1,17 @@
-import { httpFetch } from "../../util/request";
+import { httpFetch } from '../../util/request';
 
 export const types = {
-  FETCH: "RECOMMENDATIONS_ITEMS_LIST/FETCH",
-  SUCCESS: "RECOMMENDATIONS_ITEMS_LIST/SUCCESS",
-  FAILURE: "RECOMMENDATIONS_ITEMS_LIST/FAILURE",
-  REMOVE: "RECOMMENDATIONS_ITEMS_LIST/REMOVE",
+  FETCH: 'RECOMMENDATIONS_ITEMS_LIST/FETCH',
+  SUCCESS: 'RECOMMENDATIONS_ITEMS_LIST/SUCCESS',
+  FAILURE: 'RECOMMENDATIONS_ITEMS_LIST/FAILURE',
+  REMOVE: 'RECOMMENDATIONS_ITEMS_LIST/REMOVE'
 };
 
 export const initialState = {
   fetch: false,
   data: [],
-  message: "",
-  error: "",
+  message: '',
+  error: ''
 };
 
 export default function recommendationItemsReducer(
@@ -23,27 +23,27 @@ export default function recommendationItemsReducer(
       return {
         ...state,
         fetch: true,
-        message: "",
+        message: ''
       };
     case types.SUCCESS:
       return {
         ...state,
         fetch: false,
         data: action.payload,
-        error: "",
+        error: ''
       };
     case types.REMOVE:
       return {
         ...state,
         fetch: false,
         message: action.payload,
-        error: "",
+        error: ''
       };
     case types.FAILURE:
       return {
         ...state,
         fetch: false,
-        error: action.payload,
+        error: action.payload
       };
     default:
       return state;
@@ -51,27 +51,27 @@ export default function recommendationItemsReducer(
 }
 
 export const fetchRecommendationItems = () => ({
-  type: types.FETCH,
+  type: types.FETCH
 });
 
 export const successRecommendationItems = (payload) => ({
   type: types.SUCCESS,
-  payload,
+  payload
 });
 
 export const failureRecommendationItems = (payload) => ({
   type: types.FAILURE,
-  payload,
+  payload
 });
 
 export const removeRecommendationItems = (payload) => ({
   type: types.REMOVE,
-  payload,
+  payload
 });
 
 export const getRecommendationItems = (id) => (dispatch) => {
   dispatch(fetchRecommendationItems());
-  return httpFetch({ method: "GET", url: `/recommendation_items/${id}` })
+  return httpFetch({ method: 'GET', url: `/recommendation_items/${id}` })
     .then((response) =>
       dispatch(successRecommendationItems(response.data || []))
     )
@@ -82,7 +82,7 @@ export const deleteRecommendationItems = (id, recommendationID) => (
   dispatch
 ) => {
   dispatch(fetchRecommendationItems());
-  return httpFetch({ method: "DELETE", url: `/recommendation_item/${id}` })
+  return httpFetch({ method: 'DELETE', url: `/recommendation_item/${id}` })
     .then((response) => {
       dispatch(getRecommendationItems(recommendationID));
       dispatch(removeRecommendationItems(response.message));

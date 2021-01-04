@@ -1,17 +1,17 @@
 // @flow
-import React, { useReducer, useEffect, useCallback } from "react";
-import { useSelector } from "react-redux";
+import React, { useReducer, useEffect, useCallback } from 'react';
+import { useSelector } from 'react-redux';
 
-import format from "date-fns/format";
-import debounce from "lodash/debounce";
+import format from 'date-fns/format';
+import debounce from 'lodash/debounce';
 
-import { types, initialState, reducer } from "./duck";
-import { httpFetch, httpFetchTMDb } from "../../util/request";
+import { types, initialState, reducer } from './duck';
+import { httpFetch, httpFetchTMDb } from '../../util/request';
 
-import AntSelect from "antd/lib/select";
-import AntSpin from "antd/lib/spin";
-import "antd/lib/select/style/css";
-import "antd/lib/spin/style/css";
+import AntSelect from 'antd/lib/select';
+import AntSpin from 'antd/lib/spin';
+import 'antd/lib/select/style/css';
+import 'antd/lib/spin/style/css';
 
 import {
   Alert,
@@ -24,13 +24,13 @@ import {
   Select,
   Spinner,
   TextArea,
-  Option,
-} from "../Common";
+  Option
+} from '../Common';
 
 type Props = {
-  history: Object,
-  match: Object,
-  location: Object,
+  history: Object;
+  match: Object;
+  location: Object;
 };
 
 function RecommendationsEdit(props: Props) {
@@ -41,12 +41,12 @@ function RecommendationsEdit(props: Props) {
   const fillFields = useCallback((genres, keywords): void => {
     const newGenres = genres.map((value) => ({
       key: value.id,
-      label: value.name,
+      label: value.name
     }));
 
     const newKeywords = keywords.map((value) => ({
       key: value.id,
-      label: value.name,
+      label: value.name
     }));
 
     genresChangeHandler(newGenres);
@@ -61,7 +61,7 @@ function RecommendationsEdit(props: Props) {
 
       const data = {
         url: `/recommendation/${id}`,
-        method: "GET",
+        method: 'GET'
       };
       const response = await httpFetch(data);
       const genres = await fetchRecommendationGenres(id);
@@ -78,7 +78,7 @@ function RecommendationsEdit(props: Props) {
     try {
       const response = await httpFetch({
         url: `/recommendation_genres/${id}`,
-        method: "GET",
+        method: 'GET'
       });
       return response.data;
     } catch (error) {
@@ -92,7 +92,7 @@ function RecommendationsEdit(props: Props) {
     try {
       const response = await httpFetch({
         url: `/recommendation_keywords/${id}`,
-        method: "GET",
+        method: 'GET'
       });
       return response.data;
     } catch (error) {
@@ -105,17 +105,17 @@ function RecommendationsEdit(props: Props) {
   }, [fetchRecommendation]);
 
   const fetchImages = debounce((query: string) => {
-    if (query === "") return;
+    if (query === '') return;
 
     dispatch({ type: types.FETCH });
     httpFetchTMDb({
       url: `/search/multi?language=en-US&query=${encodeURIComponent(
         query.trim()
-      )}&page=1&include_adult=false`,
+      )}&page=1&include_adult=false`
     })
       .then((response) => {
         const payload = response.results.filter(
-          (img) => img.media_type !== "person" && img.backdrop_path !== null
+          (img) => img.media_type !== 'person' && img.backdrop_path !== null
         );
         dispatch({ type: types.IMAGES, payload });
       })
@@ -129,25 +129,25 @@ function RecommendationsEdit(props: Props) {
       imageValue: image.original_name
         ? `${image.original_name} (${format(
             new Date(image.first_air_date),
-            "yyyy"
+            'yyyy'
           )})`
         : `${image.original_title} (${format(
             new Date(image.release_date),
-            "yyyy"
+            'yyyy'
           )})`,
       poster: image.poster_path,
-      backdrop: image.backdrop_path,
+      backdrop: image.backdrop_path
     };
     dispatch({ type: types.IMAGE_CHANGE, payload });
   }
 
   const fetchGenres = debounce((query: string) => {
-    if (query === "") return;
+    if (query === '') return;
     dispatch({ type: types.FETCH });
 
     httpFetch({
       url: `/search_genre?query=${encodeURIComponent(query)}`,
-      method: "GET",
+      method: 'GET'
     })
       .then((response) =>
         dispatch({ type: types.GENRES, payload: response.data })
@@ -162,12 +162,12 @@ function RecommendationsEdit(props: Props) {
   }
 
   const fetchKeywords = debounce((query: string) => {
-    if (query === "") return;
+    if (query === '') return;
     dispatch({ type: types.FETCH });
 
     httpFetch({
       url: `/search_keyword?query=${encodeURIComponent(query)}`,
-      method: "GET",
+      method: 'GET'
     })
       .then((response) =>
         dispatch({ type: types.KEYWORDS, payload: response.data })
@@ -189,7 +189,7 @@ function RecommendationsEdit(props: Props) {
       poster,
       backdrop,
       genresValue,
-      keywordsValue,
+      keywordsValue
     } = recommendations;
 
     const recommendation = {
@@ -201,25 +201,25 @@ function RecommendationsEdit(props: Props) {
       keywords: keywordsValue.map((keywords) => +keywords.key),
       poster: poster,
       backdrop: backdrop,
-      user_id: +userData.id,
+      user_id: +userData.id
     };
 
     httpFetch({
       url: `/recommendation/${id}`,
-      method: "PUT",
-      data: recommendation,
+      method: 'PUT',
+      data: recommendation
     })
       .then(() => {
-        dispatch({ type: types.FAILURE, payload: "" });
+        dispatch({ type: types.FAILURE, payload: '' });
         dispatch({
           type: types.MESSAGE,
-          payload: "Recommendation edited successfully",
+          payload: 'Recommendation edited successfully'
         });
       })
       .catch((error) =>
         dispatch({
           type: types.FAILURE,
-          payload: error.message || error.errors[0].message,
+          payload: error.message || error.errors[0].message
         })
       );
   }
@@ -238,7 +238,7 @@ function RecommendationsEdit(props: Props) {
     keywordsValue,
     error,
     message,
-    formFilled,
+    formFilled
   } = recommendations;
 
   return (
@@ -246,14 +246,14 @@ function RecommendationsEdit(props: Props) {
       <Alert
         message={error}
         variant="error"
-        showAlert={error !== ""}
-        onClose={() => dispatch({ type: types.FAILURE, payload: "" })}
+        showAlert={error !== ''}
+        onClose={() => dispatch({ type: types.FAILURE, payload: '' })}
       />
       <Alert
         message={message}
         variant="success"
-        showAlert={message !== ""}
-        onClose={() => dispatch({ type: types.MESSAGE, payload: "" })}
+        showAlert={message !== ''}
+        onClose={() => dispatch({ type: types.MESSAGE, payload: '' })}
       />
 
       <BreadCrumbs
@@ -261,9 +261,9 @@ function RecommendationsEdit(props: Props) {
         breadCrumbs={[
           {
             key: 1,
-            path: "/dashboard/recommendations",
-            name: "Recommendations",
-          },
+            path: '/dashboard/recommendations',
+            name: 'Recommendations'
+          }
         ]}
       />
 
@@ -324,7 +324,7 @@ function RecommendationsEdit(props: Props) {
               showSearch
               size="large"
               value={imageValue}
-              style={{ width: "100%" }}
+              style={{ width: '100%' }}
               defaultActiveFirstOption={false}
               notFoundContent={fetch && <AntSpin size="small" />}
               showArrow={false}
@@ -338,13 +338,13 @@ function RecommendationsEdit(props: Props) {
                     {img.first_air_date
                       ? `${img.original_name} (${format(
                           new Date(img.first_air_date),
-                          "yyyy"
+                          'yyyy'
                         )})`
                       : img.original_name}
                     {img.release_date
                       ? `${img.original_title} (${format(
                           new Date(img.release_date),
-                          "yyyy"
+                          'yyyy'
                         )})`
                       : img.original_title}
                   </AntSelect.Option>
@@ -357,7 +357,7 @@ function RecommendationsEdit(props: Props) {
               labelInValue
               size="large"
               value={genresValue}
-              style={{ width: "100%" }}
+              style={{ width: '100%' }}
               notFoundContent={fetch && <AntSpin size="small" />}
               showArrow={false}
               filterOption={false}
@@ -378,7 +378,7 @@ function RecommendationsEdit(props: Props) {
               labelInValue
               size="large"
               value={keywordsValue}
-              style={{ width: "100%" }}
+              style={{ width: '100%' }}
               notFoundContent={fetch && <AntSpin size="small" />}
               showArrow={false}
               filterOption={false}

@@ -1,16 +1,16 @@
 // @flow
-import React, { useReducer, useEffect, useCallback } from "react";
+import React, { useReducer, useEffect, useCallback } from 'react';
 
-import format from "date-fns/format";
-import debounce from "lodash/debounce";
+import format from 'date-fns/format';
+import debounce from 'lodash/debounce';
 
-import { types, initialState, reducer } from "./duck";
-import { httpFetch, httpFetchTMDb } from "../../util/request";
+import { types, initialState, reducer } from './duck';
+import { httpFetch, httpFetchTMDb } from '../../util/request';
 
-import AntSelect from "antd/lib/select";
-import AntSpin from "antd/lib/spin";
-import "antd/lib/select/style/css";
-import "antd/lib/spin/style/css";
+import AntSelect from 'antd/lib/select';
+import AntSpin from 'antd/lib/spin';
+import 'antd/lib/select/style/css';
+import 'antd/lib/spin/style/css';
 
 import {
   Alert,
@@ -20,11 +20,11 @@ import {
   FormGroup,
   Spinner,
   Section,
-  SectionTitle,
-} from "../Common";
+  SectionTitle
+} from '../Common';
 
 type Props = {
-  match: Object,
+  match: Object;
 };
 
 function RecommendationItemsEdit(props: Props) {
@@ -34,7 +34,7 @@ function RecommendationItemsEdit(props: Props) {
   const fillFields = useCallback((sources) => {
     const newSources = sources.map((value) => ({
       key: +value.id,
-      label: value.name,
+      label: value.name
     }));
 
     sourcesChangeHandler(newSources);
@@ -48,7 +48,7 @@ function RecommendationItemsEdit(props: Props) {
 
       const data = {
         url: `/recommendation_item/${id}`,
-        method: "GET",
+        method: 'GET'
       };
 
       const response = await httpFetch(data);
@@ -66,13 +66,13 @@ function RecommendationItemsEdit(props: Props) {
         poster,
         backdrop,
         trailer,
-        commentary,
+        commentary
       } = response;
 
       const payload = {
-        searchValue: `${name} (${format(new Date(year), "yyyy")})`,
+        searchValue: `${name} (${format(new Date(year), 'yyyy')})`,
         tmdb_id: tmdb_id,
-        year: format(new Date(year), "yyyy-MM-dd"),
+        year: format(new Date(year), 'yyyy-MM-dd'),
         name: name,
         media_type: media_type,
         overview: overview,
@@ -80,7 +80,7 @@ function RecommendationItemsEdit(props: Props) {
         backdrop: backdrop,
         trailer: trailer,
         commentary: commentary,
-        recommendation_id: +recommendation_id,
+        recommendation_id: +recommendation_id
       };
 
       dispatch({ type: types.ITEM, payload });
@@ -95,7 +95,7 @@ function RecommendationItemsEdit(props: Props) {
     try {
       const response = await httpFetch({
         url: `/recommendation_item_sources/${id}`,
-        method: "GET",
+        method: 'GET'
       });
       return response.data;
     } catch (error) {
@@ -108,21 +108,21 @@ function RecommendationItemsEdit(props: Props) {
   }, [fetchRecommendationItem, id]);
 
   const fetchTmdbSearch = debounce((query: string) => {
-    if (query === "") return;
+    if (query === '') return;
 
     dispatch({ type: types.FETCH });
 
     httpFetchTMDb({
       url: `/search/multi?language=en-US&query=${encodeURIComponent(
         query.trim()
-      )}&page=1&include_adult=false`,
+      )}&page=1&include_adult=false`
     })
       .then((response) => {
         const payload =
           response.results &&
           response.results.filter(
             (search) =>
-              search.media_type !== "person" && search.backdrop_path !== null
+              search.media_type !== 'person' && search.backdrop_path !== null
           );
         dispatch({ type: types.SEARCH, payload });
       })
@@ -134,15 +134,15 @@ function RecommendationItemsEdit(props: Props) {
     const item = search.find((item) => item.id === selectedTitle);
     const payload = {
       searchValue: item.name
-        ? `${item.name} (${format(new Date(item.first_air_date), "yyyy")})`
-        : `${item.title} (${format(new Date(item.release_date), "yyyy")})`,
+        ? `${item.name} (${format(new Date(item.first_air_date), 'yyyy')})`
+        : `${item.title} (${format(new Date(item.release_date), 'yyyy')})`,
       tmdb_id: +item.id,
       year: item.release_date || item.first_air_date,
       name: item.title || item.name,
       media_type: item.media_type,
       overview: item.overview,
       poster: item.poster_path,
-      backdrop: item.backdrop_path,
+      backdrop: item.backdrop_path
     };
 
     dispatch({ type: types.SEARCH_CHANGE, payload });
@@ -151,7 +151,7 @@ function RecommendationItemsEdit(props: Props) {
 
     // Fetching the trailer of the current title.
     httpFetchTMDb({
-      url: `/${media_type}/${id}?language=en-US&append_to_response=videos`,
+      url: `/${media_type}/${id}?language=en-US&append_to_response=videos`
     })
       .then((response) =>
         dispatch({
@@ -159,19 +159,19 @@ function RecommendationItemsEdit(props: Props) {
           payload:
             response.videos.results.length > 0
               ? response.videos.results[0].key
-              : "",
+              : ''
         })
       )
       .catch((error) => dispatch({ type: types.FAILURE, payload: error }));
   }
 
   const fetchSources = debounce((query: string) => {
-    if (query === "") return;
+    if (query === '') return;
     dispatch({ type: types.FETCH });
 
     httpFetch({
       url: `/search_source?query=${encodeURIComponent(query)}`,
-      method: "GET",
+      method: 'GET'
     })
       .then((response) =>
         dispatch({ type: types.SOURCES, payload: response.data })
@@ -197,7 +197,7 @@ function RecommendationItemsEdit(props: Props) {
       backdrop,
       trailer,
       commentary,
-      sourcesValue,
+      sourcesValue
     } = recommendationItem;
 
     const newItem = {
@@ -211,21 +211,21 @@ function RecommendationItemsEdit(props: Props) {
       trailer: trailer,
       commentary: commentary,
       sources: sourcesValue.map((source) => source.key),
-      recommendation_id: recommendation_id,
+      recommendation_id: recommendation_id
     };
 
     httpFetch({
       url: `/recommendation_item/${id}`,
-      method: "PUT",
-      data: newItem,
+      method: 'PUT',
+      data: newItem
     })
       .then(() => {
-        dispatch({ type: types.MESSAGE, payload: "Item edited successfully" });
+        dispatch({ type: types.MESSAGE, payload: 'Item edited successfully' });
       })
       .catch((error) =>
         dispatch({
           type: types.FAILURE,
-          payload: error.message || error.errors[0].message,
+          payload: error.message || error.errors[0].message
         })
       );
   }
@@ -240,7 +240,7 @@ function RecommendationItemsEdit(props: Props) {
     error,
     message,
     formFilled,
-    recommendation_id,
+    recommendation_id
   } = recommendationItem;
 
   return (
@@ -248,14 +248,14 @@ function RecommendationItemsEdit(props: Props) {
       <Alert
         message={error}
         variant="error"
-        showAlert={error !== ""}
-        onClose={() => dispatch({ type: types.FAILURE, payload: "" })}
+        showAlert={error !== ''}
+        onClose={() => dispatch({ type: types.FAILURE, payload: '' })}
       />
       <Alert
         message={message}
         variant="success"
-        showAlert={message !== ""}
-        onClose={() => dispatch({ type: types.MESSAGE, payload: "" })}
+        showAlert={message !== ''}
+        onClose={() => dispatch({ type: types.MESSAGE, payload: '' })}
       />
 
       {formFilled && (
@@ -263,14 +263,14 @@ function RecommendationItemsEdit(props: Props) {
           breadCrumbs={[
             {
               key: 1,
-              path: "/dashboard/recommendations",
-              name: "Recommendations",
+              path: '/dashboard/recommendations',
+              name: 'Recommendations'
             },
             {
               key: 2,
               path: `/dashboard/items/${recommendation_id}`,
-              name: "Recommendation Item",
-            },
+              name: 'Recommendation Item'
+            }
           ]}
           activeName="Edit"
         />
@@ -287,7 +287,7 @@ function RecommendationItemsEdit(props: Props) {
               placeholder="Search for a Movie or TV Show"
               size="large"
               value={searchValue}
-              style={{ width: "100%" }}
+              style={{ width: '100%' }}
               defaultActiveFirstOption={false}
               notFoundContent={fetch && <AntSpin size="small" />}
               showArrow={false}
@@ -303,13 +303,13 @@ function RecommendationItemsEdit(props: Props) {
                     {item.first_air_date
                       ? `${item.name} (${format(
                           new Date(item.first_air_date),
-                          "yyyy"
+                          'yyyy'
                         )})`
                       : item.name}
                     {item.release_date
                       ? `${item.title} (${format(
                           new Date(item.release_date),
-                          "yyyy"
+                          'yyyy'
                         )})`
                       : item.title}
                   </AntSelect.Option>
@@ -323,7 +323,7 @@ function RecommendationItemsEdit(props: Props) {
               onChange={(event) =>
                 dispatch({
                   type: types.COMMENTARY,
-                  payload: event.target.value,
+                  payload: event.target.value
                 })
               }
             />
@@ -334,7 +334,7 @@ function RecommendationItemsEdit(props: Props) {
               labelInValue
               size="large"
               value={sourcesValue}
-              style={{ width: "100%" }}
+              style={{ width: '100%' }}
               defaultActiveFirstOption={false}
               notFoundContent={fetch && <AntSpin size="small" />}
               showArrow={false}

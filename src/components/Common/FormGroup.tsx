@@ -1,33 +1,23 @@
 import React from 'react';
 
 interface Props {
-    label?: string;
-    size: string | number;
-    children: React.ReactNode;
+  label?: string;
+  size?: string | number;
+  children: React.ReactNode;
 }
-
 
 function FormGroup(props: Props) {
-    const {
-        label,
-        size = 9,
-        children
-    }
-        = props
+  const { label, size = 9, children } = props;
 
-    return (
-        <>
-            <div className="form-group row">
-                <label className="col-lg-3 form-control-label">
-                    {label}
-                </label>
-                <div className={`col-lg-${size}`}>
-                    {children}
-                </div>
-            </div>
-            <div className="line"></div>
-        </>
-    )
+  return (
+    <>
+      <div className="form-group row">
+        <label className="col-lg-3 form-control-label">{label}</label>
+        <div className={`col-lg-${size}`}>{children}</div>
+      </div>
+      <div className="line"></div>
+    </>
+  );
 }
 
-export default FormGroup
+export default FormGroup;

@@ -1,8 +1,8 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Route, Redirect } from "react-router-dom";
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Route, Redirect } from 'react-router-dom';
 
-import { resetAuthentication } from "../../redux/ducks/authentication";
+import { resetAuthentication } from '../../redux/ducks/authentication';
 
 function PrivateRoute({ component: Component, ...rest }) {
   const dispatch = useDispatch();
@@ -14,7 +14,7 @@ function PrivateRoute({ component: Component, ...rest }) {
     const { exp } = authentication.user;
     if (exp < new Date().getTime() / 1000) {
       dispatch(resetAuthentication());
-      return <Redirect to={{ pathname: "/" }} />;
+      return <Redirect to={{ pathname: '/' }} />;
     }
   }
 
@@ -25,7 +25,7 @@ function PrivateRoute({ component: Component, ...rest }) {
         authorized ? (
           <Component {...props} />
         ) : (
-          <Redirect to={{ pathname: "/", state: { from: props.location } }} />
+          <Redirect to={{ pathname: '/', state: { from: props.location } }} />
         )
       }
     />

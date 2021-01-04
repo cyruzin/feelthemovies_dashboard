@@ -1,14 +1,14 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { Link, useLocation } from 'react-router-dom';
 
 function Siderbar() {
   const { pathname } = useLocation();
   const user = useSelector((state) => state.authentication.user);
 
   function activeCheck(currentPath) {
-    if (currentPath === pathname) return "active";
-    return "";
+    if (currentPath === pathname) return 'active';
+    return '';
   }
 
   return (
@@ -21,32 +21,32 @@ function Siderbar() {
       </div>
       <span className="heading">Dash</span>
       <ul className="list-unstyled">
-        <li className={activeCheck("/dashboard/users")}>
+        <li className={activeCheck('/dashboard/users')}>
           <Link to="/dashboard/users">
             <i className="fa fa-user"></i>Users
           </Link>
         </li>
-        <li className={activeCheck("/dashboard/recommendations")}>
+        <li className={activeCheck('/dashboard/recommendations')}>
           <Link to="/dashboard/recommendations">
             <i className="fa fa-thumbs-up"></i>Recommendations
           </Link>
         </li>
-        <li className={activeCheck("/dashboard/genres")}>
+        <li className={activeCheck('/dashboard/genres')}>
           <Link to="/dashboard/genres">
-            {" "}
-            <i className="fa fa-tags"></i>Genres{" "}
+            {' '}
+            <i className="fa fa-tags"></i>Genres{' '}
           </Link>
         </li>
-        <li className={activeCheck("/dashboard/keywords")}>
+        <li className={activeCheck('/dashboard/keywords')}>
           <Link to="/dashboard/keywords">
-            {" "}
-            <i className="fa fa-hashtag"></i>Keywords{" "}
+            {' '}
+            <i className="fa fa-hashtag"></i>Keywords{' '}
           </Link>
         </li>
-        <li className={activeCheck("/dashboard/sources")}>
+        <li className={activeCheck('/dashboard/sources')}>
           <Link to="/dashboard/sources">
-            {" "}
-            <i className="fa fa-play-circle"></i>Sources{" "}
+            {' '}
+            <i className="fa fa-play-circle"></i>Sources{' '}
           </Link>
         </li>
       </ul>

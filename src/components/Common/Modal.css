@@ -1,34 +1,34 @@
 .modal-wrapper {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 999;
-    background-color: rgba(0,0,0,0.4);
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .modal-header {
-    border-bottom: 1px solid #495057!important;
+  border-bottom: 1px solid #495057 !important;
 }
 
 .modal-content {
-    background-color: #2d3035!important;
+  background-color: #2d3035 !important;
 }
 
 .modal-footer {
-    border-top: 1px solid #495057!important;
+  border-top: 1px solid #495057 !important;
 }
 
 .modal-title {
-    font-size: 1.25rem!important;
+  font-size: 1.25rem !important;
 }
 
 .close {
-    color: #8a8d93!important;
-    text-shadow: 0 1px 0 #fff!important;
+  color: #8a8d93 !important;
+  text-shadow: 0 1px 0 #fff !important;
 }
 
 .close:hover {
-    color: #fff!important;
+  color: #fff !important;
 }

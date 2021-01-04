@@ -1,17 +1,22 @@
-import { createStore, applyMiddleware, compose } from 'redux'
-import ReduxThunk from 'redux-thunk'
-import ReduxDucks from './ducks'
-import { loadState, saveState } from '../util/helpers'
+import { createStore, applyMiddleware, compose } from 'redux';
+import ReduxThunk from 'redux-thunk';
+import ReduxDucks from './ducks';
+import { loadState, saveState } from '../util/helpers';
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const persistedState = loadState()
+const persistedState = loadState();
 
-const store = createStore(ReduxDucks, persistedState,
-    composeEnhancers(applyMiddleware(ReduxThunk)))
+const store = createStore(
+  ReduxDucks,
+  persistedState,
+  composeEnhancers(applyMiddleware(ReduxThunk))
+);
 
-store.subscribe(() => saveState({
+store.subscribe(() =>
+  saveState({
     authentication: store.getState().authentication
-}))
+  })
+);
 
-export default store
+export default store;

@@ -1,18 +1,18 @@
-import { httpFetchAuthentication } from "../../util/request";
-import jwtDecode from "jwt-decode";
+import { httpFetchAuthentication } from '../../util/request';
+import jwtDecode from 'jwt-decode';
 
 export const types = {
-  FETCH: "AUTHORIZATION/FETCH",
-  SUCCESS: "AUTHORIZATION/SUCCESS",
-  FAILURE: "AUTHORIZATION/FAILURE",
-  RESET: "AUTHORIZATION/RESET",
+  FETCH: 'AUTHORIZATION/FETCH',
+  SUCCESS: 'AUTHORIZATION/SUCCESS',
+  FAILURE: 'AUTHORIZATION/FAILURE',
+  RESET: 'AUTHORIZATION/RESET'
 };
 
 export const initialState = {
   fetch: false,
   authorized: false,
   user: {},
-  error: "",
+  error: ''
 };
 
 export default function authenticationReducer(state = initialState, action) {
@@ -20,21 +20,21 @@ export default function authenticationReducer(state = initialState, action) {
     case types.FETCH:
       return {
         ...state,
-        fetch: true,
+        fetch: true
       };
     case types.SUCCESS:
       return {
         ...state,
         fetch: false,
-        error: "",
+        error: '',
         authorized: true,
-        user: action.payload,
+        user: action.payload
       };
     case types.FAILURE:
       return {
         ...state,
         fetch: false,
-        error: action.payload,
+        error: action.payload
       };
     case types.RESET:
       return initialState;
@@ -44,21 +44,21 @@ export default function authenticationReducer(state = initialState, action) {
 }
 
 export const fetchAuthentication = () => ({
-  type: types.FETCH,
+  type: types.FETCH
 });
 
 export const successAuthentication = (payload) => ({
   type: types.SUCCESS,
-  payload,
+  payload
 });
 
 export const failureAuthentication = (payload) => ({
   type: types.FAILURE,
-  payload,
+  payload
 });
 
 export const resetAuthentication = () => ({
-  type: types.RESET,
+  type: types.RESET
 });
 
 export const checkAuthentication = (credentials) => (dispatch) => {

@@ -1,12 +1,12 @@
-import React from 'react'
+import React from 'react';
 
 interface Props {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }
 
 function Option(props: Props) {
-    const { children, ...rest } = props
-    return <option {...rest}>{children}</option>
+  const { children, ...rest } = props;
+  return <option {...rest}>{children}</option>;
 }
 
-export default Option
+export default Option;

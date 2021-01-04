@@ -1,17 +1,17 @@
 // @flow
-import React from 'react'
+import React from 'react';
 
 type Props = {
-    title: string
+  title: string;
+};
+
+function SectionTitle(props: Props) {
+  const { title } = props;
+  return (
+    <div className="title">
+      <strong>{title}</strong>
+    </div>
+  );
 }
 
-function SectionTitle (props: Props) {
-    const { title } = props
-    return (
-        <div className="title">
-            <strong>{title}</strong>
-        </div>
-    )
-}
-
-export default SectionTitle
+export default SectionTitle;

@@ -1,19 +1,19 @@
-import { httpFetch } from "../../util/request";
+import { httpFetch } from '../../util/request';
 
 export const types = {
-  FETCH: "RECOMMENDATIONS_LIST/FETCH",
-  SUCCESS: "RECOMMENDATIONS_LIST/SUCCESS",
-  FAILURE: "RECOMMENDATIONS_LIST/FAILURE",
-  SEARCH: "RECOMMENDATIONS_LIST/SEARCH",
-  REMOVE: "RECOMMENDATIONS_LIST/REMOVE",
+  FETCH: 'RECOMMENDATIONS_LIST/FETCH',
+  SUCCESS: 'RECOMMENDATIONS_LIST/SUCCESS',
+  FAILURE: 'RECOMMENDATIONS_LIST/FAILURE',
+  SEARCH: 'RECOMMENDATIONS_LIST/SEARCH',
+  REMOVE: 'RECOMMENDATIONS_LIST/REMOVE'
 };
 
 export const initialState = {
   fetch: false,
   data: [],
   searchData: [],
-  message: "",
-  error: "",
+  message: '',
+  error: ''
 };
 
 export default function recommendationReducer(state = initialState, action) {
@@ -22,34 +22,34 @@ export default function recommendationReducer(state = initialState, action) {
       return {
         ...state,
         fetch: true,
-        message: "",
+        message: ''
       };
     case types.SUCCESS:
       return {
         ...state,
         fetch: false,
         data: action.payload,
-        error: "",
+        error: ''
       };
     case types.SEARCH:
       return {
         ...state,
         fetch: false,
         searchData: action.payload,
-        error: "",
+        error: ''
       };
     case types.REMOVE:
       return {
         ...state,
         fetch: false,
         message: action.payload,
-        error: "",
+        error: ''
       };
     case types.FAILURE:
       return {
         ...state,
         fetch: false,
-        error: action.payload,
+        error: action.payload
       };
     default:
       return state;
@@ -57,32 +57,32 @@ export default function recommendationReducer(state = initialState, action) {
 }
 
 export const fetchRecommendations = () => ({
-  type: types.FETCH,
+  type: types.FETCH
 });
 
 export const successRecommendations = (payload) => ({
   type: types.SUCCESS,
-  payload,
+  payload
 });
 
 export const failureRecommendations = (payload) => ({
   type: types.FAILURE,
-  payload,
+  payload
 });
 
 export const searchRecommendations = (payload) => ({
   type: types.SEARCH,
-  payload,
+  payload
 });
 
 export const removeRecommendations = (payload) => ({
   type: types.REMOVE,
-  payload,
+  payload
 });
 
 export const getRecommendations = () => (dispatch) => {
   dispatch(fetchRecommendations());
-  return httpFetch({ method: "GET", url: "/recommendations_admin" })
+  return httpFetch({ method: 'GET', url: '/recommendations_admin' })
     .then((response) => dispatch(successRecommendations(response.data)))
     .catch((error) => dispatch(failureRecommendations(error.message)));
 };
@@ -90,8 +90,8 @@ export const getRecommendations = () => (dispatch) => {
 export const getSearchRecommendations = (query) => (dispatch) => {
   dispatch(fetchRecommendations());
   return httpFetch({
-    method: "GET",
-    url: `/search_recommendation?query=${query}`,
+    method: 'GET',
+    url: `/search_recommendation?query=${query}`
   })
     .then((response) =>
       dispatch(
@@ -103,7 +103,7 @@ export const getSearchRecommendations = (query) => (dispatch) => {
 
 export const deleteRecommendations = (id) => (dispatch) => {
   dispatch(fetchRecommendations());
-  return httpFetch({ method: "DELETE", url: `/recommendation/${id}` })
+  return httpFetch({ method: 'DELETE', url: `/recommendation/${id}` })
     .then((response) => {
       dispatch(getRecommendations());
       dispatch(removeRecommendations(response.message));

@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { getRecommendations } from "../../redux/ducks/recommendations";
+import { getRecommendations } from '../../redux/ducks/recommendations';
 
-import RecommendationsList from "./RecommendationsList";
-import { Alert, NoResults, SectionHeader, Spinner } from "../Common";
+import RecommendationsList from './RecommendationsList';
+import { Alert, NoResults, SectionHeader, Spinner } from '../Common';
 
 function Recommendations() {
   const recommendations = useSelector((state) => state.recommendations);
@@ -17,8 +17,8 @@ function Recommendations() {
 
   return (
     <>
-      <Alert message={error} variant="error" showAlert={error !== ""} />
-      <Alert message={message} variant="success" showAlert={message !== ""} />
+      <Alert message={error} variant="error" showAlert={error !== ''} />
+      <Alert message={message} variant="success" showAlert={message !== ''} />
       <SectionHeader title="Recommendations" />
       {fetch && <Spinner />}
 

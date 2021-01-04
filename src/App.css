@@ -1,6 +1,6 @@
-@import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
-@import "../node_modules/font-awesome/css/font-awesome.min.css";
-@import "./assets/css/style.default.css";
+@import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+@import '../node_modules/font-awesome/css/font-awesome.min.css';
+@import './assets/css/style.default.css';
 
 .smooth-enter {
   opacity: 0.01;
