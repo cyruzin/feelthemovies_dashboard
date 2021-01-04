@@ -3,7 +3,7 @@ import { Provider } from "react-redux";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import PrivateRoute from "./components/Route/PrivateRoute";
-import store from "./redux/";
+import store from "./redux";
 
 import Authentication from "./components/Authentication/Authentication";
 import Dashboard from "./components/Layout/Dashboard";

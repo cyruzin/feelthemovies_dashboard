@@ -1,11 +1,10 @@
-// @flow
-import * as React from 'react'
+import React from 'react'
 
-type Props = {
-    children: React.Node
+interface Props {
+    children: React.ReactNode;
 }
 
-function TR (props: Props) {
+function TR(props: Props) {
     const { children } = props
     return (
         <tr>

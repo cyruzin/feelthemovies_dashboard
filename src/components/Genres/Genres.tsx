@@ -12,7 +12,7 @@ import {
     Spinner,
 } from '../Common'
 
-function Genres () {
+function Genres() {
     const genres = useSelector(state => state.genres)
     const dispatch = useDispatch()
     const { fetch, data, error, message } = genres

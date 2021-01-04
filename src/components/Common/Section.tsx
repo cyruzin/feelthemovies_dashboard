@@ -1,12 +1,12 @@
-// @flow
-import * as React from 'react'
+import React from 'react'
 
-type Props = {
-    children: React.Node
+interface Props {
+    children: React.ReactNode;
 }
 
-function Section (props: Props) {
+function Section(props: Props) {
     const { children } = props
+
     return (
         <section className="no-padding-top">
             <div className="container-fluid">

@@ -1,19 +1,20 @@
-// @flow
+import React from 'react';
 
-import * as React from 'react'
-
-type Props = {
-    label?: string,
-    size: string | number,
-    children: React.Node,
+interface Props {
+    label?: string;
+    size: string | number;
+    children: React.ReactNode;
 }
 
-FormGroup.defaultProps = {
-    size: 9
-}
 
-function FormGroup (props: Props) {
-    const { label, size, children } = props
+function FormGroup(props: Props) {
+    const {
+        label,
+        size = 9,
+        children
+    }
+        = props
+
     return (
         <>
             <div className="form-group row">

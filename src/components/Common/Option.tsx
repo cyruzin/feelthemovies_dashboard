@@ -1,11 +1,10 @@
-// @flow
-import * as React from 'react'
+import React from 'react'
 
-type Props = {
-    children: React.Node
+interface Props {
+    children: React.ReactNode;
 }
 
-function Option (props: Props) {
+function Option(props: Props) {
     const { children, ...rest } = props
     return <option {...rest}>{children}</option>
 }

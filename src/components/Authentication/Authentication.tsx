@@ -10,24 +10,24 @@ import { loadJs } from '../../util/helpers'
 
 import { InputLabel, Button } from '../Common'
 
-function Authentication () {
+function Authentication() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
     const dispatch = useDispatch()
-    const authentication = useSelector(state => state.authentication)
+    const authentication = useSelector((state: any) => state.authentication)
 
     useEffect(() => {
         loadJs()
     }, [email, password, error, authentication])
 
-    function loginHandler (event) {
+    function loginHandler(event: any) {
         event.preventDefault()
         errorHandler()
         dispatch(checkAuthentication({ email, password }))
     }
 
-    function errorHandler () {
+    function errorHandler() {
         if (email === '' || password === '') {
             setError('Please, fill all fields')
             return

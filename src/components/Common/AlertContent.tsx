@@ -1,4 +1,3 @@
-// @flow
 import React from 'react'
 import clsx from 'clsx'
 
@@ -6,10 +5,11 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle'
 import ErrorIcon from '@material-ui/icons/Error'
 import InfoIcon from '@material-ui/icons/Info'
 import CloseIcon from '@material-ui/icons/Close'
-import { amber, green } from '@material-ui/core/colors'
 import IconButton from '@material-ui/core/IconButton'
 import SnackbarContent from '@material-ui/core/SnackbarContent'
 import WarningIcon from '@material-ui/icons/Warning'
+
+import { amber, green } from '@material-ui/core/colors'
 import { makeStyles } from '@material-ui/core/styles'
 
 const variantIcon = {
@@ -45,16 +45,16 @@ const useStyles1 = makeStyles(theme => ({
     },
 }))
 
-type Props = {
-    className?: string,
-    message: string,
-    onClose: () => any,
+interface Props {
+    className?: string;
+    message: string;
+    onClose: any;
     variant: 'error' | 'info' | 'success' | 'warning';
 }
 
-function AlertContent (props: Props) {
+function AlertContent(props: Props) {
     const classes = useStyles1()
-    const { className, message, onClose, variant, ...other } = props
+    const { className, message, onClose, variant, ...rest } = props
     const Icon = variantIcon[variant]
 
     return (
@@ -72,7 +72,7 @@ function AlertContent (props: Props) {
                     <CloseIcon className={classes.icon} />
                 </IconButton>,
             ]}
-            {...other}
+            {...rest}
         />
     )
 }

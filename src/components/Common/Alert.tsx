@@ -1,16 +1,15 @@
-// @flow
 import React, { useEffect } from 'react'
 import Snackbar from '@material-ui/core/Snackbar'
 import AlertContent from './AlertContent'
 
-type Props = {
-    message: string,
-    variant: string,
-    showAlert: boolean,
-    onClose: () => any
+interface Props {
+    message: string;
+    variant: string;
+    showAlert: boolean;
+    onClose: () => any;
 }
 
-function Alert (props: Props) {
+function Alert(props: Props) {
     const { showAlert, message, variant, onClose } = props
     const [open, setOpen] = React.useState(false)
 
@@ -18,11 +17,11 @@ function Alert (props: Props) {
         handleClick(showAlert)
     }, [showAlert])
 
-    function handleClick (showAlert: boolean) {
+    function handleClick(showAlert: boolean) {
         setOpen(showAlert)
     }
 
-    function handleClose (event, reason) {
+    function handleClose(event: any, reason: string) {
         if (reason === 'clickaway') {
             return
         }
@@ -43,8 +42,7 @@ function Alert (props: Props) {
             >
                 <AlertContent
                     onClose={handleClose}
-                    // $FlowFixMe
-                    variant={variant}
+                    variant={variant as any}
                     message={message}
                 />
             </Snackbar>

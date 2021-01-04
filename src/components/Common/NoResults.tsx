@@ -1,15 +1,15 @@
-// @flow
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-type Props = {
-    message: string,
-    withButton?: bool,
-    path?: string
+interface Props {
+    message: string;
+    withButton?: boolean;
+    path: string;
 }
 
-function NoResults (props: Props) {
+function NoResults(props: Props) {
     const { message, withButton, path } = props
+
     return (
         <section className="no-padding-top">
             <div className="container-fluid">

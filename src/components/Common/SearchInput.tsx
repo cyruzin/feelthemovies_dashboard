@@ -1,35 +1,31 @@
-// @flow
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import InputLabel from "./InputLabel";
 
-type Props = {
-  path: string,
-  placeholder?: string,
+interface Props {
+  path: string;
+  placeholder?: string;
 };
 
-SearchInput.defaultProps = {
-  placeholder: "Busca",
-};
 
 function SearchInput(props: Props) {
-  const { placeholder, path } = props;
+  const { placeholder = 'Busca', path } = props;
   const { push } = useHistory();
-  const [searchKeyword, setSearchKeyword] = useState("");
+  const [searchKeyword, setSearchKeyword] = useState('');
 
   function searchHandler() {
-    if (searchKeyword === "") return false;
+    if (searchKeyword === '') return false;
 
     return push(`${path}?query=${searchKeyword}`, {
       query: encodeURIComponent(searchKeyword),
     });
   }
 
-  function getKeyword(event) {
+  function getKeyword(event: any) {
     setSearchKeyword(event.target.value);
   }
 
-  function isEnterPressed(event) {
+  function isEnterPressed(event: any) {
     if (event.keyCode === 13) searchHandler();
   }
 
